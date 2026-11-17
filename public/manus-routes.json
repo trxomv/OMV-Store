@@ -1,0 +1,8 @@
+{
+  "routes": [
+    { "path": "/", "title": "OMV Store — الرئيسية" },
+    { "path": "/we.html", "title": "باقات WE المخصصة" },
+    { "path": "/provider.html", "title": "صفحة مزود الاتصالات" },
+    { "path": "/routers.html", "title": "كل الراوترات" }
+  ]
+}

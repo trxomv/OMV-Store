@@ -1,0 +1,4008 @@
+{
+  "schemaVersion": 1,
+  "sourceMode": "snapshot",
+  "snapshotAt": "2026-11-11T02:46:00+02:00",
+  "notice": "هذه لقطة ثابتة من تصديرات عامة بتاريخ 2026-11-11 02:46 (Africa/Cairo)، وليست بيانات مباشرة.",
+  "site": {
+    "ok": true,
+    "apiVersion": 1,
+    "resource": "site",
+    "sourceStatus": "snapshot",
+    "generatedAt": "2026-11-11T02:46:00+02:00",
+    "refreshSeconds": 15,
+    "settings": {
+      "status": "available",
+      "rows": [
+        {
+          "Settings": "Show Offers Globally",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Search",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Last Updated",
+          "Value": "-",
+          "Enable": false
+        },
+        {
+          "Settings": "Show Copy Button-Package cards",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Share Button-Package cards",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Vodafone Page",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show WE Page",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Orange Page",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Show Etisalat Page",
+          "Value": "-",
+          "Enable": true
+        },
+        {
+          "Settings": "Auto Refresh Seconds",
+          "Value": 15.0,
+          "Enable": true
+        }
+      ],
+      "refreshSeconds": 15,
+      "flags": {
+        "Show Offers Globally": true,
+        "Show Search": true,
+        "Show Last Updated": false,
+        "Show Copy Button-Package cards": true,
+        "Show Share Button-Package cards": true,
+        "Show Vodafone Page": true,
+        "Show WE Page": true,
+        "Show Orange Page": true,
+        "Show Etisalat Page": true,
+        "Auto Refresh Seconds": true
+      }
+    },
+    "categories": [
+      {
+        "Sort Order": 1.0,
+        "Category ID": "providers",
+        "Category Name": "Telecom Providers",
+        "Enable": true
+      },
+      {
+        "Sort Order": 2.0,
+        "Category ID": "routers",
+        "Category Name": "All Routers",
+        "Enable": true
+      }
+    ],
+    "providers": [
+      {
+        "id": 1,
+        "slug": "vodafone",
+        "name": "Vodafone",
+        "nameAr": "فودافون",
+        "enabled": true,
+        "pageEnabled": true,
+        "offersEnabled": false,
+        "routersEnabled": true,
+        "sourceStatus": "available",
+        "status": "offers_disabled"
+      },
+      {
+        "id": 2,
+        "slug": "we",
+        "name": "WE",
+        "nameAr": "وي",
+        "enabled": true,
+        "pageEnabled": true,
+        "offersEnabled": true,
+        "routersEnabled": true,
+        "sourceStatus": "available",
+        "status": "available"
+      },
+      {
+        "id": 3,
+        "slug": "orange",
+        "name": "Orange",
+        "nameAr": "أورنج",
+        "enabled": false,
+        "pageEnabled": true,
+        "offersEnabled": false,
+        "routersEnabled": true,
+        "sourceStatus": "available",
+        "status": "disabled"
+      },
+      {
+        "id": 4,
+        "slug": "etisalat",
+        "name": "Etisalat",
+        "nameAr": "اتصالات",
+        "enabled": false,
+        "pageEnabled": true,
+        "offersEnabled": false,
+        "routersEnabled": true,
+        "sourceStatus": "available",
+        "status": "disabled"
+      }
+    ],
+    "contacts": [
+      {
+        "Sort Order": 1,
+        "Contact ID": "whatsapp_number",
+        "Contact Type": "WhatsApp Number",
+        "Value": 201554551710.0,
+        "Target": "All",
+        "Enable": true
+      },
+      {
+        "Sort Order": 2,
+        "Contact ID": "telegram_number",
+        "Contact Type": "Telegram Number",
+        "Value": 201554551710.0,
+        "Target": "All",
+        "Enable": true
+      },
+      {
+        "Sort Order": 3,
+        "Contact ID": "whatsapp_group",
+        "Contact Type": "WhatsApp Group",
+        "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+        "Target": "All",
+        "Enable": true
+      },
+      {
+        "Sort Order": 4,
+        "Contact ID": "telegram_group",
+        "Contact Type": "Telegram Group",
+        "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+        "Target": "All",
+        "Enable": true
+      }
+    ],
+    "paymentMethods": [
+      {
+        "Payment Method": "Payment_InstaPay",
+        "Enable": true
+      },
+      {
+        "Payment Method": "Payment_Telda",
+        "Enable": true
+      },
+      {
+        "Payment Method": "Payment_Vodafone_Cash",
+        "Enable": true
+      },
+      {
+        "Payment Method": "Payment_Orange_Cash",
+        "Enable": true
+      },
+      {
+        "Payment Method": "Payment_Etisalat_Money",
+        "Enable": true
+      }
+    ],
+    "announcements": [
+      {
+        "No.": 1,
+        "Target": "All",
+        "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+        "Enable": true
+      },
+      {
+        "No.": 2,
+        "Target": "All",
+        "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+        "Enable": true
+      },
+      {
+        "No.": 3,
+        "Target": "All",
+        "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+        "Enable": true
+      },
+      {
+        "No.": 4,
+        "Target": "All",
+        "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+        "Enable": true
+      },
+      {
+        "No.": 5,
+        "Target": "All",
+        "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+        "Enable": true
+      },
+      {
+        "No.": 6,
+        "Target": "All",
+        "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+        "Enable": true
+      },
+      {
+        "No.": 7,
+        "Target": "All",
+        "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+        "Enable": true
+      }
+    ],
+    "terms": {
+      "status": "missing_headers",
+      "headers": [],
+      "rows": []
+    }
+  },
+  "providers": {
+    "1": {
+      "ok": true,
+      "apiVersion": 1,
+      "resource": "provider",
+      "sourceStatus": "available",
+      "generatedAt": "2026-11-11T02:46:00+02:00",
+      "refreshSeconds": 15,
+      "provider": {
+        "id": 1,
+        "slug": "vodafone",
+        "name": "Vodafone",
+        "nameAr": "فودافون",
+        "enabled": true
+      },
+      "pageEnabled": true,
+      "pageState": "offers_disabled",
+      "pageSettings": {
+        "status": "available",
+        "rows": [
+          {
+            "Settings": "Show Offers Vodafone",
+            "Enable": false
+          },
+          {
+            "Settings": "Show Vodafone Routers",
+            "Enable": true
+          },
+          {
+            "Settings": null,
+            "Enable": true
+          }
+        ],
+        "offersEnabled": false,
+        "routersEnabled": true
+      },
+      "sections": {
+        "offers": {
+          "enabled": false,
+          "status": "disabled"
+        },
+        "routers": {
+          "enabled": true,
+          "status": "empty",
+          "rows": []
+        },
+        "terms": {
+          "enabled": true,
+          "status": "available",
+          "rows": [
+            {
+              "id": 1,
+              "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "type": "General",
+              "displayOrder": 1.0
+            },
+            {
+              "id": 2,
+              "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "type": "General",
+              "displayOrder": 2.0
+            },
+            {
+              "id": 3,
+              "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "type": "Important",
+              "displayOrder": 3.0
+            },
+            {
+              "id": 4,
+              "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "type": "Important",
+              "displayOrder": 4.0
+            },
+            {
+              "id": 5,
+              "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "type": "Important",
+              "displayOrder": 5.0
+            }
+          ]
+        }
+      },
+      "terms": {
+        "status": "available",
+        "rows": [
+          {
+            "id": 1,
+            "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+            "type": "General",
+            "displayOrder": 1.0
+          },
+          {
+            "id": 2,
+            "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+            "type": "General",
+            "displayOrder": 2.0
+          },
+          {
+            "id": 3,
+            "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+            "type": "Important",
+            "displayOrder": 3.0
+          },
+          {
+            "id": 4,
+            "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+            "type": "Important",
+            "displayOrder": 4.0
+          },
+          {
+            "id": 5,
+            "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+            "type": "Important",
+            "displayOrder": 5.0
+          }
+        ]
+      },
+      "tables": {
+        "standard": {
+          "status": "available",
+          "sheetName": "Mobile_Rate Plans-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Offer Price",
+            "Show Offer",
+            "Badge",
+            "Show Rate Plan"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1.0,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 300.0,
+              "Increase": 5.0,
+              "Final Price": 305,
+              "Offer Price": 275,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 2.0,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 350.0,
+              "Increase": 5.0,
+              "Final Price": 355,
+              "Offer Price": 320,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 3.0,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 370.0,
+              "Increase": 5.0,
+              "Final Price": 375,
+              "Offer Price": 340,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 4.0,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 410.0,
+              "Increase": 5.0,
+              "Final Price": 415,
+              "Offer Price": 375,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 5.0,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 500.0,
+              "Increase": 0.0,
+              "Final Price": 500,
+              "Offer Price": 450,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 6.0,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 560.0,
+              "Increase": 10.0,
+              "Final Price": 570,
+              "Offer Price": 515,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 7.0,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 620.0,
+              "Increase": 15.0,
+              "Final Price": 635,
+              "Offer Price": 575,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 8.0,
+              "MBs": 55000.0,
+              "Minutes": 2000.0,
+              "Main Price": 680.0,
+              "Increase": 15.0,
+              "Final Price": 695,
+              "Offer Price": 630,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 9.0,
+              "MBs": 60000.0,
+              "Minutes": 2100.0,
+              "Main Price": 740.0,
+              "Increase": 30.0,
+              "Final Price": 770,
+              "Offer Price": 695,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 10.0,
+              "MBs": 100000.0,
+              "Minutes": 5000.0,
+              "Main Price": 1500.0,
+              "Increase": 30.0,
+              "Final Price": 1530,
+              "Offer Price": 1380,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            }
+          ]
+        },
+        "eom": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "to15": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "air": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "routers": {
+          "status": "available",
+          "sheetName": "Vodafone-Routers",
+          "headers": [
+            "Router ID",
+            "Router Name",
+            "Price",
+            "Increase",
+            "FInal Price",
+            "Discount Price",
+            "Show Offer",
+            "Enable",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 201.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 1
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 2
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 3
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 4
+            }
+          ]
+        },
+        "routerDetails": {
+          "status": "available",
+          "sheetName": "Vodafone-Routers_Details",
+          "headers": [
+            "Router ID",
+            "Section",
+            "Titel",
+            "Content",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 101.0,
+              "Section": "Overview",
+              "Titel": "About Router",
+              "Content": null,
+              "Sort Order": 1.0
+            }
+          ]
+        },
+        "pageSettings": {
+          "status": "available",
+          "sheetName": "Page Settings",
+          "headers": [
+            "Settings",
+            "Enable"
+          ],
+          "rows": [
+            {
+              "Settings": "Show Offers Vodafone",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Vodafone Routers",
+              "Enable": true
+            },
+            {
+              "Settings": null,
+              "Enable": true
+            }
+          ]
+        },
+        "terms": {
+          "status": "available",
+          "sheetName": "Terms&Conditions",
+          "headers": [
+            "Term_ID",
+            "Term_Text",
+            "Term_Type",
+            "Enable",
+            "Display_Order"
+          ],
+          "rows": [
+            {
+              "Term_ID": 1,
+              "Term_Text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 1
+            },
+            {
+              "Term_ID": 2,
+              "Term_Text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 2
+            },
+            {
+              "Term_ID": 3,
+              "Term_Text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 3
+            },
+            {
+              "Term_ID": 4,
+              "Term_Text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 4
+            },
+            {
+              "Term_ID": 5,
+              "Term_Text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 5
+            },
+            {
+              "Term_ID": 6,
+              "Term_Text": "للمشتركين اعتباراً من يوم 1 في الشهر: آخر موعد لدفع التجديد هو يوم 28 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 6
+            },
+            {
+              "Term_ID": 7,
+              "Term_Text": "للمشتركين اعتباراً من يوم 16 في الشهر: آخر موعد لدفع التجديد هو يوم 13 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 7
+            },
+            {
+              "Term_ID": 8,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": false,
+              "Display_Order": 8
+            }
+          ]
+        },
+        "customPricing": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "addons": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        }
+      },
+      "site": {
+        "settings": {
+          "status": "available",
+          "rows": [
+            {
+              "Settings": "Show Offers Globally",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Search",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Last Updated",
+              "Value": "-",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Copy Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Share Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Vodafone Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show WE Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Orange Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Etisalat Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Auto Refresh Seconds",
+              "Value": 15.0,
+              "Enable": true
+            }
+          ],
+          "refreshSeconds": 15,
+          "flags": {
+            "Show Offers Globally": true,
+            "Show Search": true,
+            "Show Last Updated": false,
+            "Show Copy Button-Package cards": true,
+            "Show Share Button-Package cards": true,
+            "Show Vodafone Page": true,
+            "Show WE Page": true,
+            "Show Orange Page": true,
+            "Show Etisalat Page": true,
+            "Auto Refresh Seconds": true
+          }
+        },
+        "announcements": [
+          {
+            "No.": 1,
+            "Target": "All",
+            "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+            "Enable": true
+          },
+          {
+            "No.": 2,
+            "Target": "All",
+            "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+            "Enable": true
+          },
+          {
+            "No.": 3,
+            "Target": "All",
+            "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+            "Enable": true
+          },
+          {
+            "No.": 4,
+            "Target": "All",
+            "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+            "Enable": true
+          },
+          {
+            "No.": 5,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          },
+          {
+            "No.": 6,
+            "Target": "All",
+            "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+            "Enable": true
+          },
+          {
+            "No.": 7,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          }
+        ],
+        "contacts": [
+          {
+            "Sort Order": 1,
+            "Contact ID": "whatsapp_number",
+            "Contact Type": "WhatsApp Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 2,
+            "Contact ID": "telegram_number",
+            "Contact Type": "Telegram Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 3,
+            "Contact ID": "whatsapp_group",
+            "Contact Type": "WhatsApp Group",
+            "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 4,
+            "Contact ID": "telegram_group",
+            "Contact Type": "Telegram Group",
+            "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+            "Target": "All",
+            "Enable": true
+          }
+        ],
+        "paymentMethods": [
+          {
+            "Payment Method": "Payment_InstaPay",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Telda",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Vodafone_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Orange_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Etisalat_Money",
+            "Enable": true
+          }
+        ]
+      },
+      "we": null
+    },
+    "2": {
+      "ok": true,
+      "apiVersion": 1,
+      "resource": "provider",
+      "sourceStatus": "available",
+      "generatedAt": "2026-11-11T02:46:00+02:00",
+      "refreshSeconds": 15,
+      "provider": {
+        "id": 2,
+        "slug": "we",
+        "name": "WE",
+        "nameAr": "وي",
+        "enabled": true
+      },
+      "pageEnabled": true,
+      "pageState": "available",
+      "pageSettings": {
+        "status": "available",
+        "rows": [
+          {
+            "Settings": "Show Offers WE",
+            "Enable": true
+          },
+          {
+            "Settings": "Show WE Routers",
+            "Enable": true
+          },
+          {
+            "Settings": "Custom Rate Plans From 1",
+            "Enable": true
+          },
+          {
+            "Settings": "Custom Rate Plans From 16",
+            "Enable": true
+          }
+        ],
+        "offersEnabled": true,
+        "routersEnabled": true
+      },
+      "sections": {
+        "offers": {
+          "enabled": true,
+          "status": "available"
+        },
+        "routers": {
+          "enabled": true,
+          "status": "empty",
+          "rows": []
+        },
+        "terms": {
+          "enabled": true,
+          "status": "available",
+          "rows": [
+            {
+              "id": 1,
+              "text": "الخط يجب أن يكون نظام كارت عادي",
+              "type": "General",
+              "displayOrder": 1.0
+            },
+            {
+              "id": 2,
+              "text": "لا توجد أي مشكلة نهائيًا لو كنت مستلف رصيد على الخط",
+              "type": "General",
+              "displayOrder": 2.0
+            },
+            {
+              "id": 3,
+              "text": "لا يمكن الاشتراك لخطوط الفاتورة أو خطوط الطلبة أو خطوط تكافل وكرامة.",
+              "type": "Important",
+              "displayOrder": 3.0
+            },
+            {
+              "id": 4,
+              "text": "لا توجد ضرائب إضافية السعر شامل التفعيل الدوري.",
+              "type": "General",
+              "displayOrder": 4.0
+            }
+          ]
+        }
+      },
+      "terms": {
+        "status": "available",
+        "rows": [
+          {
+            "id": 1,
+            "text": "الخط يجب أن يكون نظام كارت عادي",
+            "type": "General",
+            "displayOrder": 1.0
+          },
+          {
+            "id": 2,
+            "text": "لا توجد أي مشكلة نهائيًا لو كنت مستلف رصيد على الخط",
+            "type": "General",
+            "displayOrder": 2.0
+          },
+          {
+            "id": 3,
+            "text": "لا يمكن الاشتراك لخطوط الفاتورة أو خطوط الطلبة أو خطوط تكافل وكرامة.",
+            "type": "Important",
+            "displayOrder": 3.0
+          },
+          {
+            "id": 4,
+            "text": "لا توجد ضرائب إضافية السعر شامل التفعيل الدوري.",
+            "type": "General",
+            "displayOrder": 4.0
+          }
+        ]
+      },
+      "tables": {
+        "standard": {
+          "status": "available",
+          "sheetName": "Mobile_Rate Plans-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Offer Price",
+            "Show Offer",
+            "Badge",
+            "Show Rate Plan"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1.0,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 205.0,
+              "Increase": 5.0,
+              "Final Price": 210,
+              "Offer Price": 190,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 2.0,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 245.0,
+              "Increase": 5.0,
+              "Final Price": 250,
+              "Offer Price": 225,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 3.0,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 265.0,
+              "Increase": 5.0,
+              "Final Price": 270,
+              "Offer Price": 245,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 4.0,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 285.0,
+              "Increase": 5.0,
+              "Final Price": 290,
+              "Offer Price": 265,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 5.0,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 390.0,
+              "Increase": 0.0,
+              "Final Price": 390,
+              "Offer Price": 355,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 6.0,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 460.0,
+              "Increase": 10.0,
+              "Final Price": 470,
+              "Offer Price": 425,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 7.0,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 545.0,
+              "Increase": 15.0,
+              "Final Price": 560,
+              "Offer Price": 505,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 8.0,
+              "MBs": 55000.0,
+              "Minutes": 2000.0,
+              "Main Price": 585.0,
+              "Increase": 15.0,
+              "Final Price": 600,
+              "Offer Price": 540,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 9.0,
+              "MBs": 60000.0,
+              "Minutes": 2100.0,
+              "Main Price": 640.0,
+              "Increase": 30.0,
+              "Final Price": 670,
+              "Offer Price": 605,
+              "Show Offer": false,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 10.0,
+              "MBs": 100000.0,
+              "Minutes": 5000.0,
+              "Main Price": 1220.0,
+              "Increase": 30.0,
+              "Final Price": 1250,
+              "Offer Price": 1125,
+              "Show Offer": null,
+              "Badge": null,
+              "Show Rate Plan": true
+            }
+          ]
+        },
+        "eom": {
+          "status": "available",
+          "sheetName": "Mobile_Plans to EOM-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Tha Actual Days Left",
+            "Days Left",
+            "Show"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1,
+              "MBs": 5000.0,
+              "Minutes": 500.0,
+              "Main Price": 150.0,
+              "Increase": 5.0,
+              "Final Price": 125,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 2,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 205.0,
+              "Increase": 5.0,
+              "Final Price": 170,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 3,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 245.0,
+              "Increase": 5.0,
+              "Final Price": 200,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 4,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 265.0,
+              "Increase": 5.0,
+              "Final Price": 220,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 5,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 285.0,
+              "Increase": 5.0,
+              "Final Price": 235,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 6,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 390.0,
+              "Increase": 0.0,
+              "Final Price": 315,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 7,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 460.0,
+              "Increase": 10.0,
+              "Final Price": 380,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 8,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 545.0,
+              "Increase": 15.0,
+              "Final Price": 450,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": true
+            },
+            {
+              "No. of Plan": 9,
+              "MBs": 55000.0,
+              "Minutes": 1900.0,
+              "Main Price": 595.0,
+              "Increase": 15.0,
+              "Final Price": 490,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": false
+            },
+            {
+              "No. of Plan": 10,
+              "MBs": 60000.0,
+              "Minutes": 5222.0,
+              "Main Price": 600.0,
+              "Increase": 20.0,
+              "Final Price": 500,
+              "Tha Actual Days Left": 19,
+              "Days Left": 24,
+              "Show": false
+            },
+            {
+              "No. of Plan": null,
+              "MBs": null,
+              "Minutes": null,
+              "Main Price": null,
+              "Increase": null,
+              "Final Price": null,
+              "Tha Actual Days Left": null,
+              "Days Left": 5,
+              "Show": false
+            }
+          ]
+        },
+        "to15": {
+          "status": "available",
+          "sheetName": "Mobile_Plans to 15-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Tha Actual Days Left",
+            "Days Left",
+            "Show"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1,
+              "MBs": 5000.0,
+              "Minutes": 500.0,
+              "Main Price": 150.0,
+              "Increase": 5.0,
+              "Final Price": 60,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 2,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 205.0,
+              "Increase": 5.0,
+              "Final Price": 80,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 3,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 245.0,
+              "Increase": 5.0,
+              "Final Price": 95,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 4,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 265.0,
+              "Increase": 5.0,
+              "Final Price": 100,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 5,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 285.0,
+              "Increase": 5.0,
+              "Final Price": 110,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 6,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 390.0,
+              "Increase": 0.0,
+              "Final Price": 145,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": true
+            },
+            {
+              "No. of Plan": 7,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 460.0,
+              "Increase": 10.0,
+              "Final Price": 175,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": false
+            },
+            {
+              "No. of Plan": 8,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 545.0,
+              "Increase": 15.0,
+              "Final Price": 210,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": false
+            },
+            {
+              "No. of Plan": 9,
+              "MBs": 55000.0,
+              "Minutes": 1900.0,
+              "Main Price": 595.0,
+              "Increase": 15.0,
+              "Final Price": 225,
+              "Tha Actual Days Left": 4,
+              "Days Left": 11,
+              "Show": false
+            },
+            {
+              "No. of Plan": null,
+              "MBs": null,
+              "Minutes": null,
+              "Main Price": null,
+              "Increase": null,
+              "Final Price": 0,
+              "Tha Actual Days Left": null,
+              "Days Left": 7,
+              "Show": false
+            }
+          ]
+        },
+        "air": {
+          "status": "available",
+          "sheetName": "WE-Air_Rate Plans-Website",
+          "headers": [
+            "No. of Plan",
+            "GBs",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Offer Price",
+            "Show Offer",
+            "Badge",
+            "Show Rate Plan"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1.0,
+              "GBs": 320.0,
+              "Main Price": 950.0,
+              "Increase": 150.0,
+              "Final Price": 1100,
+              "Offer Price": 990,
+              "Show Offer": false,
+              "Badge": null,
+              "Show Rate Plan": true
+            }
+          ]
+        },
+        "routers": {
+          "status": "available",
+          "sheetName": "WE-Routers",
+          "headers": [
+            "Router ID",
+            "Router Name",
+            "Price",
+            "Increase",
+            "FInal Price",
+            "Discount Price",
+            "Show Offer",
+            "Enable",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 201.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 1
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 2
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 3
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 4
+            }
+          ]
+        },
+        "routerDetails": {
+          "status": "available",
+          "sheetName": "WE-Routers_Details",
+          "headers": [
+            "Router ID",
+            "Section",
+            "Titel",
+            "Content",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 201.0,
+              "Section": "Overview",
+              "Titel": "About Router",
+              "Content": null,
+              "Sort Order": 1.0
+            }
+          ]
+        },
+        "pageSettings": {
+          "status": "available",
+          "sheetName": "Page Settings",
+          "headers": [
+            "Settings",
+            "Enable"
+          ],
+          "rows": [
+            {
+              "Settings": "Show Offers WE",
+              "Enable": true
+            },
+            {
+              "Settings": "Show WE Routers",
+              "Enable": true
+            },
+            {
+              "Settings": "Custom Rate Plans From 1",
+              "Enable": true
+            },
+            {
+              "Settings": "Custom Rate Plans From 16",
+              "Enable": true
+            }
+          ]
+        },
+        "terms": {
+          "status": "available",
+          "sheetName": "We-Terms&Conditions",
+          "headers": [
+            "Term_ID",
+            "Term_Text",
+            "Term_Type",
+            "Enable",
+            "Display_Order"
+          ],
+          "rows": [
+            {
+              "Term_ID": 1,
+              "Term_Text": "الخط يجب أن يكون نظام كارت عادي",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 1
+            },
+            {
+              "Term_ID": 2,
+              "Term_Text": "لا توجد أي مشكلة نهائيًا لو كنت مستلف رصيد على الخط",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 2
+            },
+            {
+              "Term_ID": 3,
+              "Term_Text": "لا يمكن الاشتراك لخطوط الفاتورة أو خطوط الطلبة أو خطوط تكافل وكرامة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 3
+            },
+            {
+              "Term_ID": 4,
+              "Term_Text": "لا توجد ضرائب إضافية السعر شامل التفعيل الدوري.",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 4
+            },
+            {
+              "Term_ID": null,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": false,
+              "Display_Order": null
+            },
+            {
+              "Term_ID": null,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": false,
+              "Display_Order": null
+            },
+            {
+              "Term_ID": null,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": false,
+              "Display_Order": null
+            },
+            {
+              "Term_ID": null,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": false,
+              "Display_Order": null
+            }
+          ]
+        },
+        "customPricing": {
+          "status": "available",
+          "sheetName": "Custom Pricing",
+          "headers": [
+            "Rule",
+            "Type",
+            "GB From",
+            "GB To",
+            "Minutes From",
+            "Minutes To",
+            "GB Price",
+            "Minute Price",
+            "Enabled"
+          ],
+          "rows": [
+            {
+              "Rule": 1,
+              "Type": "GB Only",
+              "GB From": 1.0,
+              "GB To": 19.0,
+              "Minutes From": 0.0,
+              "Minutes To": 0,
+              "GB Price": 16.0,
+              "Minute Price": "0",
+              "Enabled": true
+            },
+            {
+              "Rule": 2,
+              "Type": "GB Only",
+              "GB From": 20.0,
+              "GB To": 29.0,
+              "Minutes From": 0.0,
+              "Minutes To": 0,
+              "GB Price": "13.75",
+              "Minute Price": "0",
+              "Enabled": true
+            },
+            {
+              "Rule": 3,
+              "Type": "GB Only",
+              "GB From": 30.0,
+              "GB To": 49.0,
+              "Minutes From": 0.0,
+              "Minutes To": 0,
+              "GB Price": "12.5",
+              "Minute Price": "0",
+              "Enabled": true
+            },
+            {
+              "Rule": 4,
+              "Type": "GB Only",
+              "GB From": 50.0,
+              "GB To": 64.0,
+              "Minutes From": 0.0,
+              "Minutes To": 0,
+              "GB Price": "11.75",
+              "Minute Price": "0",
+              "Enabled": true
+            },
+            {
+              "Rule": 5,
+              "Type": "GB Only",
+              "GB From": 65.0,
+              "GB To": 100.0,
+              "Minutes From": 0.0,
+              "Minutes To": 0,
+              "GB Price": "11.55",
+              "Minute Price": "0",
+              "Enabled": true
+            },
+            {
+              "Rule": 6,
+              "Type": "Minutes Only",
+              "GB From": 0.0,
+              "GB To": 0.0,
+              "Minutes From": 1.0,
+              "Minutes To": 500.0,
+              "GB Price": "0",
+              "Minute Price": "0.105",
+              "Enabled": true
+            },
+            {
+              "Rule": 7,
+              "Type": "Minutes Only",
+              "GB From": 0.0,
+              "GB To": 0.0,
+              "Minutes From": 501.0,
+              "Minutes To": 1000.0,
+              "GB Price": "0",
+              "Minute Price": "0.105",
+              "Enabled": true
+            },
+            {
+              "Rule": 8,
+              "Type": "Minutes Only",
+              "GB From": 0.0,
+              "GB To": 0.0,
+              "Minutes From": 1001.0,
+              "Minutes To": 2000.0,
+              "GB Price": "0",
+              "Minute Price": "0.105",
+              "Enabled": true
+            },
+            {
+              "Rule": 9,
+              "Type": "GB + Minutes",
+              "GB From": 1.0,
+              "GB To": 19.0,
+              "Minutes From": 1.0,
+              "Minutes To": 3500.0,
+              "GB Price": 13.0,
+              "Minute Price": "0.06",
+              "Enabled": true
+            },
+            {
+              "Rule": 10,
+              "Type": "GB + Minutes",
+              "GB From": 20.0,
+              "GB To": 29.0,
+              "Minutes From": 1.0,
+              "Minutes To": 3500.0,
+              "GB Price": "11",
+              "Minute Price": "0.05",
+              "Enabled": true
+            },
+            {
+              "Rule": 11,
+              "Type": "GB + Minutes",
+              "GB From": 30.0,
+              "GB To": 49.0,
+              "Minutes From": 1.0,
+              "Minutes To": 3500.0,
+              "GB Price": "10.1",
+              "Minute Price": "0.06",
+              "Enabled": true
+            },
+            {
+              "Rule": 12,
+              "Type": "GB + Minutes",
+              "GB From": 50.0,
+              "GB To": 100.0,
+              "Minutes From": 1.0,
+              "Minutes To": 3500.0,
+              "GB Price": 10.0,
+              "Minute Price": "0.05",
+              "Enabled": true
+            },
+            {
+              "Rule": 13,
+              "Type": "-",
+              "GB From": "-",
+              "GB To": "-",
+              "Minutes From": "-",
+              "Minutes To": "-",
+              "GB Price": "-",
+              "Minute Price": "-",
+              "Enabled": true
+            }
+          ]
+        },
+        "addons": {
+          "status": "available",
+          "sheetName": "Add-on",
+          "headers": [
+            "Bundle",
+            "Quota",
+            "Price"
+          ],
+          "rows": [
+            {
+              "Bundle": "Minutes",
+              "Quota": 2000.0,
+              "Price": 250.0
+            },
+            {
+              "Bundle": "GBs",
+              "Quota": 2.0,
+              "Price": 45.0
+            }
+          ]
+        }
+      },
+      "site": {
+        "settings": {
+          "status": "available",
+          "rows": [
+            {
+              "Settings": "Show Offers Globally",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Search",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Last Updated",
+              "Value": "-",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Copy Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Share Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Vodafone Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show WE Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Orange Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Etisalat Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Auto Refresh Seconds",
+              "Value": 15.0,
+              "Enable": true
+            }
+          ],
+          "refreshSeconds": 15,
+          "flags": {
+            "Show Offers Globally": true,
+            "Show Search": true,
+            "Show Last Updated": false,
+            "Show Copy Button-Package cards": true,
+            "Show Share Button-Package cards": true,
+            "Show Vodafone Page": true,
+            "Show WE Page": true,
+            "Show Orange Page": true,
+            "Show Etisalat Page": true,
+            "Auto Refresh Seconds": true
+          }
+        },
+        "announcements": [
+          {
+            "No.": 1,
+            "Target": "All",
+            "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+            "Enable": true
+          },
+          {
+            "No.": 2,
+            "Target": "All",
+            "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+            "Enable": true
+          },
+          {
+            "No.": 3,
+            "Target": "All",
+            "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+            "Enable": true
+          },
+          {
+            "No.": 4,
+            "Target": "All",
+            "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+            "Enable": true
+          },
+          {
+            "No.": 5,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          },
+          {
+            "No.": 6,
+            "Target": "All",
+            "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+            "Enable": true
+          },
+          {
+            "No.": 7,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          }
+        ],
+        "contacts": [
+          {
+            "Sort Order": 1,
+            "Contact ID": "whatsapp_number",
+            "Contact Type": "WhatsApp Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 2,
+            "Contact ID": "telegram_number",
+            "Contact Type": "Telegram Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 3,
+            "Contact ID": "whatsapp_group",
+            "Contact Type": "WhatsApp Group",
+            "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 4,
+            "Contact ID": "telegram_group",
+            "Contact Type": "Telegram Group",
+            "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+            "Target": "All",
+            "Enable": true
+          }
+        ],
+        "paymentMethods": [
+          {
+            "Payment Method": "Payment_InstaPay",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Telda",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Vodafone_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Orange_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Etisalat_Money",
+            "Enable": true
+          }
+        ]
+      },
+      "we": {
+        "ok": true,
+        "generatedAt": "2026-11-11T02:46:00+02:00",
+        "refreshSeconds": 15,
+        "providerEnabled": true,
+        "pageEnabled": true,
+        "offersEnabled": true,
+        "sheets": {
+          "standard": {
+            "status": "available",
+            "sheetName": "Mobile_Rate Plans-Website",
+            "headers": [
+              "No. of Plan",
+              "MBs",
+              "Minutes",
+              "Main Price",
+              "Increase",
+              "Final Price",
+              "Offer Price",
+              "Show Offer",
+              "Badge",
+              "Show Rate Plan"
+            ],
+            "rows": [
+              {
+                "No. of Plan": 1.0,
+                "MBs": 10000.0,
+                "Minutes": 1100.0,
+                "Main Price": 205.0,
+                "Increase": 5.0,
+                "Final Price": 210,
+                "Offer Price": 190,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 2.0,
+                "MBs": 15000.0,
+                "Minutes": 1200.0,
+                "Main Price": 245.0,
+                "Increase": 5.0,
+                "Final Price": 250,
+                "Offer Price": 225,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 3.0,
+                "MBs": 17000.0,
+                "Minutes": 1300.0,
+                "Main Price": 265.0,
+                "Increase": 5.0,
+                "Final Price": 270,
+                "Offer Price": 245,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 4.0,
+                "MBs": 20000.0,
+                "Minutes": 1500.0,
+                "Main Price": 285.0,
+                "Increase": 5.0,
+                "Final Price": 290,
+                "Offer Price": 265,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 5.0,
+                "MBs": 30000.0,
+                "Minutes": 1700.0,
+                "Main Price": 390.0,
+                "Increase": 0.0,
+                "Final Price": 390,
+                "Offer Price": 355,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 6.0,
+                "MBs": 40000.0,
+                "Minutes": 1800.0,
+                "Main Price": 460.0,
+                "Increase": 10.0,
+                "Final Price": 470,
+                "Offer Price": 425,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 7.0,
+                "MBs": 50000.0,
+                "Minutes": 1900.0,
+                "Main Price": 545.0,
+                "Increase": 15.0,
+                "Final Price": 560,
+                "Offer Price": 505,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 8.0,
+                "MBs": 55000.0,
+                "Minutes": 2000.0,
+                "Main Price": 585.0,
+                "Increase": 15.0,
+                "Final Price": 600,
+                "Offer Price": 540,
+                "Show Offer": true,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 9.0,
+                "MBs": 60000.0,
+                "Minutes": 2100.0,
+                "Main Price": 640.0,
+                "Increase": 30.0,
+                "Final Price": 670,
+                "Offer Price": 605,
+                "Show Offer": false,
+                "Badge": null,
+                "Show Rate Plan": true
+              },
+              {
+                "No. of Plan": 10.0,
+                "MBs": 100000.0,
+                "Minutes": 5000.0,
+                "Main Price": 1220.0,
+                "Increase": 30.0,
+                "Final Price": 1250,
+                "Offer Price": 1125,
+                "Show Offer": null,
+                "Badge": null,
+                "Show Rate Plan": true
+              }
+            ]
+          },
+          "eom": {
+            "status": "available",
+            "sheetName": "Mobile_Plans to EOM-Website",
+            "headers": [
+              "No. of Plan",
+              "MBs",
+              "Minutes",
+              "Main Price",
+              "Increase",
+              "Final Price",
+              "Tha Actual Days Left",
+              "Days Left",
+              "Show"
+            ],
+            "rows": [
+              {
+                "No. of Plan": 1,
+                "MBs": 5000.0,
+                "Minutes": 500.0,
+                "Main Price": 150.0,
+                "Increase": 5.0,
+                "Final Price": 125,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 2,
+                "MBs": 10000.0,
+                "Minutes": 1100.0,
+                "Main Price": 205.0,
+                "Increase": 5.0,
+                "Final Price": 170,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 3,
+                "MBs": 15000.0,
+                "Minutes": 1200.0,
+                "Main Price": 245.0,
+                "Increase": 5.0,
+                "Final Price": 200,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 4,
+                "MBs": 17000.0,
+                "Minutes": 1300.0,
+                "Main Price": 265.0,
+                "Increase": 5.0,
+                "Final Price": 220,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 5,
+                "MBs": 20000.0,
+                "Minutes": 1500.0,
+                "Main Price": 285.0,
+                "Increase": 5.0,
+                "Final Price": 235,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 6,
+                "MBs": 30000.0,
+                "Minutes": 1700.0,
+                "Main Price": 390.0,
+                "Increase": 0.0,
+                "Final Price": 315,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 7,
+                "MBs": 40000.0,
+                "Minutes": 1800.0,
+                "Main Price": 460.0,
+                "Increase": 10.0,
+                "Final Price": 380,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 8,
+                "MBs": 50000.0,
+                "Minutes": 1900.0,
+                "Main Price": 545.0,
+                "Increase": 15.0,
+                "Final Price": 450,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": true
+              },
+              {
+                "No. of Plan": 9,
+                "MBs": 55000.0,
+                "Minutes": 1900.0,
+                "Main Price": 595.0,
+                "Increase": 15.0,
+                "Final Price": 490,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": false
+              },
+              {
+                "No. of Plan": 10,
+                "MBs": 60000.0,
+                "Minutes": 5222.0,
+                "Main Price": 600.0,
+                "Increase": 20.0,
+                "Final Price": 500,
+                "Tha Actual Days Left": 19,
+                "Days Left": 24,
+                "Show": false
+              },
+              {
+                "No. of Plan": null,
+                "MBs": null,
+                "Minutes": null,
+                "Main Price": null,
+                "Increase": null,
+                "Final Price": null,
+                "Tha Actual Days Left": null,
+                "Days Left": 5,
+                "Show": false
+              }
+            ]
+          },
+          "to15": {
+            "status": "available",
+            "sheetName": "Mobile_Plans to 15-Website",
+            "headers": [
+              "No. of Plan",
+              "MBs",
+              "Minutes",
+              "Main Price",
+              "Increase",
+              "Final Price",
+              "Tha Actual Days Left",
+              "Days Left",
+              "Show"
+            ],
+            "rows": [
+              {
+                "No. of Plan": 1,
+                "MBs": 5000.0,
+                "Minutes": 500.0,
+                "Main Price": 150.0,
+                "Increase": 5.0,
+                "Final Price": 60,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 2,
+                "MBs": 10000.0,
+                "Minutes": 1100.0,
+                "Main Price": 205.0,
+                "Increase": 5.0,
+                "Final Price": 80,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 3,
+                "MBs": 15000.0,
+                "Minutes": 1200.0,
+                "Main Price": 245.0,
+                "Increase": 5.0,
+                "Final Price": 95,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 4,
+                "MBs": 17000.0,
+                "Minutes": 1300.0,
+                "Main Price": 265.0,
+                "Increase": 5.0,
+                "Final Price": 100,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 5,
+                "MBs": 20000.0,
+                "Minutes": 1500.0,
+                "Main Price": 285.0,
+                "Increase": 5.0,
+                "Final Price": 110,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 6,
+                "MBs": 30000.0,
+                "Minutes": 1700.0,
+                "Main Price": 390.0,
+                "Increase": 0.0,
+                "Final Price": 145,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": true
+              },
+              {
+                "No. of Plan": 7,
+                "MBs": 40000.0,
+                "Minutes": 1800.0,
+                "Main Price": 460.0,
+                "Increase": 10.0,
+                "Final Price": 175,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": false
+              },
+              {
+                "No. of Plan": 8,
+                "MBs": 50000.0,
+                "Minutes": 1900.0,
+                "Main Price": 545.0,
+                "Increase": 15.0,
+                "Final Price": 210,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": false
+              },
+              {
+                "No. of Plan": 9,
+                "MBs": 55000.0,
+                "Minutes": 1900.0,
+                "Main Price": 595.0,
+                "Increase": 15.0,
+                "Final Price": 225,
+                "Tha Actual Days Left": 4,
+                "Days Left": 11,
+                "Show": false
+              },
+              {
+                "No. of Plan": null,
+                "MBs": null,
+                "Minutes": null,
+                "Main Price": null,
+                "Increase": null,
+                "Final Price": 0,
+                "Tha Actual Days Left": null,
+                "Days Left": 7,
+                "Show": false
+              }
+            ]
+          },
+          "offers": {
+            "status": "not_applicable",
+            "headers": [],
+            "rows": []
+          },
+          "settings": {
+            "status": "available",
+            "headers": [
+              "Settings",
+              "Value",
+              "Enable"
+            ],
+            "rows": [
+              {
+                "Settings": "Show Offers Globally",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Search",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Last Updated",
+                "Value": "-",
+                "Enable": false
+              },
+              {
+                "Settings": "Show Copy Button",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Share Button",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Vodafone Page",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show WE Page",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Orange Page",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Show Etisalat Page",
+                "Value": "-",
+                "Enable": true
+              },
+              {
+                "Settings": "Auto Refresh Seconds",
+                "Value": 15.0,
+                "Enable": true
+              },
+              {
+                "Settings": "WhatsApp Number",
+                "Value": 201554551710.0,
+                "Enable": true
+              },
+              {
+                "Settings": "Telegram Number",
+                "Value": 201554551710.0,
+                "Enable": true
+              },
+              {
+                "Settings": "WhatsApp Group URL",
+                "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+                "Enable": true
+              },
+              {
+                "Settings": "Telegram Group URL",
+                "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+                "Enable": true
+              },
+              {
+                "Settings": "Custom Rate Plans From 1",
+                "Value": true,
+                "Enable": true
+              },
+              {
+                "Settings": "Custom Rate Plans From 16",
+                "Value": true,
+                "Enable": true
+              }
+            ]
+          },
+          "announcements": {
+            "status": "available",
+            "headers": [
+              "No.",
+              "Value",
+              "Enable"
+            ],
+            "rows": [
+              {
+                "No.": 1,
+                "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+                "Enable": true
+              },
+              {
+                "No.": 2,
+                "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+                "Enable": true
+              },
+              {
+                "No.": 3,
+                "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+                "Enable": true
+              },
+              {
+                "No.": 4,
+                "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+                "Enable": true
+              },
+              {
+                "No.": 5,
+                "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+                "Enable": true
+              },
+              {
+                "No.": 6,
+                "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+                "Enable": true
+              },
+              {
+                "No.": 7,
+                "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+                "Enable": true
+              }
+            ]
+          },
+          "paymentMethods": {
+            "status": "available",
+            "headers": [
+              "Payment Method",
+              "Enable"
+            ],
+            "rows": [
+              {
+                "Payment Method": "Payment_InstaPay",
+                "Enable": true
+              },
+              {
+                "Payment Method": "Payment_Telda",
+                "Enable": true
+              },
+              {
+                "Payment Method": "Payment_Vodafone_Cash",
+                "Enable": true
+              },
+              {
+                "Payment Method": "Payment_Orange_Cash",
+                "Enable": true
+              },
+              {
+                "Payment Method": "Payment_Etisalat_Money",
+                "Enable": true
+              }
+            ]
+          },
+          "addons": {
+            "status": "available",
+            "sheetName": "Add-on",
+            "headers": [
+              "Bundle",
+              "Quota",
+              "Price"
+            ],
+            "rows": [
+              {
+                "Bundle": "Minutes",
+                "Quota": 2000.0,
+                "Price": 250.0
+              },
+              {
+                "Bundle": "GBs",
+                "Quota": 2.0,
+                "Price": 45.0
+              }
+            ]
+          },
+          "customPricing": {
+            "status": "available",
+            "sheetName": "Custom Pricing",
+            "headers": [
+              "Rule",
+              "Type",
+              "GB From",
+              "GB To",
+              "Minutes From",
+              "Minutes To",
+              "GB Price",
+              "Minute Price",
+              "Enabled"
+            ],
+            "rows": [
+              {
+                "Rule": 1,
+                "Type": "GB Only",
+                "GB From": 1.0,
+                "GB To": 19.0,
+                "Minutes From": 0.0,
+                "Minutes To": 0,
+                "GB Price": 16.0,
+                "Minute Price": "0",
+                "Enabled": true
+              },
+              {
+                "Rule": 2,
+                "Type": "GB Only",
+                "GB From": 20.0,
+                "GB To": 29.0,
+                "Minutes From": 0.0,
+                "Minutes To": 0,
+                "GB Price": "13.75",
+                "Minute Price": "0",
+                "Enabled": true
+              },
+              {
+                "Rule": 3,
+                "Type": "GB Only",
+                "GB From": 30.0,
+                "GB To": 49.0,
+                "Minutes From": 0.0,
+                "Minutes To": 0,
+                "GB Price": "12.5",
+                "Minute Price": "0",
+                "Enabled": true
+              },
+              {
+                "Rule": 4,
+                "Type": "GB Only",
+                "GB From": 50.0,
+                "GB To": 64.0,
+                "Minutes From": 0.0,
+                "Minutes To": 0,
+                "GB Price": "11.75",
+                "Minute Price": "0",
+                "Enabled": true
+              },
+              {
+                "Rule": 5,
+                "Type": "GB Only",
+                "GB From": 65.0,
+                "GB To": 100.0,
+                "Minutes From": 0.0,
+                "Minutes To": 0,
+                "GB Price": "11.55",
+                "Minute Price": "0",
+                "Enabled": true
+              },
+              {
+                "Rule": 6,
+                "Type": "Minutes Only",
+                "GB From": 0.0,
+                "GB To": 0.0,
+                "Minutes From": 1.0,
+                "Minutes To": 500.0,
+                "GB Price": "0",
+                "Minute Price": "0.105",
+                "Enabled": true
+              },
+              {
+                "Rule": 7,
+                "Type": "Minutes Only",
+                "GB From": 0.0,
+                "GB To": 0.0,
+                "Minutes From": 501.0,
+                "Minutes To": 1000.0,
+                "GB Price": "0",
+                "Minute Price": "0.105",
+                "Enabled": true
+              },
+              {
+                "Rule": 8,
+                "Type": "Minutes Only",
+                "GB From": 0.0,
+                "GB To": 0.0,
+                "Minutes From": 1001.0,
+                "Minutes To": 2000.0,
+                "GB Price": "0",
+                "Minute Price": "0.105",
+                "Enabled": true
+              },
+              {
+                "Rule": 9,
+                "Type": "GB + Minutes",
+                "GB From": 1.0,
+                "GB To": 19.0,
+                "Minutes From": 1.0,
+                "Minutes To": 3500.0,
+                "GB Price": 13.0,
+                "Minute Price": "0.06",
+                "Enabled": true
+              },
+              {
+                "Rule": 10,
+                "Type": "GB + Minutes",
+                "GB From": 20.0,
+                "GB To": 29.0,
+                "Minutes From": 1.0,
+                "Minutes To": 3500.0,
+                "GB Price": "11",
+                "Minute Price": "0.05",
+                "Enabled": true
+              },
+              {
+                "Rule": 11,
+                "Type": "GB + Minutes",
+                "GB From": 30.0,
+                "GB To": 49.0,
+                "Minutes From": 1.0,
+                "Minutes To": 3500.0,
+                "GB Price": "10.1",
+                "Minute Price": "0.06",
+                "Enabled": true
+              },
+              {
+                "Rule": 12,
+                "Type": "GB + Minutes",
+                "GB From": 50.0,
+                "GB To": 100.0,
+                "Minutes From": 1.0,
+                "Minutes To": 3500.0,
+                "GB Price": 10.0,
+                "Minute Price": "0.05",
+                "Enabled": true
+              },
+              {
+                "Rule": 13,
+                "Type": "-",
+                "GB From": "-",
+                "GB To": "-",
+                "Minutes From": "-",
+                "Minutes To": "-",
+                "GB Price": "-",
+                "Minute Price": "-",
+                "Enabled": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    "3": {
+      "ok": true,
+      "apiVersion": 1,
+      "resource": "provider",
+      "sourceStatus": "available",
+      "generatedAt": "2026-11-11T02:46:00+02:00",
+      "refreshSeconds": 15,
+      "provider": {
+        "id": 3,
+        "slug": "orange",
+        "name": "Orange",
+        "nameAr": "أورنج",
+        "enabled": false
+      },
+      "pageEnabled": true,
+      "pageState": "disabled",
+      "pageSettings": {
+        "status": "available",
+        "rows": [
+          {
+            "Settings": "Show Offers Orange",
+            "Enable": false
+          },
+          {
+            "Settings": "Show Orange Routers",
+            "Enable": true
+          },
+          {
+            "Settings": null,
+            "Enable": true
+          }
+        ],
+        "offersEnabled": false,
+        "routersEnabled": true
+      },
+      "sections": {
+        "offers": {
+          "enabled": false,
+          "status": "disabled"
+        },
+        "routers": {
+          "enabled": false,
+          "status": "disabled",
+          "rows": []
+        },
+        "terms": {
+          "enabled": false,
+          "status": "available",
+          "rows": [
+            {
+              "id": 1,
+              "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "type": "General",
+              "displayOrder": 1.0
+            },
+            {
+              "id": 2,
+              "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "type": "General",
+              "displayOrder": 2.0
+            },
+            {
+              "id": 3,
+              "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "type": "Important",
+              "displayOrder": 3.0
+            },
+            {
+              "id": 4,
+              "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "type": "Important",
+              "displayOrder": 4.0
+            },
+            {
+              "id": 5,
+              "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "type": "Important",
+              "displayOrder": 5.0
+            }
+          ]
+        }
+      },
+      "terms": {
+        "status": "available",
+        "rows": [
+          {
+            "id": 1,
+            "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+            "type": "General",
+            "displayOrder": 1.0
+          },
+          {
+            "id": 2,
+            "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+            "type": "General",
+            "displayOrder": 2.0
+          },
+          {
+            "id": 3,
+            "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+            "type": "Important",
+            "displayOrder": 3.0
+          },
+          {
+            "id": 4,
+            "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+            "type": "Important",
+            "displayOrder": 4.0
+          },
+          {
+            "id": 5,
+            "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+            "type": "Important",
+            "displayOrder": 5.0
+          }
+        ]
+      },
+      "tables": {
+        "standard": {
+          "status": "available",
+          "sheetName": "Mobile_Rate Plans-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Offer Price",
+            "Show Offer",
+            "Badge",
+            "Show Rate Plan"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1.0,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 300.0,
+              "Increase": 5.0,
+              "Final Price": 305,
+              "Offer Price": 275,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 2.0,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 350.0,
+              "Increase": 5.0,
+              "Final Price": 355,
+              "Offer Price": 320,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 3.0,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 370.0,
+              "Increase": 5.0,
+              "Final Price": 375,
+              "Offer Price": 340,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 4.0,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 410.0,
+              "Increase": 5.0,
+              "Final Price": 415,
+              "Offer Price": 375,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 5.0,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 500.0,
+              "Increase": 0.0,
+              "Final Price": 500,
+              "Offer Price": 450,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 6.0,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 560.0,
+              "Increase": 10.0,
+              "Final Price": 570,
+              "Offer Price": 515,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 7.0,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 620.0,
+              "Increase": 15.0,
+              "Final Price": 635,
+              "Offer Price": 575,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 8.0,
+              "MBs": 55000.0,
+              "Minutes": 2000.0,
+              "Main Price": 680.0,
+              "Increase": 15.0,
+              "Final Price": 695,
+              "Offer Price": 630,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 9.0,
+              "MBs": 60000.0,
+              "Minutes": 2100.0,
+              "Main Price": 740.0,
+              "Increase": 30.0,
+              "Final Price": 770,
+              "Offer Price": 695,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 10.0,
+              "MBs": 100000.0,
+              "Minutes": 5000.0,
+              "Main Price": 1500.0,
+              "Increase": 30.0,
+              "Final Price": 1530,
+              "Offer Price": 1380,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            }
+          ]
+        },
+        "eom": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "to15": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "air": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "routers": {
+          "status": "available",
+          "sheetName": "Orange-Routers",
+          "headers": [
+            "Router ID",
+            "Router Name",
+            "Price",
+            "Increase",
+            "FInal Price",
+            "Discount Price",
+            "Show Offer",
+            "Enable",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 201.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 1
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 2
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 3
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 4
+            }
+          ]
+        },
+        "routerDetails": {
+          "status": "available",
+          "sheetName": "Orange-Routers_Details",
+          "headers": [
+            "Router ID",
+            "Section",
+            "Titel",
+            "Content",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 301.0,
+              "Section": "Overview",
+              "Titel": "About Router",
+              "Content": null,
+              "Sort Order": 1.0
+            }
+          ]
+        },
+        "pageSettings": {
+          "status": "available",
+          "sheetName": "Page Settings",
+          "headers": [
+            "Settings",
+            "Enable"
+          ],
+          "rows": [
+            {
+              "Settings": "Show Offers Orange",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Orange Routers",
+              "Enable": true
+            },
+            {
+              "Settings": null,
+              "Enable": true
+            }
+          ]
+        },
+        "terms": {
+          "status": "available",
+          "sheetName": "Orange-Terms&Conditions",
+          "headers": [
+            "Term_ID",
+            "Term_Text",
+            "Term_Type",
+            "Enable",
+            "Display_Order"
+          ],
+          "rows": [
+            {
+              "Term_ID": 1,
+              "Term_Text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 1
+            },
+            {
+              "Term_ID": 2,
+              "Term_Text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 2
+            },
+            {
+              "Term_ID": 3,
+              "Term_Text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 3
+            },
+            {
+              "Term_ID": 4,
+              "Term_Text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 4
+            },
+            {
+              "Term_ID": 5,
+              "Term_Text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 5
+            },
+            {
+              "Term_ID": 6,
+              "Term_Text": "للمشتركين اعتباراً من يوم 1 في الشهر: آخر موعد لدفع التجديد هو يوم 28 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 6
+            },
+            {
+              "Term_ID": 7,
+              "Term_Text": "للمشتركين اعتباراً من يوم 16 في الشهر: آخر موعد لدفع التجديد هو يوم 13 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 7
+            },
+            {
+              "Term_ID": 8,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": true,
+              "Display_Order": 8
+            }
+          ]
+        },
+        "customPricing": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "addons": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        }
+      },
+      "site": {
+        "settings": {
+          "status": "available",
+          "rows": [
+            {
+              "Settings": "Show Offers Globally",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Search",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Last Updated",
+              "Value": "-",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Copy Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Share Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Vodafone Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show WE Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Orange Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Etisalat Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Auto Refresh Seconds",
+              "Value": 15.0,
+              "Enable": true
+            }
+          ],
+          "refreshSeconds": 15,
+          "flags": {
+            "Show Offers Globally": true,
+            "Show Search": true,
+            "Show Last Updated": false,
+            "Show Copy Button-Package cards": true,
+            "Show Share Button-Package cards": true,
+            "Show Vodafone Page": true,
+            "Show WE Page": true,
+            "Show Orange Page": true,
+            "Show Etisalat Page": true,
+            "Auto Refresh Seconds": true
+          }
+        },
+        "announcements": [
+          {
+            "No.": 1,
+            "Target": "All",
+            "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+            "Enable": true
+          },
+          {
+            "No.": 2,
+            "Target": "All",
+            "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+            "Enable": true
+          },
+          {
+            "No.": 3,
+            "Target": "All",
+            "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+            "Enable": true
+          },
+          {
+            "No.": 4,
+            "Target": "All",
+            "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+            "Enable": true
+          },
+          {
+            "No.": 5,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          },
+          {
+            "No.": 6,
+            "Target": "All",
+            "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+            "Enable": true
+          },
+          {
+            "No.": 7,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          }
+        ],
+        "contacts": [
+          {
+            "Sort Order": 1,
+            "Contact ID": "whatsapp_number",
+            "Contact Type": "WhatsApp Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 2,
+            "Contact ID": "telegram_number",
+            "Contact Type": "Telegram Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 3,
+            "Contact ID": "whatsapp_group",
+            "Contact Type": "WhatsApp Group",
+            "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 4,
+            "Contact ID": "telegram_group",
+            "Contact Type": "Telegram Group",
+            "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+            "Target": "All",
+            "Enable": true
+          }
+        ],
+        "paymentMethods": [
+          {
+            "Payment Method": "Payment_InstaPay",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Telda",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Vodafone_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Orange_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Etisalat_Money",
+            "Enable": true
+          }
+        ]
+      },
+      "we": null
+    },
+    "4": {
+      "ok": true,
+      "apiVersion": 1,
+      "resource": "provider",
+      "sourceStatus": "available",
+      "generatedAt": "2026-11-11T02:46:00+02:00",
+      "refreshSeconds": 15,
+      "provider": {
+        "id": 4,
+        "slug": "etisalat",
+        "name": "Etisalat",
+        "nameAr": "اتصالات",
+        "enabled": false
+      },
+      "pageEnabled": true,
+      "pageState": "disabled",
+      "pageSettings": {
+        "status": "available",
+        "rows": [
+          {
+            "Settings": "Show Offers Etisalat",
+            "Enable": false
+          },
+          {
+            "Settings": "Show Etisalat Routers",
+            "Enable": true
+          },
+          {
+            "Settings": null,
+            "Enable": true
+          }
+        ],
+        "offersEnabled": false,
+        "routersEnabled": true
+      },
+      "sections": {
+        "offers": {
+          "enabled": false,
+          "status": "disabled"
+        },
+        "routers": {
+          "enabled": false,
+          "status": "disabled",
+          "rows": []
+        },
+        "terms": {
+          "enabled": false,
+          "status": "available",
+          "rows": [
+            {
+              "id": 1,
+              "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "type": "General",
+              "displayOrder": 1.0
+            },
+            {
+              "id": 2,
+              "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "type": "General",
+              "displayOrder": 2.0
+            },
+            {
+              "id": 3,
+              "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "type": "Important",
+              "displayOrder": 3.0
+            },
+            {
+              "id": 4,
+              "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "type": "Important",
+              "displayOrder": 4.0
+            },
+            {
+              "id": 5,
+              "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "type": "Important",
+              "displayOrder": 5.0
+            }
+          ]
+        }
+      },
+      "terms": {
+        "status": "available",
+        "rows": [
+          {
+            "id": 1,
+            "text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+            "type": "General",
+            "displayOrder": 1.0
+          },
+          {
+            "id": 2,
+            "text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+            "type": "General",
+            "displayOrder": 2.0
+          },
+          {
+            "id": 3,
+            "text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+            "type": "Important",
+            "displayOrder": 3.0
+          },
+          {
+            "id": 4,
+            "text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+            "type": "Important",
+            "displayOrder": 4.0
+          },
+          {
+            "id": 5,
+            "text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+            "type": "Important",
+            "displayOrder": 5.0
+          }
+        ]
+      },
+      "tables": {
+        "standard": {
+          "status": "available",
+          "sheetName": "Mobile_Rate Plans-Website",
+          "headers": [
+            "No. of Plan",
+            "MBs",
+            "Minutes",
+            "Main Price",
+            "Increase",
+            "Final Price",
+            "Offer Price",
+            "Show Offer",
+            "Badge",
+            "Show Rate Plan"
+          ],
+          "rows": [
+            {
+              "No. of Plan": 1.0,
+              "MBs": 10000.0,
+              "Minutes": 1100.0,
+              "Main Price": 300.0,
+              "Increase": 5.0,
+              "Final Price": 305,
+              "Offer Price": 275,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 2.0,
+              "MBs": 15000.0,
+              "Minutes": 1200.0,
+              "Main Price": 350.0,
+              "Increase": 5.0,
+              "Final Price": 355,
+              "Offer Price": 320,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 3.0,
+              "MBs": 17000.0,
+              "Minutes": 1300.0,
+              "Main Price": 370.0,
+              "Increase": 5.0,
+              "Final Price": 375,
+              "Offer Price": 340,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 4.0,
+              "MBs": 20000.0,
+              "Minutes": 1500.0,
+              "Main Price": 410.0,
+              "Increase": 5.0,
+              "Final Price": 415,
+              "Offer Price": 375,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 5.0,
+              "MBs": 30000.0,
+              "Minutes": 1700.0,
+              "Main Price": 500.0,
+              "Increase": 0.0,
+              "Final Price": 500,
+              "Offer Price": 450,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 6.0,
+              "MBs": 40000.0,
+              "Minutes": 1800.0,
+              "Main Price": 560.0,
+              "Increase": 10.0,
+              "Final Price": 570,
+              "Offer Price": 515,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 7.0,
+              "MBs": 50000.0,
+              "Minutes": 1900.0,
+              "Main Price": 620.0,
+              "Increase": 15.0,
+              "Final Price": 635,
+              "Offer Price": 575,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 8.0,
+              "MBs": 55000.0,
+              "Minutes": 2000.0,
+              "Main Price": 680.0,
+              "Increase": 15.0,
+              "Final Price": 695,
+              "Offer Price": 630,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 9.0,
+              "MBs": 60000.0,
+              "Minutes": 2100.0,
+              "Main Price": 740.0,
+              "Increase": 30.0,
+              "Final Price": 770,
+              "Offer Price": 695,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            },
+            {
+              "No. of Plan": 10.0,
+              "MBs": 100000.0,
+              "Minutes": 5000.0,
+              "Main Price": 1500.0,
+              "Increase": 30.0,
+              "Final Price": 1530,
+              "Offer Price": 1380,
+              "Show Offer": true,
+              "Badge": null,
+              "Show Rate Plan": true
+            }
+          ]
+        },
+        "eom": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "to15": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "air": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "routers": {
+          "status": "available",
+          "sheetName": "Etisalat-Routers",
+          "headers": [
+            "Router ID",
+            "Router Name",
+            "Price",
+            "Increase",
+            "FInal Price",
+            "Discount Price",
+            "Show Offer",
+            "Enable",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 201.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 1
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 2
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 3
+            },
+            {
+              "Router ID": 202.0,
+              "Router Name": null,
+              "Price": null,
+              "Increase": null,
+              "FInal Price": 0,
+              "Discount Price": 0,
+              "Show Offer": false,
+              "Enable": false,
+              "Sort Order": 4
+            }
+          ]
+        },
+        "routerDetails": {
+          "status": "available",
+          "sheetName": "Etisalat-Routers_Details",
+          "headers": [
+            "Router ID",
+            "Section",
+            "Titel",
+            "Content",
+            "Sort Order"
+          ],
+          "rows": [
+            {
+              "Router ID": 401.0,
+              "Section": "Overview",
+              "Titel": "About Router",
+              "Content": null,
+              "Sort Order": 1.0
+            }
+          ]
+        },
+        "pageSettings": {
+          "status": "available",
+          "sheetName": "Page Settings",
+          "headers": [
+            "Settings",
+            "Enable"
+          ],
+          "rows": [
+            {
+              "Settings": "Show Offers Etisalat",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Etisalat Routers",
+              "Enable": true
+            },
+            {
+              "Settings": null,
+              "Enable": true
+            }
+          ]
+        },
+        "terms": {
+          "status": "available",
+          "sheetName": "Etisalat-Terms&Conditions",
+          "headers": [
+            "Term_ID",
+            "Term_Text",
+            "Term_Type",
+            "Enable",
+            "Display_Order"
+          ],
+          "rows": [
+            {
+              "Term_ID": 1,
+              "Term_Text": "يجب أن يكون الخط مسجلاً على نظام (14 قرش) أو نظام (فليكس).",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 1
+            },
+            {
+              "Term_ID": 2,
+              "Term_Text": "التفعيل يتم على رقمك الحالي دون الحاجة لشراء شريحة جديدة.",
+              "Term_Type": "General",
+              "Enable": true,
+              "Display_Order": 2
+            },
+            {
+              "Term_ID": 3,
+              "Term_Text": "يجب أن يكون الخط مسجلاً بالرقم القومي الصحيح لصاحب الخط لضمان سريان الخدمة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 3
+            },
+            {
+              "Term_ID": 4,
+              "Term_Text": "أول شهر تنزل ضريبة باقة Vodafone Red الرسمية بقيمة 24 جنيه تُدفع عبر فوري أو فودافون كاش أو فيزا (تُدفع مرة واحدة سنوياً) للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 4
+            },
+            {
+              "Term_ID": 5,
+              "Term_Text": "لإلغاء الباقة في أي وقت تواصل مع خدمة عملاء فودافون عبر 1100 أو 888 وفي خلال يومين عمل يتم الالغاء بعد دفع رسوم التسوية للشركة.",
+              "Term_Type": "Important",
+              "Enable": true,
+              "Display_Order": 5
+            },
+            {
+              "Term_ID": 6,
+              "Term_Text": "للمشتركين اعتباراً من يوم 1 في الشهر: آخر موعد لدفع التجديد هو يوم 28 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 6
+            },
+            {
+              "Term_ID": 7,
+              "Term_Text": "للمشتركين اعتباراً من يوم 16 في الشهر: آخر موعد لدفع التجديد هو يوم 13 من الشهر السابق.",
+              "Term_Type": "Renewal",
+              "Enable": false,
+              "Display_Order": 7
+            },
+            {
+              "Term_ID": 8,
+              "Term_Text": null,
+              "Term_Type": null,
+              "Enable": true,
+              "Display_Order": 8
+            }
+          ]
+        },
+        "customPricing": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        },
+        "addons": {
+          "status": "not_applicable",
+          "headers": [],
+          "rows": []
+        }
+      },
+      "site": {
+        "settings": {
+          "status": "available",
+          "rows": [
+            {
+              "Settings": "Show Offers Globally",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Search",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Last Updated",
+              "Value": "-",
+              "Enable": false
+            },
+            {
+              "Settings": "Show Copy Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Share Button-Package cards",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Vodafone Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show WE Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Orange Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Show Etisalat Page",
+              "Value": "-",
+              "Enable": true
+            },
+            {
+              "Settings": "Auto Refresh Seconds",
+              "Value": 15.0,
+              "Enable": true
+            }
+          ],
+          "refreshSeconds": 15,
+          "flags": {
+            "Show Offers Globally": true,
+            "Show Search": true,
+            "Show Last Updated": false,
+            "Show Copy Button-Package cards": true,
+            "Show Share Button-Package cards": true,
+            "Show Vodafone Page": true,
+            "Show WE Page": true,
+            "Show Orange Page": true,
+            "Show Etisalat Page": true,
+            "Auto Refresh Seconds": true
+          }
+        },
+        "announcements": [
+          {
+            "No.": 1,
+            "Target": "All",
+            "Value": "🚨 عروض الـ Black Friday وصلت! 💥⚡",
+            "Enable": true
+          },
+          {
+            "No.": 2,
+            "Target": "All",
+            "Value": "🎁⚡عروض جديدة وصلت  و خصومات لفترة محدودة ⚡",
+            "Enable": true
+          },
+          {
+            "No.": 3,
+            "Target": "All",
+            "Value": "🛒 اطلب باقتك دلوقتي من الموقع",
+            "Enable": true
+          },
+          {
+            "No.": 4,
+            "Target": "All",
+            "Value": "⚡ تفعيل مباشر ورسمي على رقمك📲",
+            "Enable": true
+          },
+          {
+            "No.": 5,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          },
+          {
+            "No.": 6,
+            "Target": "All",
+            "Value": "🛡️تفعيل فوري على خطك.. والدفع بعد التفعيل!",
+            "Enable": true
+          },
+          {
+            "No.": 7,
+            "Target": "All",
+            "Value": "🏃‍♂️ الحق العرض واشحن جيجاتك دلوقتي",
+            "Enable": true
+          }
+        ],
+        "contacts": [
+          {
+            "Sort Order": 1,
+            "Contact ID": "whatsapp_number",
+            "Contact Type": "WhatsApp Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 2,
+            "Contact ID": "telegram_number",
+            "Contact Type": "Telegram Number",
+            "Value": 201554551710.0,
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 3,
+            "Contact ID": "whatsapp_group",
+            "Contact Type": "WhatsApp Group",
+            "Value": "https://chat.whatsapp.com/CAGWbmHZLx0B1zIF5sQzRc",
+            "Target": "All",
+            "Enable": true
+          },
+          {
+            "Sort Order": 4,
+            "Contact ID": "telegram_group",
+            "Contact Type": "Telegram Group",
+            "Value": "https://t.me/+K6sC-Da1_VBjNTRk",
+            "Target": "All",
+            "Enable": true
+          }
+        ],
+        "paymentMethods": [
+          {
+            "Payment Method": "Payment_InstaPay",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Telda",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Vodafone_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Orange_Cash",
+            "Enable": true
+          },
+          {
+            "Payment Method": "Payment_Etisalat_Money",
+            "Enable": true
+          }
+        ]
+      },
+      "we": null
+    }
+  },
+  "routers": {
+    "ok": true,
+    "apiVersion": 1,
+    "resource": "routers",
+    "generatedAt": "2026-11-11T02:46:00+02:00",
+    "refreshSeconds": 15,
+    "sourceStatus": "empty",
+    "sectionEnabled": true,
+    "providers": [
+      {
+        "providerId": 1,
+        "name": "Vodafone",
+        "slug": "vodafone",
+        "enabled": true,
+        "sectionEnabled": true,
+        "status": "empty"
+      },
+      {
+        "providerId": 2,
+        "name": "WE",
+        "slug": "we",
+        "enabled": true,
+        "sectionEnabled": true,
+        "status": "empty"
+      },
+      {
+        "providerId": 3,
+        "name": "Orange",
+        "slug": "orange",
+        "enabled": false,
+        "sectionEnabled": false,
+        "status": "disabled"
+      },
+      {
+        "providerId": 4,
+        "name": "Etisalat",
+        "slug": "etisalat",
+        "enabled": false,
+        "sectionEnabled": false,
+        "status": "disabled"
+      }
+    ],
+    "routers": []
+  }
+}

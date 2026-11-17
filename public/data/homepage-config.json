@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "source": "واجهة العرض فقط؛ بيانات الموقع تُحمّل من API المركزي أو snapshot معلّمة كمعاينة",
+  "providerFallbacks": [
+    { "id": 1, "name": "Vodafone", "nameAr": "فودافون" },
+    { "id": 2, "name": "WE", "nameAr": "وي" },
+    { "id": 3, "name": "Orange", "nameAr": "أورنج" },
+    { "id": 4, "name": "Etisalat", "nameAr": "اتصالات" }
+  ],
+  "settings": {
+    "headerOptions": {
+      "home": true,
+      "providers": true,
+      "routers": true,
+      "announcements": true,
+      "contact": true,
+      "we": true
+    }
+  }
+}

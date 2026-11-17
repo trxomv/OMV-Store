@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090513" />
+    <meta name="description" content="اكتشف خدمات وباقات شركات الاتصالات المصرية من مكان واحد على OMV Store." />
+    <title>OMV Store — كل شبكاتك في مكان واحد</title>
+    <link rel="icon" type="image/webp" href="assets/images/we-project-mark.webp" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
+    <script type="module" src="js/homepage.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تخطي إلى المحتوى</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="#top" aria-label="OMV Store، الرئيسية">
+          <span class="brand-mark" aria-hidden="true"><i></i><b></b><em></em></span>
+          <span class="brand-name">OMV <strong>Store</strong></span>
+        </a>
+        <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+          <a class="is-current" href="#top" data-header-option="home">الرئيسية</a>
+          <a href="#providers" data-header-option="providers">الشبكات</a>
+          <a href="routers.html" data-header-option="routers">الراوترات</a>
+          <a href="#announcements" data-header-option="announcements">الإعلانات</a>
+          <a href="#contact" data-header-option="contact">تواصل معنا</a>
+        </nav>
+        <a class="we-shortcut" href="we.html" data-header-option="we"><span class="we-dot" aria-hidden="true"></span> باقات WE</a>
+        <details class="mobile-nav">
+          <summary aria-label="فتح قائمة التنقل"><span></span><span></span><span></span></summary>
+          <nav aria-label="التنقل للهاتف">
+            <a href="#top" data-header-option="home">الرئيسية</a>
+            <a href="#providers" data-header-option="providers">الشبكات</a>
+            <a href="routers.html" data-header-option="routers">الراوترات</a>
+            <a href="#announcements" data-header-option="announcements">الإعلانات</a>
+            <a href="#contact" data-header-option="contact">تواصل معنا</a>
+            <a href="we.html" data-header-option="we">باقات WE</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="data-mode-banner shell" id="data-mode-banner" role="status" hidden></div>
+      <section class="hero shell" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="signal-pulse" aria-hidden="true"></span> منصتك لخدمات الاتصالات</p>
+          <h1 id="hero-title">كل عروض الاتصالات<br /><span>في مكان واحد</span></h1>
+          <p class="hero-description">اختار شبكتك المفضلة واستكشف الخدمات المتاحة، وكل جديد تلاقيه هنا.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#providers">استكشف الشبكات <span aria-hidden="true">←</span></a>
+            <a class="button button-secondary" href="routers.html">كل الراوترات</a>
+          </div>
+          <div class="hero-proof" aria-label="ملخص المنصة">
+            <span><b>4</b> شبكات</span><i aria-hidden="true"></i>
+            <span><b>WE</b> متاحة الآن</span><i aria-hidden="true"></i>
+            <span>تجربة واحدة</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="رسم تقني لشريحة اتصال">
+          <div class="art-halo halo-one" aria-hidden="true"></div>
+          <div class="art-halo halo-two" aria-hidden="true"></div>
+          <div class="orbit orbit-one" aria-hidden="true"></div>
+          <div class="orbit orbit-two" aria-hidden="true"></div>
+          <img src="assets/images/sim-hero.webp" alt="شريحة اتصال بتصميم تقني مضيء" width="640" height="640" fetchpriority="high" />
+          <div class="art-caption"><span class="caption-spark" aria-hidden="true">✦</span> اتصال أوضح. اختيارات أسهل.</div>
+          <span class="art-chip chip-a" aria-hidden="true">OMV</span>
+          <span class="art-chip chip-b" aria-hidden="true">4G · 5G</span>
+        </div>
+        <a class="scroll-hint" href="#providers" aria-label="انتقل إلى الشبكات"><span aria-hidden="true">↓</span></a>
+      </section>
+
+      <section class="providers-section shell section-block" id="providers" aria-labelledby="providers-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">اختار اللي يناسبك</p><h2 id="providers-title">شبكات الاتصالات</h2></div>
+          <p>بوابتك لكل شبكة — والمزيد من الخدمات قادم.</p>
+        </div>
+        <div class="provider-grid" id="provider-grid" aria-live="polite" aria-busy="true">
+          <p class="loading-note">جاري تجهيز الشبكات…</p>
+        </div>
+      </section>
+
+      <section class="router-section shell section-block" id="routers" aria-labelledby="routers-title">
+        <div class="router-panel">
+          <div class="router-copy">
+            <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">⌁</span> قريبًا على OMV Store</p>
+            <h2 id="routers-title">كل الراوترات<br /><span>في مكان واحد</span></h2>
+            <p id="router-description">نجهّز مساحة تجمع أجهزة الراوتر من مختلف الشبكات، مع تفاصيل واضحة عند توفر البيانات.</p>
+            <span class="availability-pill"><i aria-hidden="true"></i> <span id="router-status">قسم الراوترات قيد التجهيز</span></span>
+            <div class="router-announcements" id="router-announcements" aria-live="polite"></div>
+            <a class="button button-secondary router-catalog-link" id="router-catalog-link" href="routers.html">عرض كتالوج الراوترات <span aria-hidden="true">←</span></a>
+          </div>
+          <div class="router-art" aria-hidden="true">
+            <div class="wifi-rings"><i></i><i></i><i></i></div>
+            <svg viewBox="0 0 360 180" role="presentation"><path class="router-antenna" d="M105 79V25M255 79V25"/><path class="router-body" d="M56 82Q56 70 69 70H291Q304 70 304 82V138Q304 151 291 151H69Q56 151 56 138Z"/><path class="router-line" d="M57 111H303"/><circle class="router-led" cx="249" cy="131" r="4"/><circle class="router-led" cx="269" cy="131" r="4"/><circle class="router-led" cx="289" cy="131" r="4"/><path class="router-foot" d="M91 151v8m178-8v8"/></svg>
+            <span class="router-glow"></span>
+          </div>
+          <span class="router-number" aria-hidden="true">02</span>
+        </div>
+      </section>
+
+      <section class="announcement-section shell section-block" id="announcements" aria-labelledby="announcement-title">
+        <div class="announcement-head"><span class="announcement-icon" aria-hidden="true">✦</span><div><p class="eyebrow">خليك على اطلاع</p><h2 id="announcement-title">آخر الإعلانات</h2></div><span class="announcement-line" aria-hidden="true"></span></div>
+        <div class="announcement-list" id="announcement-list" aria-live="polite" aria-busy="true">
+          <p class="loading-note">جاري تحميل الإعلانات…</p>
+        </div>
+      </section>
+
+      <section class="contact-cta shell" aria-label="التواصل">
+        <div><p class="eyebrow">موجودين علشانك</p><h2>محتاج مساعدة؟</h2><p>اختار وسيلة التواصل المناسبة، وفريقنا هيساعدك.</p></div>
+        <div class="contact-cta-links" id="contact-cta-links"><span class="loading-note">جاري تجهيز طرق التواصل…</span></div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="contact">
+      <div class="footer-main shell">
+        <div class="footer-brand-column">
+          <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><i></i><b></b><em></em></span><span class="brand-name">OMV <strong>Store</strong></span></a>
+          <p>شبكاتك وخدمات الاتصالات، أقرب وأسهل.</p>
+          <div class="social-links" id="social-links" aria-label="روابط التواصل"></div>
+        </div>
+      <div class="footer-column"><h2>روابط سريعة</h2><a href="#top">الرئيسية</a><a href="#providers">الشبكات</a><a href="routers.html">الراوترات</a><a href="we.html">باقات WE</a></div>
+        <div class="footer-column"><h2>طرق الدفع</h2><div class="payment-list" id="payment-list"><span class="loading-note">جاري التحميل…</span></div></div>
+      <div class="footer-column footer-terms"><h2>الشروط والأحكام</h2><p id="terms-note">جاري التحقق من البيانات…</p><div id="terms-content"></div><a href="#contact" class="footer-contact-link">تواصل معنا <span aria-hidden="true">←</span></a></div>
+      </div>
+      <div class="footer-bottom"><div class="shell"><span>© <span id="copyright-year"></span> OMV Store</span><span>كل الحقوق محفوظة</span><a href="#top">العودة للأعلى ↑</a></div></div>
+    </footer>
+  </body>
+</html>

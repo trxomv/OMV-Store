@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090513" />
+    <meta name="description" content="كتالوج راوترات مزودي الاتصالات على OMV Store." />
+    <title>كل الراوترات — OMV Store</title>
+    <link rel="icon" type="image/webp" href="assets/images/we-project-mark.webp" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
+    <script src="site-config.js" defer></script>
+    <script type="module" src="js/routers-page.js"></script>
+  </head>
+  <body class="catalog-page">
+    <a class="skip-link" href="#main">تخطي إلى المحتوى</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="OMV Store، الرئيسية"><span class="brand-mark" aria-hidden="true"><i></i><b></b><em></em></span><span class="brand-name">OMV <strong>Store</strong></span></a>
+        <nav class="desktop-nav" aria-label="التنقل الرئيسي"><a href="/">الرئيسية</a><a class="is-current" href="routers.html">كل الراوترات</a><a href="we.html">باقات WE</a></nav>
+        <a class="we-shortcut" href="/">العودة للرئيسية</a>
+      </div>
+    </header>
+    <main id="main" class="catalog-main shell">
+      <div class="data-mode-banner" id="data-mode-banner" role="status" hidden></div>
+      <nav class="breadcrumbs" aria-label="مسار التنقل"><a href="/">الرئيسية</a><span aria-hidden="true">/</span><span>كل الراوترات</span></nav>
+      <section class="catalog-page-hero" aria-labelledby="routers-title">
+        <p class="eyebrow"><span class="signal-pulse" aria-hidden="true"></span> كتالوج موحّد للشبكات</p>
+        <h1 id="routers-title">كل الراوترات <span>في مكان واحد</span></h1>
+        <p>يعرض هذا القسم أجهزة الراوتر التي تم إدخالها وتفعيلها في مصدر مزود الخدمة، دون بيانات تجريبية أو أسعار افتراضية.</p>
+        <span class="catalog-status" id="routers-status" role="status" aria-live="polite">جاري تحميل بيانات الراوترات…</span>
+      </section>
+      <section class="catalog-section" aria-labelledby="router-catalog-title">
+        <div class="catalog-heading"><div><p class="eyebrow">اختار الشبكة</p><h2 id="router-catalog-title">الراوترات المتاحة</h2></div>
+          <label class="provider-filter-label" for="provider-filter">تصفية حسب المزود</label>
+          <select id="provider-filter" class="provider-filter"><option value="all">كل الشبكات</option></select>
+        </div>
+        <div class="catalog-grid router-grid" id="router-list" aria-live="polite" aria-busy="true"></div>
+        <p class="empty-note" id="router-empty" hidden></p>
+      </section>
+      <p class="catalog-footnote" id="router-footnote">تُشارك هذه الصفحة نفس سجلات الراوترات مع أقسام الراوتر داخل صفحات المزودين.</p>
+    </main>
+    <footer class="site-footer catalog-footer"><div class="shell"><a class="footer-brand" href="/">OMV Store</a><span>© <span id="copyright-year"></span> OMV Store</span><a href="#main">العودة للأعلى ↑</a></div></footer>
+  </body>
+</html>
