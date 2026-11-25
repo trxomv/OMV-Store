@@ -104,7 +104,7 @@
   function uniqueIds(sourceRows, mapRow) {
     const candidates = (Array.isArray(sourceRows) ? sourceRows : []).map((row) => ({
       row,
-      id: normalizePlanId(pick(row, ["No. of Plan", "No of Plan"])),
+      id: normalizePlanId(pick(row, ["No. of Plan", "No of Plan", "Plan_ID"])),
     }));
     const counts = new Map();
     candidates.forEach(({ id }) => {
@@ -167,7 +167,11 @@
       const rawShow = pick(row, ["Show Rate Plan", "Show Plan", "Show", "Visible", "Visibility", "Enabled"]);
       if (rawShow !== undefined && rawShow !== "" && !booleanValue(rawShow, false)) return null;
 
-      const badges = badgeItems(pick(row, ["Badges", "Badge Text", "Plan Badge", "Badge"]));
+      const badges = [...new Set([
+        ...badgeItems(pick(row, ["Badges", "Badge Text", "Plan Badge", "Badge"])),
+        ...badgeItems(pick(row, ["First Badge"])),
+        ...badgeItems(pick(row, ["Second Badge"])),
+      ])];
 
       const sourceOfferFlag = pick(row, [
         "Discount Eligible", "Eligible For Discount", "Show Offer", "Show Discount", "Discount Enabled", "Has Offer",
@@ -189,7 +193,7 @@
       const categorySource = normalizeText(pick(row, ["Category ID"])) || categoryId;
       return {
         planId,
-        name: normalizeText(pick(row, ["Plan Name", "Package Name", "Name", "اسم الباقة"])),
+        name: normalizeText(pick(row, ["Plan Name", "Plan-Name", "Package Name", "Name", "اسم الباقة"])),
         badge: badges.join(" "),
         badges,
         mbs,

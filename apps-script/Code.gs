@@ -1,8 +1,9 @@
 /**
  * OMV Store central, read-only website data API.
  *
- * IMPORTANT: This is a new local source file. It has not been deployed.
- * Set OMV_MAIN_CONFIG_ID in Script Properties before manual deployment.
+ * Production source for the existing Web App deployment.
+ * Script Property OMV_MAIN_CONFIG_ID must hold the existing main workbook ID.
+ * The property name is a key; do not replace it with the workbook ID.
  * Provider spreadsheet IDs are read dynamically from Telecom Providers and
  * are never included in API responses.
  */

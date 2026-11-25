@@ -15,6 +15,7 @@ const routes = JSON.parse(routeText);
   assert.equal((config.match(/centralApiEndpoint\s*:/g) || []).length, 1);
   assert.doesNotMatch(config + homeHtml + weHtml + providerHtml + routersHtml + frontend, /docs\.google\.com\/spreadsheets|Spreadsheet_ID|spreadsheetId|201554551710|CAGWbmHZLx0B1zIF5sQzRc|K6sC-Da1_VBjNTRk/i);
   assert.match(config, /centralApiEndpoint:\s*"https:\/\/script\.google\.com\/macros\/s\/[^\"]+\/exec"/);
+  assert.match(config, /centralApiEndpoint:\s*"https:\/\/script\.google\.com\/macros\/s\/AKfycbyzE6Eq4R08y3OwCAFCEd5byHy1D2YMlKNNuRm6-qlr6GZI6LGiLJxpNZzWCopbf7-CIQ\/exec"/);
   assert.doesNotMatch(homepageConfig, /Spreadsheet_ID|spreadsheetId/);
 });
 

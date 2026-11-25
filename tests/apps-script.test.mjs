@@ -146,6 +146,8 @@ test("Apps Script source is read-only and excludes sheets or provider IDs from p
   assert.doesNotMatch(source, /function\s+doPost\s*\(/);
   assert.doesNotMatch(source, /\.setValue\s*\(|\.appendRow\s*\(|\.deleteRow\s*\(/);
   assert.match(source, /Spreadsheet_ID/);
+  const { context } = makeHarness();
+  assert.equal(context.MAIN_ID_PROPERTY_, "OMV_MAIN_CONFIG_ID");
   assert.match(source, /PropertiesService\.getScriptProperties\(\)\.getProperty\(MAIN_ID_PROPERTY_\)/);
   assert.match(source, /function\s+safeCallback_/);
   assert.match(source, /function\s+planSourceStatus_/);
