@@ -37,7 +37,7 @@ test("stable provider cards are always built for IDs 1–4 and use coming-soon f
   assert.match(homepageJs, /\[1, 2, 3, 4\]\.map/);
   assert.match(homepageJs, /providerRoute\(provider\.canonicalId \|\| provider\.id\)/);
   assert.match(homepageJs, /const FALLBACK_PROVIDERS = \[1, 2, 3, 4\]\.map/);
-  assert.match(adapterJs, /empty:\s*"قريبًا"/);
+  assert.match(adapterJs, /empty:\s*"لا توجد بيانات"/);
   assert.match(homepageJs, /providerAnnouncements/);
   assert.doesNotMatch(configText + endpointConfig, /Spreadsheet_ID|spreadsheetId|1yTtzviCGjNALFlMFgFdvjfyDgDAJ_7_NDqccJ53orGg|16Au8ERRsELBR96LSG_lxRCOcjT6GVK_MaXy_R9vnrIs/);
 });

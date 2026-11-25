@@ -569,7 +569,7 @@ import { formatNumber } from "./utils/format.js";
         ? (currentData.plans.all ?? []).length > 0
         : (currentData.plans[category.id] ?? []).length > 0,
     );
-    categories.push({ id: "competitions", label: "المسابقات" });
+    if (currentData.settings.showCompetitions) categories.push({ id: "competitions", label: "المسابقات" });
     categories.push({ id: "custom", label: "خصص باقتك بنفسك" });
     if (!categories.some((category) => category.id === selectedCategory)) selectedCategory = categories[0]?.id ?? "all";
     elements.tabs.replaceChildren();
@@ -869,7 +869,7 @@ import { formatNumber } from "./utils/format.js";
     window.clearTimeout(refreshTimer);
     if (result?.sourceMode !== "live") return;
     const seconds = refreshSeconds(result.payload, currentData?.settings?.autoRefreshSeconds ?? core.DEFAULT_REFRESH_SECONDS);
-    refreshTimer = window.setTimeout(refresh, seconds * 1000);
+    if (seconds > 0) refreshTimer = window.setTimeout(refresh, seconds * 1000);
   }
 
   async function refresh() {

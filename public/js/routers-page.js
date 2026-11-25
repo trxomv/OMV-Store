@@ -97,7 +97,8 @@ async function start() {
       ? "تتبع حالة القسم إعداد Main Categories؛ لم تُعرض أي سجلات لأن القسم معطّل."
       : "تستخدم هذه الصفحة نفس سجل الراوتر الموحّد الذي تستخدمه أقسام الراوتر داخل صفحات المزودين.";
     renderList();
-    if (result.sourceMode === "live") refreshTimer = window.setTimeout(() => start().catch(showFailure), refreshSeconds(payload, 15) * 1000);
+    const seconds = refreshSeconds(payload, 15);
+    if (result.sourceMode === "live" && seconds > 0) refreshTimer = window.setTimeout(() => start().catch(showFailure), seconds * 1000);
     window.addEventListener("online", () => start().catch(showFailure), { once: true });
   } catch (error) {
     console.error("Router catalog data could not be loaded", error);

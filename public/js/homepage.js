@@ -58,6 +58,8 @@ function providerHref(provider) {
 function providerDescription(state, provider) {
   if (state === "available") return providerIdentity(provider.id).canonicalId === "TE" ? "الباقات والخدمات المتاحة" : "الخدمات المتاحة من هذه الشبكة";
   if (state === "offers_disabled") return "قسم العروض غير مفعّل حاليًا حسب إعداد الشبكة";
+  if (state === "page_disabled") return "صفحة الشبكة غير مفعّلة حاليًا حسب الإعدادات";
+  if (state === "disabled") return "الشبكة غير مفعّلة في سجل المزوّدين";
   if (state === "unavailable") return "بيانات الشبكة غير متاحة حاليًا";
   return "الخدمات قيد التجهيز — ترقّبوا توفرها";
 }
@@ -241,8 +243,9 @@ async function start() {
     renderContacts(siteResult.payload);
     renderPayments(siteResult.payload);
     renderTerms(siteResult.payload);
-    if (siteResult.sourceMode === "live") {
-      refreshTimer = window.setTimeout(() => start().catch(showLoadError), refreshSeconds(siteResult.payload, 15) * 1000);
+    const seconds = refreshSeconds(siteResult.payload, 15);
+    if (siteResult.sourceMode === "live" && seconds > 0) {
+      refreshTimer = window.setTimeout(() => start().catch(showLoadError), seconds * 1000);
     }
     window.addEventListener("online", () => start().catch(showLoadError), { once: true });
   } catch (error) {

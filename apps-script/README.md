@@ -1,6 +1,6 @@
 # Central OMV Store Apps Script API — Container-Bound Main Configuration
 
-This folder contains the source for one read-only Apps Script Web App whose project should be opened from the existing **OMV-Store_Main Configuration → Extensions → Apps Script** workbook. The main workbook remains the central configuration source. Provider workbooks remain separate and are opened dynamically through their existing `Spreadsheet_ID` values. This source has not been authorized, run in Google Apps Script, deployed, or connected to a live workbook by this task.
+This folder contains the source for one read-only Apps Script Web App whose project should be opened from the existing **OMV-Store_Main Configuration → Extensions → Apps Script** workbook. The main workbook remains the central configuration source. Provider workbooks remain separate and are opened dynamically through their existing `Spreadsheet_ID` values. The maintained workbook/settings map is [docs/data-settings-mapping.md](../docs/data-settings-mapping.md). This source has not been authorized, run in Google Apps Script, deployed, or connected to a live workbook by this task.
 
 ## Architecture decision
 
@@ -53,7 +53,7 @@ The required headers enforced by the current adapter layer include:
 - `Main Categories`: `Category ID`, `Enable`; `Category Name` is supported for category matching.
 - `Website Settings` and provider page-settings sheets: `Settings`, `Enable`; `Value` is used for configured values and refresh settings.
 - Provider terms: `Term_ID`, `Term_Text`, `Term_Type`, `Enable`, `Display_Order`.
-- Router sheets: `Router ID`, `Router Name`; provider-specific visibility headers are `Show Router` for Vodafone/Orange/Etisalat and `Enable` for WE.
+- Router sheets: `Router ID`, `Router Name`, `FInal Price`, and `Show Router` for all four providers. `Show Offer` independently controls the router discount offer.
 - `Router Offers` and `Master_Plans` remain explicitly schema-unestablished in the source; the code preserves their rows and reports schema diagnostics rather than inventing required headers.
 
 Optional/recognized columns include provider name aliases, `Target`, announcement/payment/contact fields, plan pricing and visibility fields, router pricing/display fields, terms title fields for main terms, and the refresh aliases documented in `provider-adapters.gs`.
@@ -76,14 +76,16 @@ Provider worksheet mappings, including provider-specific package, router, page-s
 `Code.gs` exposes read-only `doGet(event)` resources:
 
 - `resource=site`: public website settings, provider summaries, active announcements, contacts, payment methods, main terms, and mapped main tables.
-- `resource=provider&id=VF|TE|ORA|ET` (legacy numeric IDs remain compatible): one provider's normalized data, page settings, offers, routers, terms, targeted site content, and the WE compatibility payload for `TE`.
+- `resource=provider&id=VF|TE|ORA|ET` (legacy numeric IDs remain compatible): one provider's normalized data, mapped page settings, offers, routers, terms, public competition rows, sanitized diagnostics, targeted site content, and the WE compatibility payload for `TE`.
 - `resource=routers`: the enabled all-routers catalog and provider states.
 
-The response contract remains the existing v1 shape with `ok`, `apiVersion`, `resource`, `sourceStatus`, `generatedAt`, and resource-specific fields. Validated JSONP callbacks remain supported. There is no `doPost` and no spreadsheet write operation.
+The response contract retains the existing v1 envelope (`ok`, `apiVersion`, `resource`, `sourceStatus`, `generatedAt`) and adds provider setting-state, competition-section, and sanitized diagnostics fields. Validated JSONP callbacks remain supported. There is no `doPost` and no spreadsheet write operation.
 
-## Competition Entries status
+## Competitions and participant-data boundary
 
-`provider-adapters.gs` contains provider competition worksheet mappings and the reserved declaration:
+The four provider workbooks have public-data competition tabs (`VF-Competitions`, `TE-Competitions`, `ORA-Competitions`, `ET-Competitions`) with a shared schema. The API now reads those provider tabs and applies each provider's `Show <Provider> Competitions` setting (WE: `Show WE Competitions`). WE's pre-existing competition view consumes the normalized rows; no new competition UI destination was introduced on Vodafone, Orange, or Etisalat pages because none is established in the current frontend.
+
+`provider-adapters.gs` also retains the reserved declaration:
 
 ```text
 resource: competitionEntries
@@ -91,7 +93,7 @@ spreadsheetProperty: OMV_COMPETITION_ENTRIES_ID
 worksheet: Competition Entries
 ```
 
-The actual `Code.gs` source never consumes `COMPETITION_ENTRIES_MAPPING_`, never reads `OMV_COMPETITION_ENTRIES_ID`, never opens a Competition Entries workbook, and never returns competition rows in `site`, `provider`, or `routers` responses. Therefore Competition Entries integration is currently **mapped but not implemented**. No participant data is exposed, no registration write exists, and no competition workbook is modified. A future implementation would need an approved read-only source location, response contract, privacy rules, and tests before adding a read path.
+The actual `Code.gs` source does not consume `COMPETITION_ENTRIES_MAPPING_`, read `OMV_COMPETITION_ENTRIES_ID`, open a Competition Entries workbook, or access participant registrations. No participant data is returned, and no registration write or spreadsheet write exists. Any future participant-data integration requires an approved read-only source, explicit privacy rules, API contract, and tests.
 
 ## OAuth and account access
 
@@ -114,4 +116,4 @@ npm test
 npm run build
 ```
 
-The Apps Script tests execute the source inside a mocked, read-only workbook environment. They verify dynamic main/provider access, canonical IDs, mappings, response safety, cache/refresh behavior, and the absence of write methods. They do not contact Google and cannot verify a live deployment without authorization. No Google Sheets were edited by this task.
+The Apps Script tests execute the source inside mocked, read-only workbooks. They verify the actual provider-specific tabs and setting keys for all four providers, router visibility versus router offers, WE EOM/day-15 controls, competition public-table mapping, diagnostics, response safety, refresh behavior, and the absence of write methods. They do not contact Google and cannot verify a live deployment without authorization. No Google Sheets were edited by this task.

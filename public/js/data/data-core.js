@@ -10,7 +10,9 @@
   });
   const SETTING_DEFAULTS = Object.freeze({
     showOffersGlobally: false,
+    showPlansToEom: true,
     showPlansTo15: true,
+    showCompetitions: false,
     showNotes: true,
     showWhatsApp: false,
     showWhatsAppGroup: false,
@@ -282,7 +284,9 @@
     };
 
     result.showOffersGlobally = enabledSetting("Show Offers Globally", [], result.showOffersGlobally);
-    result.showPlansTo15 = enabledSetting("Show Plans to 15", [], result.showPlansTo15);
+    result.showPlansToEom = enabledSetting("Show Plans to EOM", [], result.showPlansToEom);
+    result.showPlansTo15 = enabledSetting("Show Plans to 15", ["Show to 15"], result.showPlansTo15);
+    result.showCompetitions = enabledSetting("Show Competitions", ["Show WE Competitions"], result.showCompetitions);
     result.showNotes = enabledSetting("Show Notes", [], result.showNotes);
     result.showSearch = enabledSetting("Show Search", [], result.showSearch);
     result.showLastUpdated = enabledSetting("Show Last Updated", [], result.showLastUpdated);
@@ -407,6 +411,9 @@
       eom: normalizePlans(sheets.eom, "eom"),
       to15: normalizePlans(sheets.to15, "to15"),
     };
+    if (!settings.showPlansToEom) plans.eom = [];
+    if (!settings.showPlansTo15) plans.to15 = [];
+
     const offers = settings.showOffersGlobally
       ? new Map(normalizeOffers(sheets.offers).filter((offer) => offer.showOffer).map((offer) => [offer.planId, offer]))
       : new Map();
@@ -466,7 +473,7 @@
       { id: "all", label: CATEGORY_LABELS.all },
       { id: "standard", label: CATEGORY_LABELS.standard },
     ];
-    if (day >= 8 && day <= lastDay) categories.push({ id: "eom", label: CATEGORY_LABELS.eom });
+    if (settings.showPlansToEom !== false && day >= 8 && day <= lastDay) categories.push({ id: "eom", label: CATEGORY_LABELS.eom });
     if (settings.showPlansTo15 && (day >= 23 || day <= 15)) categories.push({ id: "to15", label: CATEGORY_LABELS.to15 });
     return categories;
   }

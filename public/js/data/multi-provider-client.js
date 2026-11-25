@@ -141,6 +141,16 @@ export function renderSourceBanner(element, result) {
 }
 
 export function refreshSeconds(payload, fallback = 15) {
-  const value = Number(payload?.refreshSeconds ?? payload?.settings?.refreshSeconds ?? fallback);
-  return Number.isFinite(value) && value >= 5 && value <= 86400 ? Math.floor(value) : fallback;
+  if (payload?.refreshConfiguration?.effective?.autoDataRefresh === false
+    || payload?.settings?.effectiveRefresh?.autoDataRefresh === false
+    || payload?.settings?.flags?.["Auto Data Refresh"] === false) return 0;
+  const hasTopLevel = Object.prototype.hasOwnProperty.call(payload ?? {}, "refreshSeconds");
+  const hasSettings = Object.prototype.hasOwnProperty.call(payload?.settings ?? {}, "refreshSeconds");
+  const explicit = hasTopLevel || hasSettings;
+  const raw = hasTopLevel ? payload.refreshSeconds : hasSettings ? payload.settings.refreshSeconds : fallback;
+  if (explicit && (raw === null || raw === undefined || raw === "")) return 0;
+  const value = Number(raw);
+  if (explicit && value === 0) return 0;
+  if (!Number.isFinite(value) || value < 1 || value > 86400) return 0;
+  return Math.floor(value);
 }

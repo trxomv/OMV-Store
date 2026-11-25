@@ -327,8 +327,9 @@ async function start() {
     renderRouters(payload);
     renderTerms(payload);
     renderShared(payload.site);
-    if (result.sourceMode === "live") {
-      refreshTimer = window.setTimeout(() => start().catch(showFailure), refreshSeconds(payload, 15) * 1000);
+    const seconds = refreshSeconds(payload, 15);
+    if (result.sourceMode === "live" && seconds > 0) {
+      refreshTimer = window.setTimeout(() => start().catch(showFailure), seconds * 1000);
     }
     window.addEventListener("online", () => start().catch(showFailure), { once: true });
     if (state === "disabled" || state === "page_disabled") {

@@ -58,10 +58,10 @@ export function providerState(provider = {}) {
 export function providerStateLabel(state) {
   return ({
     available: "متاحة الآن",
-    disabled: "قريبًا",
+    disabled: "غير مفعّل",
     page_disabled: "الصفحة غير مفعّلة",
     offers_disabled: "العروض غير مفعّلة",
-    empty: "قريبًا",
+    empty: "لا توجد بيانات",
     unavailable: "تعذر تحميل البيانات",
     inaccessible: "المصدر غير متاح",
     unsupported_schema: "المصدر قيد التجهيز",

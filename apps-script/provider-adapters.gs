@@ -22,7 +22,11 @@ var PROVIDER_REGISTRY_ = {
       competitions: "VF-Competitions", providerTerms: "VF-Terms&Conditions"
     },
     legacySheets: { standard: ["Mobile_Rate Plans-Website"], routers: ["Vodafone-Routers"], routerDetails: ["Vodafone-Routers_Details"], pageSettings: ["Page Settings"], terms: ["Terms&Conditions"] },
-    routerVisibilityHeader: "Show Router"
+    routerVisibilityHeader: "Show Router",
+    settings: {
+      page: "Show Vodafone Page", offers: "Show Vodafone Offers", discountRate: "Show Discount Rate",
+      routers: "Show Vodafone Routers", competitions: "Show Vodafone Competitions"
+    }
   },
   TE: {
     providerId: "TE", legacyRouteId: 2, slug: "we", name: "WE",
@@ -32,7 +36,12 @@ var PROVIDER_REGISTRY_ = {
       providerSettings: "TE-Page Settings", competitions: "TE-Competitions", providerTerms: "TE-Terms&Conditions"
     },
     legacySheets: { standard: ["Mobile_Rate Plans-Website"], eom: ["Mobile_Plans to EOM-Website"], to15: ["Mobile_Plans to 15-Website"], air: ["WE-Air_Rate Plans-Website"], routers: ["WE-Routers"], routerDetails: ["WE-Routers_Details"], pageSettings: ["Page Settings"], terms: ["We-Terms&Conditions"] },
-    routerVisibilityHeader: "Enable"
+    routerVisibilityHeader: "Show Router",
+    settings: {
+      page: null, offers: "Show Offers WE", discountRate: null, routers: "Show WE Routers",
+      eom: "Show to EOM", to15: "Show to 15", competitions: "Show WE Competitions",
+      customRatePlansFrom1: "Custom Rate Plans From 1", customRatePlansFrom16: "Custom Rate Plans From 16"
+    }
   },
   ORA: {
     providerId: "ORA", legacyRouteId: 3, slug: "orange", name: "Orange",
@@ -42,7 +51,11 @@ var PROVIDER_REGISTRY_ = {
       competitions: "ORA-Competitions", providerTerms: "ORA-Terms&Conditions"
     },
     legacySheets: { standard: ["Mobile_Rate Plans-Website"], routers: ["Orange-Routers"], routerDetails: ["Orange-Routers_Details"], pageSettings: ["Page Settings"], terms: ["Orange-Terms&Conditions"] },
-    routerVisibilityHeader: "Show Router"
+    routerVisibilityHeader: "Show Router",
+    settings: {
+      page: "Show Orange Page", offers: "Show Orange Offers", discountRate: "Show Discount Rate",
+      routers: "Show Orange Routers", competitions: "Show Orange Competitions"
+    }
   },
   ET: {
     providerId: "ET", legacyRouteId: 4, slug: "etisalat", name: "Etisalat",
@@ -52,7 +65,11 @@ var PROVIDER_REGISTRY_ = {
       competitions: "ET-Competitions", providerTerms: "Etisalat-Terms&Conditions"
     },
     legacySheets: { standard: ["Mobile_Rate Plans-Website"], routers: ["Etisalat-Routers"], routerDetails: ["Etisalat-Routers_Details"], pageSettings: ["Page Settings"], terms: ["Etisalat-Terms&Conditions"] },
-    routerVisibilityHeader: "Show Router"
+    routerVisibilityHeader: "Show Router",
+    settings: {
+      page: "Show Etisalat Page", offers: "Show Etisalat Offers", discountRate: "Show Discount Rate",
+      routers: "Show Etisalat Routers", competitions: "Show Etisalat Competitions"
+    }
   }
 };
 
@@ -97,7 +114,7 @@ function logicalWorksheet_(providerId, logicalResource) {
   if (logicalResource === "terms") value = mapping.providerTerms;
   if (logicalResource === "providerSettings") value = mapping.providerSettings;
   if (logicalResource === "standard") value = mapping.packages.mobile;
-  if (logicalResource === "home" || logicalResource === "mobile") value = mapping.packages[logicalResource] || (logicalResource === "home" ? mapping.packages.air : "");
+  if (["home", "mobile", "eom", "to15", "air"].indexOf(logicalResource) >= 0) value = mapping.packages[logicalResource] || (logicalResource === "home" ? mapping.packages.air : "");
   if (!value) return adapterError_("UNKNOWN_RESOURCE", "Unknown provider resource.");
   return { providerId: adapter.providerId, logicalResource: logicalResource, physicalWorksheet: value, visibilityHeader: logicalResource === "routers" ? adapter.routerVisibilityHeader : null };
 }
@@ -137,8 +154,15 @@ function requiredHeadersForResource_(logicalResource) {
     pageSettings: ["Settings", "Enable"],
     routers: ["Router ID", "Router Name"],
     routerDetails: ["Router ID"],
-    terms: ["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"],
-    providerTerms: ["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"]
+      terms: ["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"],
+      competitions: ["Competition ID", "Competition Title", "Enable"],
+      standard: ["Plan_ID", "Plan-Name", "MBs", "Final Price", "Show Rate Plan"],
+      home: ["Plan_ID", "Plan-Name", "GBs", "Final Price", "Show Rate Plan"],
+      air: ["Plan_ID", "Plan-Name", "GBs", "Final Price", "Show Rate Plan"],
+      eom: ["Plan_ID", "Plan-Name", "MBs", "Final Price", "Show"],
+      to15: ["Plan_ID", "Plan-Name", "MBs", "Final Price", "Show"],
+      routers: ["Router ID", "Router Name", "FInal Price", "Show Router"],
+      providerTerms: ["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"]
   };
   return requirements[logicalResource] || (RESOURCE_SCHEMA_DEFINITIONS_[logicalResource] ? RESOURCE_SCHEMA_DEFINITIONS_[logicalResource].required : []);
 }

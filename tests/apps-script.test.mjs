@@ -20,39 +20,59 @@ function table(headers, rows = []) {
 }
 
 function makeHarness(options = {}) {
+  const providerId = options.providerId ?? "TE";
+  const providers = {
+    VF: { id: 1, name: "Vodafone", slug: "vodafone", sheets: { home: "@Home_Rate_Plans", routers: "VF-Routers", details: "VF-Routers_Details", settings: "VF-Page Settings", terms: "VF-Terms&Conditions", competitions: "VF-Competitions" } },
+    TE: { id: 2, name: "WE", slug: "we", sheets: { home: "TE-Air_Rate_Plans", routers: "TE-Routers", details: "TE-Routers_Details", settings: "TE-Page Settings", terms: "TE-Terms&Conditions", competitions: "TE-Competitions" } },
+    ORA: { id: 3, name: "Orange", slug: "orange", sheets: { home: "Home_Wir_Rate_Plans", routers: "ORA-Routers", details: "ORA-Routers_Details", settings: "ORA-Page Settings", terms: "ORA-Terms&Conditions", competitions: "ORA-Competitions" } },
+    ET: { id: 4, name: "Etisalat", slug: "etisalat", sheets: { home: "eHome_Rate_Plans", routers: "ET-Routers", details: "ET-Routers_Details", settings: "ET-Page Settings", terms: "Etisalat-Terms&Conditions", competitions: "ET-Competitions" } },
+  }[providerId];
+  const sourceId = providerId === "TE" ? "provider-id" : `provider-${providerId}`;
+  const mainPageKey = `Show ${providers.name} Page`;
+  const localSettings = providerId === "TE"
+    ? [["Show Offers WE", options.offersEnabled ?? true], ["Show WE Routers", options.routersEnabled ?? true], ["Show to EOM", options.showEom ?? true], ["Show to 15", options.showTo15 ?? true], ["Custom Rate Plans From 1", true], ["Custom Rate Plans From 16", true], ["Show WE Competitions", options.competitionsEnabled ?? true]]
+    : [[mainPageKey, options.providerPageEnabled ?? true], [`Show ${providers.name} Offers`, options.offersEnabled ?? true], ["Show Discount Rate", true], [`Show ${providers.name} Routers`, options.routersEnabled ?? true], [`Show ${providers.name} Competitions`, options.competitionsEnabled ?? true]];
   const mainWorkbook = new Map([
-    ["Telecom Providers", table(["Provider_ID", "Provider_Name", "Spreadsheet_ID", "Enable"], [[2, "WE", "provider-id", true]])],
-    ["Main Categories", table(["Category ID", "Category Name", "Enable"], [["routers", "All Routers", true]])],
+    ["Telecom Providers", table(["Provider_ID", "Provider_Name", "Spreadsheet_ID", "Enable"], [[providers.id, providers.name, sourceId, true]])],
+    ["Main Categories", table(["Sort Order", "Category ID", "Category Name", "Enable"], [[1, "routers", "All Routers", true]])],
     ["Website Settings", table(["Settings", "Value", "Enable"], [
-      ["Show WE Page", "-", true],
-      ["Show Offers Globally", "-", true],
+      [mainPageKey, true, options.mainPageEnabled ?? true],
+      ["Show Offers Globally", "--", true],
       ["Auto Refresh Seconds", 20, true],
     ])],
-    ["Social Media", table(["Contact ID", "Contact Type", "Value", "Target", "Enable"], [["whatsapp", "WhatsApp Number", "201234567890", "All", true]])],
+    ["Social Media", table(["Sort Order", "Contact ID", "Contact Type", "Value", "Target", "Enable"], [[1, "whatsapp", "WhatsApp Number", "201234567890", "All", true]])],
     ["Payment Methods", table(["Payment Method", "Enable"], [["Payment_InstaPay", true]])],
     ["Announcements", table(["No.", "Target", "Value", "Enable"], [[1, "All", "إعلان عام للاختبار", true]])],
     ["Terms&Conditions", table(["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"])],
   ]);
-  const providerWorkbook = new Map([
-    ["Mobile_Rate Plans-Website", table(["No. of Plan", "MBs", "Minutes", "Main Price", "Increase", "Final Price", "Offer Price", "Show Offer", "Badge", "Show Rate Plan"], [[1, 10000, 1000, 100, 5, 105, 95, true, "", true]])],
-    ["Page Settings", table(["Settings", "Enable"], [["Show Offers WE", true], ["Show WE Routers", true], ["Custom Rate Plans From 1", true]])],
-    ["We-Terms&Conditions", table(["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"], [[1, "شرط اختبار", "General", true, 1]])],
-    ["WE-Routers", table(["Router ID", "Router Name", "Price", "Increase", "FInal Price", "Discount Price", "Show Offer", "Enable", "Sort Order"])],
-    ["WE-Routers_Details", table(["Router ID", "Section", "Titel", "Content", "Sort Order"])],
-  ]);
-  mainWorkbook.set("OMV-Terms&Conditions", table(["Term_ID", "Term_Titel", "Term_Text", "Term_Type", "Enable", "Display_Order"], [[1, "عنوان اختبار", "شرط اختبار", "General", true, 1]]));
-  mainWorkbook.set("Router Offers", table(["Offer_ID", "Router_ID", "Enable"], [["offer-1", "r1", true]]));
-  mainWorkbook.set("Master_Plans", table(["Plan_ID", "Enable"], [["master-1", true]]));
   if (options.approvedRefresh) mainWorkbook.set("Website Settings", table(["Settings", "Value", "Enable"], [
     ["Auto Data Refresh", true, true],
     ["Competitions Change Check (Seconds)", 5, true],
     ["General Data Change Check (Seconds)", 15, true]
   ]));
-  providerWorkbook.set("Mobile_Rate_Plans", table(["No. of Plan", "MBs", "Minutes", "Final Price", "Show Rate Plan"], [[1, 10000, 1000, 105, true]]));
-  providerWorkbook.set("TE-Air_Rate_Plans", table(["No. of Plan", "MBs", "Minutes", "Final Price", "Show Rate Plan"], [[2, 20000, 2000, 150, true]]));
-  providerWorkbook.set("TE-Page Settings", table(["Settings", "Enable"], [["Show Offers WE", true], ["Show WE Routers", true]]));
-  providerWorkbook.set("TE-Terms&Conditions", table(["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"], [[1, "شرط اختبار", "General", true, 1]]));
-  providerWorkbook.set("TE-Routers", table(["Router ID", "Router Name", "Final Price", "Enable", "Show Offer"]));
+  mainWorkbook.set("OMV-Terms&Conditions", table(["Term_ID", "Term_Titel", "Term_Text", "Term_Type", "Enable", "Display_Order"], [[1, "عنوان اختبار", "شرط اختبار", "General", true, 1]]));
+  mainWorkbook.set("Router Offers", table(["Offer_ID", "Router_ID", "Enable"], [["offer-1", "r1", true]]));
+  mainWorkbook.set("Master_Plans", table(["Plan_ID", "Enable"], [["master-1", true]]));
+
+  const standardHeaders = ["Plan_ID", "Plan-Name", "MBs", "Minutes", "Main Price", "Increase", "Final Price", "Offer Price", "Show Offer", "First Badge", "Second Badge", "Show Rate Plan"];
+  const homeHeaders = ["Plan_ID", "Plan-Name", "GBs", "Main Price", "Increase", "Final Price", "Offer Price", "Show Offer", "First Badge", "Second Badge", "Show Rate Plan"];
+  const routerHeaders = ["Router ID", "Router Name", "Price", "Increase", "FInal Price", "Discount Price", "Show Offer", "First Badge", "Second Badge", "Show Router", "Sort Order"];
+  const competitionHeaders = ["Competition ID", "Competition Title", "Benefit_Type", "Gift_Data_GB", "Gift_Duration", "Duration_Unit", "Start_Date", "End_Date", "Terms", "Sort_Order", "Enable"];
+  const providerWorkbook = new Map([
+    ["Mobile_Rate_Plans", table(standardHeaders, [[1, "Mobile Plan", 10000, 1000, 100, 5, 105, 95, false, "", "", true]])],
+    [providers.sheets.home, table(homeHeaders, [[2, "Home Plan", 30, 100, 5, 105, 95, false, "", "", true]])],
+    [providers.sheets.settings, table(["Settings", "Enable"], localSettings)],
+    [providers.sheets.terms, table(["Term_ID", "Term_Text", "Term_Type", "Enable", "Display_Order"], [[1, "شرط اختبار", "General", true, 1]])],
+    [providers.sheets.routers, table(routerHeaders, options.includeRouter ? [["r1", "Source Router", 90, 10, 100, 95, options.routerOfferEnabled ?? false, "", "", options.routerEnabled ?? true, 1]] : [])],
+    [providers.sheets.details, table(["Router ID", "Section", "Titel", "Content", "Sort Order"])],
+    [providers.sheets.competitions, table(competitionHeaders, [["c1", "Competition", "Data", 2, 7, "days", "2026-10-01", "2026-10-31", "Public terms", 1, true]])],
+  ]);
+  if (providerId === "TE") {
+    providerWorkbook.set("Mobile_Plans_2_EOM", table(["Plan_ID", "Plan-Name", "MBs", "Minutes", "Main Price", "Increase", "Final Price", "Tha Actual Days Left", "Days Left", "Show"], [[3, "EOM Plan", 5000, 500, 80, 0, 80, 10, 10, options.showEom ?? true]]));
+    providerWorkbook.set("Mobile_Plans_2_15", table(["Plan_ID", "Plan-Name", "MBs", "Minutes", "Main Price", "Increase", "Final Price", "Tha Actual Days Left", "Days Left", "Show"], [[4, "15 Plan", 6000, 600, 90, 0, 90, 10, 10, options.showTo15 ?? true]]));
+    providerWorkbook.set("Custom Pricing", table(["Rule", "Type", "GB From", "GB To", "Minutes From", "Minutes To", "GB Price", "Minute Price", "Enabled"]));
+    providerWorkbook.set("Add-on", table(["Bundle", "Quota", "Price"]));
+  }
   const requestedIds = [];
   const requestedSheets = [];
   const cacheValues = new Map();
@@ -67,7 +87,7 @@ function makeHarness(options = {}) {
     SpreadsheetApp: {
       openById(id) {
         requestedIds.push(id);
-        const workbook = id === "main-id" ? mainWorkbook : id === "provider-id" ? providerWorkbook : null;
+        const workbook = id === "main-id" ? mainWorkbook : id === sourceId ? providerWorkbook : null;
         if (!workbook) throw new Error("not accessible");
         return { getSheetByName(name) { requestedSheets.push(name); return workbook.get(name) || null; } };
       },
@@ -81,7 +101,7 @@ function makeHarness(options = {}) {
     console: { error() {} },
   });
   vm.runInContext(source, context);
-  return { context, requestedIds, requestedSheets };
+  return { context, requestedIds, requestedSheets, sourceId, mainWorkbook, providerWorkbook };
 }
 
 function getJson(context, resource, extra = {}) {
@@ -129,6 +149,103 @@ test("router resource respects Main Categories and aggregates only valid enabled
   assert.equal(payload.providers[0].providerId, "TE");
   assert.equal(payload.providers[0].id, 2);
   assert.equal(payload.providers[0].sectionEnabled, true);
+});
+
+test("all four providers use actual local setting keys, source tabs, and enabled public competitions", () => {
+  const names = { VF: "Vodafone", TE: "WE", ORA: "Orange", ET: "Etisalat" };
+  for (const providerId of ["VF", "TE", "ORA", "ET"]) {
+    const { context } = makeHarness({ providerId, mainPageEnabled: true, providerPageEnabled: true, includeRouter: true, routerEnabled: true, routerOfferEnabled: false });
+    const site = getJson(context, "site").payload;
+    const summary = site.providers[0];
+    assert.equal(summary.providerId, providerId);
+    assert.equal(summary.pageEnabled, true);
+    assert.equal(summary.offersEnabled, true);
+    assert.equal(summary.routersEnabled, true);
+    assert.equal(summary.competitionsEnabled, true);
+    const provider = getJson(context, "provider", { id: providerId }).payload;
+    assert.equal(provider.pageEnabled, true);
+    assert.equal(provider.pageSettings.offersEnabled, true);
+    assert.equal(provider.pageSettings.routersEnabled, true);
+    assert.equal(provider.sections.offers.enabled, true);
+    assert.equal(provider.sections.routers.enabled, true);
+    assert.equal(provider.sections.routers.rows.length, 1);
+    assert.equal(provider.sections.routers.rows[0].visibility.router, true);
+    assert.equal(provider.sections.routers.rows[0].visibility.deviceOffer, false);
+    assert.equal(provider.sections.competitions.enabled, true);
+    assert.equal(provider.sections.competitions.rows.length, 1);
+    assert.equal(provider.sections.competitions.rows[0].title, "Competition");
+    assert.equal(provider.tables.competitions.status, "available");
+    assert.equal(provider.tables.standard.headers.includes("Plan_ID"), true);
+    assert.equal(provider.diagnostics.some((item) => /spreadsheet|participant|secret/i.test(JSON.stringify(item))), false);
+    assert.equal(provider.provider.name, names[providerId]);
+    if (providerId === "TE") {
+      assert.equal(provider.tables.eom.status, "available");
+      assert.equal(provider.tables.to15.status, "available");
+      assert.equal(provider.we.sheets.eom.rows[0].Show, true);
+      assert.equal(provider.we.sheets.to15.rows[0].Show, true);
+      assert.equal(provider.we.sheets.settings.rows.find((row) => row.Settings === "Show Plans to EOM").Value, true);
+      assert.equal(provider.we.sheets.settings.rows.find((row) => row.Settings === "Show Plans to 15").Value, true);
+      assert.equal(provider.we.competitions.length, 1);
+    }
+  }
+});
+
+test("provider and main page switches combine, while WE uses its real main switch and has no invented local page setting", () => {
+  const mainDisabled = getJson(makeHarness({ providerId: "VF", mainPageEnabled: false }).context, "provider", { id: "VF" }).payload;
+  assert.equal(mainDisabled.pageSettings.mainPageEnabled, false);
+  assert.equal(mainDisabled.pageSettings.providerPageEnabled, true);
+  assert.equal(mainDisabled.pageEnabled, false);
+  assert.equal(mainDisabled.sections.offers.enabled, false);
+  assert.equal(mainDisabled.sections.routers.enabled, false);
+
+  const providerDisabled = getJson(makeHarness({ providerId: "ORA", mainPageEnabled: true, providerPageEnabled: false }).context, "provider", { id: "ORA" }).payload;
+  assert.equal(providerDisabled.pageSettings.mainPageEnabled, true);
+  assert.equal(providerDisabled.pageSettings.providerPageEnabled, false);
+  assert.equal(providerDisabled.pageEnabled, false);
+
+  const we = getJson(makeHarness({ providerId: "TE", mainPageEnabled: false }).context, "provider", { id: "TE" }).payload;
+  assert.equal(we.pageEnabled, false);
+  assert.equal(we.pageSettings.providerPageEnabled, null);
+  assert.equal(we.diagnostics.some((item) => item.setting === "Show WE Page"), false);
+});
+
+test("provider page switches independently gate offers, router visibility, device offers, and competitions", () => {
+  const { context } = makeHarness({ providerId: "ET", includeRouter: true, routersEnabled: true, routerEnabled: true, routerOfferEnabled: false, offersEnabled: false, competitionsEnabled: false });
+  const payload = getJson(context, "provider", { id: "ET" }).payload;
+  assert.equal(payload.sections.offers.enabled, false);
+  assert.equal(payload.sections.routers.enabled, true);
+  assert.equal(payload.sections.routers.rows.length, 1);
+  assert.equal(payload.sections.routers.rows[0].showOffer, false);
+  assert.equal(payload.sections.competitions.enabled, false);
+  assert.deepEqual(JSON.parse(JSON.stringify(payload.sections.competitions.rows)), []);
+
+  const hiddenRouter = getJson(makeHarness({ providerId: "TE", includeRouter: true, routersEnabled: true, routerEnabled: false }).context, "provider", { id: "TE" }).payload;
+  assert.equal(hiddenRouter.sections.routers.enabled, true);
+  assert.equal(hiddenRouter.sections.routers.rows.length, 0);
+});
+
+test("WE EOM and day-15 switches are forwarded independently and malformed settings produce sanitized diagnostics", () => {
+  const { context } = makeHarness({ providerId: "TE", showEom: false, showTo15: true });
+  const payload = getJson(context, "provider", { id: "TE" }).payload;
+  assert.equal(payload.we.sheets.settings.rows.find((row) => row.Settings === "Show Plans to EOM").Value, false);
+  assert.equal(payload.we.sheets.settings.rows.find((row) => row.Settings === "Show Plans to 15").Value, true);
+  assert.equal(payload.tables.eom.rows[0].Show, false);
+  assert.equal(payload.tables.to15.rows[0].Show, true);
+
+  const { context: invalidContext, providerWorkbook } = makeHarness({ providerId: "VF" });
+  const settingsSheet = invalidContext.logicalWorksheet_("VF", "providerSettings").physicalWorksheet;
+  providerWorkbook.set(settingsSheet, table(["Settings", "Enable"], [["Show Vodafone Page", true], ["Show Vodafone Offers", "maybe"], ["Show Discount Rate", true], ["Show Vodafone Routers", true], ["Show Vodafone Competitions", true]]));
+  const invalidPayload = getJson(invalidContext, "provider", { id: "VF" }).payload;
+  assert.equal(invalidPayload.pageSettings.offersEnabled, false);
+  assert.ok(invalidPayload.diagnostics.some((item) => item.code === "SETTING_INVALID_BOOLEAN" && item.setting === "Show Vodafone Offers"));
+  assert.equal(invalidPayload.diagnostics.every((item) => !Object.prototype.hasOwnProperty.call(item, "value")), true);
+  const { context: dataContext, providerWorkbook: dataWorkbook } = makeHarness({ providerId: "VF" });
+  const standardSheet = dataContext.logicalWorksheet_("VF", "standard").physicalWorksheet;
+  dataWorkbook.set(standardSheet, table(["Plan_ID", "Plan-Name", "MBs", "Minutes", "Main Price", "Increase", "Final Price", "Offer Price", "Show Offer", "First Badge", "Second Badge", "Show Rate Plan"], [["", "Broken", 1000, 100, 10, 0, "bad price", "", false, "", "", true]]));
+  const dataDiagnostics = getJson(dataContext, "provider", { id: "VF" }).payload.diagnostics;
+  assert.ok(dataDiagnostics.some((item) => item.code === "MISSING_IDENTIFIER" && item.resource === "standard" && item.count === 1));
+  assert.ok(dataDiagnostics.some((item) => item.code === "INVALID_PRICE" && item.resource === "standard" && item.count === 1));
+  assert.equal(dataDiagnostics.every((item) => !Object.prototype.hasOwnProperty.call(item, "value")), true);
 });
 
 test("unknown resources, bad provider IDs and unsafe JSONP callback names fail safely", () => {
@@ -245,8 +362,12 @@ test("router visibility remains independent from device-offer visibility", () =>
   assert.equal(result.rows.length, 1);
   assert.equal(result.rows[0].visibility.router, true);
   assert.equal(result.rows[0].visibility.deviceOffer, false);
-  const we = context.normalizeRouters_({ status: "available", rows: [{ "Router ID": "r2", "Router Name": "WE Router", "FInal Price": 100, Enable: true, "Show Offer": true }] }, { rows: [] }, { providerId: "TE", id: 2, name: "WE", slug: "we" }, true);
+  const we = context.normalizeRouters_({ status: "available", rows: [{ "Router ID": "r2", "Router Name": "WE Router", "FInal Price": 100, "Show Router": true, "Show Offer": false }] }, { rows: [] }, { providerId: "TE", id: 2, name: "WE", slug: "we" }, true);
   assert.equal(we.rows.length, 1);
+  assert.equal(we.rows[0].visibility.router, true);
+  assert.equal(we.rows[0].visibility.deviceOffer, false);
+  const obsolete = context.normalizeRouters_({ status: "available", rows: [{ "Router ID": "r3", "Router Name": "Wrong Header", "FInal Price": 100, Enable: true, "Show Offer": true }] }, { rows: [] }, { providerId: "TE", id: 2, name: "WE", slug: "we" }, true);
+  assert.equal(obsolete.rows.length, 0);
 });
 
 test("Egyptian phone normalization is isolated and canonical", () => {
@@ -285,7 +406,7 @@ test("home-plan adapters resolve all four approved physical worksheets through m
   const expected = { VF: "@Home_Rate_Plans", TE: "TE-Air_Rate_Plans", ORA: "Home_Wir_Rate_Plans", ET: "eHome_Rate_Plans" };
   Object.keys(expected).forEach((providerId) => {
     const workbook = { getSheetByName(name) {
-      return name === expected[providerId] ? table(["Plan_ID", "Enable"], [["home-1", true]]) : null;
+      return name === expected[providerId] ? table(["Plan_ID", "Plan-Name", "GBs", "Final Price", "Show Rate Plan"], [["home-1", "Home", 10, 50, true]]) : null;
     } };
     const result = context.readMappedTable_(workbook, providerId, "home");
     assert.equal(result.sheetName, expected[providerId]);
