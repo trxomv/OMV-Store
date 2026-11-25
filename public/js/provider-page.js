@@ -14,6 +14,7 @@ import {
   rowValue,
 } from "./data/provider-adapters.js";
 import { hasCompletePlanFacts, planAvailability, providerPlanRows, providerVisual, whatsappPhone, whatsappPlanHref } from "./provider-page-ui.js";
+import { competitionRoute, discountRateVisible, publicCompetitionRows } from "./data/provider-page-rules.js";
 
 const $ = (id) => document.getElementById(id);
 const make = (tag, className, text) => {
@@ -115,7 +116,7 @@ function renderPlanAction(label, href) {
   return link;
 }
 
-function renderOfferCard(row, index, contacts) {
+function renderOfferCard(row, index, contacts, showDiscountRate) {
   const planId = rowValue(row, ["No. of Plan", "No of Plan", "Plan ID"]);
   const sourceName = rowValue(row, ["Plan Name", "Package Name", "Name"]);
   const title = sourceName ? String(sourceName) : planId !== undefined ? `باقة رقم ${planId}` : `باقة ${index + 1}`;
@@ -154,7 +155,7 @@ function renderOfferCard(row, index, contacts) {
   price.append(valueStack, make("b", "currency", "جنيه"));
   if (price.childElementCount) card.append(price);
   const discount = offerPrice !== null && finalPrice ? Math.round((1 - offerPrice / finalPrice) * 100) : offer?.discountPercent;
-  if (discount !== null && discount !== undefined && discount > 0) card.append(make("small", "discount-badge", `خصم ${formatNumber(discount)}%`));
+  if (showDiscountRate && discount !== null && discount !== undefined && discount > 0) card.append(make("small", "discount-badge", `خصم ${formatNumber(discount)}%`));
   const status = make("p", `provider-plan-status ${availability.available ? "is-available" : "is-unavailable"}`, availability.label);
   status.setAttribute("role", "status");
   card.append(status);
@@ -176,14 +177,34 @@ function renderOffers(payload) {
   if (!enabled) return;
   const table = payload.tables?.standard;
   const rows = providerPlanRows(table);
+  const showDiscountRate = discountRateVisible(payload.provider?.providerId ?? payload.provider?.id, payload.pageSettings);
   $("provider-offer-fact").textContent = rows.length ? `${formatNumber(rows.length)} باقات متاحة` : "لا توجد باقات متاحة";
   const list = $("provider-offer-list");
-  list.replaceChildren(...rows.map((row, index) => renderOfferCard(row, index, payload.site?.contacts || [])));
+  list.replaceChildren(...rows.map((row, index) => renderOfferCard(row, index, payload.site?.contacts || [], showDiscountRate)));
   const empty = $("provider-offers-empty");
   empty.hidden = rows.length > 0;
   if (!rows.length) empty.textContent = table?.status === "available" || table?.status === "empty"
     ? "لا توجد باقات مكتملة ومفعّلة للعرض في هذا المصدر حاليًا."
     : `تعذر عرض الباقات: حالة الورقة ${table?.status || "غير معروفة"}.`;
+}
+
+function renderCompetitionLink(payload) {
+  const link = $("provider-competitions-link");
+  if (!link) return;
+  const providerId = payload.provider?.providerId ?? payload.provider?.canonicalProviderId ?? payload.provider?.id;
+  const route = competitionRoute(providerId);
+  const visible = Boolean(route)
+    && payload.pageEnabled === true
+    && payload.provider?.enabled === true
+    && payload.sections?.competitions?.enabled === true
+    && publicCompetitionRows(payload).length > 0;
+  link.hidden = !visible;
+  if (!visible) {
+    link.removeAttribute("href");
+    return;
+  }
+  link.href = route;
+  link.textContent = "المسابقات المتاحة ←";
 }
 
 function renderRouterCard(router) {
@@ -323,6 +344,7 @@ async function start() {
     if (!payload.provider) throw new Error("provider-not-found");
     setProviderHeader(payload.provider);
     const state = renderStatus(payload);
+    renderCompetitionLink(payload);
     renderOffers(payload);
     renderRouters(payload);
     renderTerms(payload);

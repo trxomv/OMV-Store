@@ -6,6 +6,7 @@
     { "path": "/orange/", "title": "أورنج — OMV Store" },
     { "path": "/etisalat/", "title": "اتصالات — OMV Store" },
     { "path": "/provider.html", "title": "صفحة مزود الاتصالات" },
-    { "path": "/routers.html", "title": "كل الراوترات" }
+    { "path": "/routers.html", "title": "كل الراوترات" },
+    { "path": "/competitions.html", "title": "مسابقات الشبكة" }
   ]
 }

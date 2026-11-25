@@ -271,6 +271,25 @@ function normalizeCompetitions_(table, enabled) {
   return { status: rows.length ? "available" : "empty", rows: rows };
 }
 
+function publicCompetitionTable_(table) {
+  var publicHeaders = [
+    "Competition ID", "Competition Title", "Benefit_Type", "Gift_Data_GB", "Gift_Duration",
+    "Duration_Unit", "Start_Date", "End_Date", "Terms", "Sort_Order", "Enable"
+  ];
+  if (!table) return notApplicableTable_();
+  var headers = (Array.isArray(table.headers) ? table.headers : []).filter(function (header) {
+    return publicHeaders.indexOf(header) >= 0;
+  });
+  var rows = (Array.isArray(table.rows) ? table.rows : []).map(function (row) {
+    var safeRow = {};
+    headers.forEach(function (header) {
+      if (row && Object.prototype.hasOwnProperty.call(row, header)) safeRow[header] = row[header];
+    });
+    return safeRow;
+  });
+  return { status: table.status || "not_inspected", headers: headers, rows: rows };
+}
+
 function buildProviderResource_(providerId) {
   var main = getMainConfig_();
   var provider = findProvider_(main.providers, providerId);
@@ -322,6 +341,8 @@ function buildProviderResource_(providerId) {
   var competitions = normalizeCompetitions_(tables.competitions || notApplicableTable_(), showCompetitions && pageEnabled && provider.enabled);
   var pageState = !provider.enabled ? "disabled" : !pageEnabled ? "page_disabled" : !showOffers ? "offers_disabled" : sourceStatus;
   var diagnostics = providerSettingsDiagnostics_(provider, mainPageSetting, localSettings).concat(tableSchemaDiagnostics_(provider, tables));
+  var publicTables = Object.assign({}, tables);
+  publicTables.competitions = publicCompetitionTable_(tables.competitions);
 
   return {
     ok: true,
@@ -349,7 +370,7 @@ function buildProviderResource_(providerId) {
       competitions: { enabled: showCompetitions && pageEnabled && provider.enabled, status: competitions.status, rows: competitions.rows }
     },
     terms: terms,
-    tables: tables,
+    tables: publicTables,
     site: {
       settings: publicWebsiteSettings_(main.websiteSettings, main.refreshSeconds, main.refreshConfiguration),
       announcements: targetRowsForProvider_(main.announcements, provider),

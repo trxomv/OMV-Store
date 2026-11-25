@@ -103,7 +103,7 @@ test("central endpoint is configured and the snapshot remains an explicit safe f
 });
 
 test("route manifest declares all source pages and does not include APIs/assets", () => {
-  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html"]);
+  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"]);
   assert.equal(Object.keys(routes).length, 1);
   assert.ok(routes.routes.every((route) => route.path.startsWith("/") && !route.path.startsWith("//")));
 });

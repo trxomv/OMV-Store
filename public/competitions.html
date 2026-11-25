@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090513" />
+    <meta name="description" content="المسابقات العامة المتاحة لدى مزودي الاتصالات على OMV Store." />
+    <title>مسابقات الشبكة — OMV Store</title>
+    <link rel="icon" type="image/webp" href="assets/brand/omv-logo.webp" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
+    <link rel="stylesheet" href="css/refinement.css" />
+    <script src="site-config.js" defer></script>
+    <script type="module" src="js/competitions-page.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="مسابقات الشبكة — OMV Store" />
+    <meta property="og:description" content="المعلومات العامة للمسابقات من مصدر مزود الخدمة." />
+    <meta property="og:url" content="https://we-product.vercel.app/competitions.html" />
+    <meta property="og:image" content="https://we-product.vercel.app/assets/social-preview/omv-home.webp" />
+    <meta property="og:image:alt" content="مسابقات الشبكة على OMV Store" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="مسابقات الشبكة — OMV Store" />
+    <meta name="twitter:description" content="المعلومات العامة للمسابقات من مصدر مزود الخدمة." />
+    <meta name="twitter:image" content="https://we-product.vercel.app/assets/social-preview/omv-home.webp" />
+    <link rel="canonical" href="https://we-product.vercel.app/competitions.html" />
+  </head>
+  <body class="catalog-page">
+    <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="OMV Store، الرئيسية"><span class="brand-mark" aria-hidden="true"><i></i><b></b><em></em></span><span class="brand-name">OMV <strong>Store</strong></span></a>
+        <nav class="desktop-nav" aria-label="التنقل الرئيسي"><a href="/">الرئيسية</a><a href="routers.html">كل الراوترات</a><a href="we.html">باقات WE</a></nav>
+        <a class="we-shortcut" id="competition-return" href="/">العودة إلى الشبكة</a>
+      </div>
+    </header>
+    <main id="main" class="catalog-main shell">
+      <div class="data-mode-banner" id="data-mode-banner" role="status" hidden></div>
+      <nav class="breadcrumbs" aria-label="مسار التنقل"><a href="/">الرئيسية</a><span aria-hidden="true">/</span><span id="competition-breadcrumb">المسابقات</span></nav>
+      <section class="catalog-page-hero competition-hero" aria-labelledby="competitions-title">
+        <p class="eyebrow"><span class="signal-pulse" aria-hidden="true"></span> مسابقات الشبكة</p>
+        <h1 id="competitions-title">مسابقات <span id="competition-provider-name">الشبكة</span></h1>
+        <p id="competition-intro">المعلومات العامة المفعّلة من مصدر مزود الخدمة فقط.</p>
+        <p class="catalog-status" id="competitions-status" role="status" aria-live="polite">جاري تحميل المسابقات…</p>
+      </section>
+      <section class="catalog-section" aria-labelledby="competition-list-title">
+        <div class="catalog-heading"><div><p class="eyebrow">المعلومات العامة</p><h2 id="competition-list-title">المسابقات المتاحة</h2></div></div>
+        <div class="catalog-grid competition-grid" id="competition-list" aria-live="polite" aria-busy="true"></div>
+        <p class="empty-note" id="competition-state" role="status" aria-live="polite" hidden></p>
+      </section>
+    </main>
+    <footer class="site-footer catalog-footer"><div class="shell"><a class="footer-brand" href="/">OMV Store</a><span>© <span id="copyright-year"></span> OMV Store</span><a href="#main">العودة للأعلى ↑</a></div></footer>
+  </body>
+</html>

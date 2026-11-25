@@ -31,7 +31,7 @@ function makeHarness(options = {}) {
   const mainPageKey = `Show ${providers.name} Page`;
   const localSettings = providerId === "TE"
     ? [["Show Offers WE", options.offersEnabled ?? true], ["Show WE Routers", options.routersEnabled ?? true], ["Show to EOM", options.showEom ?? true], ["Show to 15", options.showTo15 ?? true], ["Custom Rate Plans From 1", true], ["Custom Rate Plans From 16", true], ["Show WE Competitions", options.competitionsEnabled ?? true]]
-    : [[mainPageKey, options.providerPageEnabled ?? true], [`Show ${providers.name} Offers`, options.offersEnabled ?? true], ["Show Discount Rate", true], [`Show ${providers.name} Routers`, options.routersEnabled ?? true], [`Show ${providers.name} Competitions`, options.competitionsEnabled ?? true]];
+    : [[mainPageKey, options.providerPageEnabled ?? true], [`Show ${providers.name} Offers`, options.offersEnabled ?? true], ...(options.omitDiscountRate ? [] : [["Show Discount Rate", options.discountRateEnableValue ?? options.discountRateEnabled ?? true]]), [`Show ${providers.name} Routers`, options.routersEnabled ?? true], [`Show ${providers.name} Competitions`, options.competitionsEnabled ?? true]];
   const mainWorkbook = new Map([
     ["Telecom Providers", table(["Provider_ID", "Provider_Name", "Spreadsheet_ID", "Enable"], [[providers.id, providers.name, sourceId, true]])],
     ["Main Categories", table(["Sort Order", "Category ID", "Category Name", "Enable"], [[1, "routers", "All Routers", true]])],
@@ -190,6 +190,32 @@ test("all four providers use actual local setting keys, source tabs, and enabled
   }
 });
 
+test("discount-rate API field follows each VF/ORA/ET Page Settings Enable cell and fails closed", () => {
+  for (const providerId of ["VF", "ORA", "ET"]) {
+    const enabled = getJson(makeHarness({ providerId, discountRateEnabled: true }).context, "provider", { id: providerId }).payload;
+    const disabled = getJson(makeHarness({ providerId, discountRateEnabled: false }).context, "provider", { id: providerId }).payload;
+    const missing = getJson(makeHarness({ providerId, omitDiscountRate: true }).context, "provider", { id: providerId }).payload;
+    const invalid = getJson(makeHarness({ providerId, discountRateEnableValue: "perhaps" }).context, "provider", { id: providerId }).payload;
+    assert.equal(enabled.pageSettings.discountRateEnabled, true);
+    assert.equal(disabled.pageSettings.discountRateEnabled, false);
+    assert.equal(missing.pageSettings.discountRateEnabled, null);
+    assert.equal(invalid.pageSettings.discountRateEnabled, null);
+    assert.ok(missing.diagnostics.some((item) => item.code === "SETTING_MISSING" && item.setting === "Show Discount Rate"));
+    assert.ok(invalid.diagnostics.some((item) => item.code === "SETTING_INVALID_BOOLEAN" && item.setting === "Show Discount Rate"));
+
+    const harness = makeHarness({ providerId, discountRateEnabled: false });
+    const sheetName = harness.context.logicalWorksheet_(providerId, "providerSettings").physicalWorksheet;
+    const sourceRows = harness.providerWorkbook.get(sheetName).getDataRange().getValues().slice(1);
+    const rowsWithConflictingValue = sourceRows.map(([setting, enable]) => [setting, setting === "Show Discount Rate", setting === "Show Discount Rate" ? false : enable]);
+    harness.providerWorkbook.set(sheetName, table(["Settings", "Value", "Enable"], rowsWithConflictingValue));
+    const enableWins = getJson(harness.context, "provider", { id: providerId }).payload;
+    assert.equal(enableWins.pageSettings.discountRateEnabled, false, `${providerId} must follow Enable rather than Value`);
+  }
+  const we = getJson(makeHarness({ providerId: "TE" }).context, "provider", { id: "TE" }).payload;
+  assert.equal(we.pageSettings.discountRateEnabled, null);
+  assert.equal(we.diagnostics.some((item) => item.setting === "Show Discount Rate"), false);
+});
+
 test("provider and main page switches combine, while WE uses its real main switch and has no invented local page setting", () => {
   const mainDisabled = getJson(makeHarness({ providerId: "VF", mainPageEnabled: false }).context, "provider", { id: "VF" }).payload;
   assert.equal(mainDisabled.pageSettings.mainPageEnabled, false);
@@ -222,6 +248,50 @@ test("provider page switches independently gate offers, router visibility, devic
   const hiddenRouter = getJson(makeHarness({ providerId: "TE", includeRouter: true, routersEnabled: true, routerEnabled: false }).context, "provider", { id: "TE" }).payload;
   assert.equal(hiddenRouter.sections.routers.enabled, true);
   assert.equal(hiddenRouter.sections.routers.rows.length, 0);
+});
+
+test("VF/ORA/ET competitions preserve public order, exclude disabled/incomplete rows, and expose no participant fields", () => {
+  for (const providerId of ["VF", "ORA", "ET"]) {
+    const enabled = getJson(makeHarness({ providerId, competitionsEnabled: true }).context, "provider", { id: providerId }).payload;
+    const disabled = getJson(makeHarness({ providerId, competitionsEnabled: false }).context, "provider", { id: providerId }).payload;
+    assert.equal(enabled.sections.competitions.enabled, true);
+    assert.equal(enabled.sections.competitions.rows.length, 1);
+    assert.equal(disabled.sections.competitions.enabled, false);
+    assert.deepEqual(JSON.parse(JSON.stringify(disabled.sections.competitions.rows)), []);
+  }
+
+  const { context } = makeHarness({ providerId: "VF" });
+  const normalized = context.normalizeCompetitions_({ status: "available", rows: [
+    { "Competition ID": "later", "Competition Title": "Second", Enable: true, Sort_Order: 20, Participant_Name: "PRIVATE", Phone: "01000000000" },
+    { "Competition ID": "off", "Competition Title": "Disabled", Enable: false, Sort_Order: 1 },
+    { "Competition ID": "missing-title", "Competition Title": "", Enable: true, Sort_Order: 2 },
+    { "Competition ID": "", "Competition Title": "Incomplete", Enable: true, Sort_Order: 3 },
+    { "Competition ID": "first", "Competition Title": "First", Enable: true, Sort_Order: 10 }
+  ] }, true);
+  assert.deepEqual(JSON.parse(JSON.stringify(normalized.rows.map((row) => row.competitionId))), ["first", "later"]);
+  assert.deepEqual(JSON.parse(JSON.stringify(normalized.rows.map((row) => row.sortOrder))), [10, 20]);
+  assert.doesNotMatch(JSON.stringify(normalized), /Participant_Name|PRIVATE|01000000000/);
+});
+
+test("provider API competition table keeps only approved source columns even when the sheet has private fields", () => {
+  for (const providerId of ["VF", "TE", "ORA", "ET"]) {
+    const harness = makeHarness({ providerId });
+    const sheetName = harness.context.logicalWorksheet_(providerId, "competitions").physicalWorksheet;
+    const existing = harness.providerWorkbook.get(sheetName).getDataRange().getValues();
+    const publicHeaders = existing[0];
+    harness.providerWorkbook.set(sheetName, table(
+      [...publicHeaders, "Participant_Name", "Phone", "Registration", "Private_Entry"],
+      [[...existing[1], "PRIVATE_PERSON", "01000000000", "registration-secret", "private-entry-secret"]],
+    ));
+
+    const payload = getJson(harness.context, "provider", { id: providerId }).payload;
+    assert.deepEqual(JSON.parse(JSON.stringify(payload.tables.competitions.headers)), publicHeaders);
+    assert.equal(payload.tables.competitions.rows.length, 1);
+    assert.equal(payload.tables.competitions.rows[0].Participant_Name, undefined);
+    assert.equal(payload.sections.competitions.rows.length, 1);
+    if (providerId === "TE") assert.equal(payload.we.competitions[0].Competition_Name, "Competition");
+    assert.doesNotMatch(JSON.stringify(payload), /PRIVATE_PERSON|01000000000|registration-secret|private-entry-secret|Participant_Name|Private_Entry/);
+  }
 });
 
 test("WE EOM and day-15 switches are forwarded independently and malformed settings produce sanitized diagnostics", () => {

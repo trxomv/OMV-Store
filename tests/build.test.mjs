@@ -20,12 +20,12 @@ const routes = JSON.parse(routeText);
 });
 
 test("static build validates the complete route manifest and copies the whole public tree", () => {
-  for (const page of ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html"]) assert.ok(routes.routes.some((route) => route.path === page));
+  for (const page of ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"]) assert.ok(routes.routes.some((route) => route.path === page));
   assert.match(buildScript, /centralApiEndpoint/);
   assert.match(buildScript, /script\.google\.com/);
   assert.match(buildScript, /await cp\(publicDir, distDir, \{ recursive: true \}\)/);
   assert.match(buildScript, /manus-routes\.json/);
-  for (const file of ["provider.html", "routers.html", "we.html", "data/preview-snapshot.json", "css/catalog.css", "js/provider-page.js", "js/routers-page.js", "js/we-integration.js"]) assert.ok(buildScript.includes(file));
+  for (const file of ["provider.html", "routers.html", "competitions.html", "we.html", "data/preview-snapshot.json", "css/catalog.css", "js/provider-page.js", "js/routers-page.js", "js/competitions-page.js", "js/data/provider-page-rules.js", "js/we-integration.js"]) assert.ok(buildScript.includes(file));
   assert.match(buildScript, /assertNoSpreadsheetIds/);
   assert.match(serveScript, /centralApiEndpoint/);
   assert.doesNotMatch(serveScript, /sheetsEndpoint/);
@@ -63,7 +63,7 @@ test("local payment and add-on assets remain bundled with the WE feature compone
 });
 
 test("all canonical static page routes are declared and safe", () => {
-  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html"]);
+  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"]);
   assert.equal(Object.keys(routes).length, 1);
   assert.ok(routes.routes.every((route) => route.title && route.path.startsWith("/") && !route.path.startsWith("//")));
 });
