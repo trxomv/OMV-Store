@@ -48,7 +48,7 @@ const server = http.createServer(async (request, response) => {
   try {
     const urlPath = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
     const relative = urlPath === "/" ? "index.html" : urlPath.replace(/^\/+/, "");
-    const target = path.resolve(root, relative);
+    let target = path.resolve(root, relative);
     if (!target.startsWith(root + path.sep) && target !== path.join(root, "index.html")) {
       response.writeHead(403).end("Forbidden");
       return;
@@ -63,7 +63,11 @@ const server = http.createServer(async (request, response) => {
       }).end(source);
       return;
     }
-    const info = await stat(target);
+    let info = await stat(target);
+    if (info.isDirectory()) {
+      target = path.join(target, "index.html");
+      info = await stat(target);
+    }
     if (!info.isFile()) {
       response.writeHead(404).end("Not found");
       return;

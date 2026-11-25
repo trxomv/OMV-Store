@@ -1,7 +1,10 @@
 {
   "routes": [
     { "path": "/", "title": "OMV Store — الرئيسية" },
+    { "path": "/vodafone/", "title": "فودافون — OMV Store" },
     { "path": "/we.html", "title": "باقات WE المخصصة" },
+    { "path": "/orange/", "title": "أورنج — OMV Store" },
+    { "path": "/etisalat/", "title": "اتصالات — OMV Store" },
     { "path": "/provider.html", "title": "صفحة مزود الاتصالات" },
     { "path": "/routers.html", "title": "كل الراوترات" }
   ]

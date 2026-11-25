@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 
 const read = (relative) => readFile(new URL(`../${relative}`, import.meta.url), "utf8");
-const [config, buildScript, serveScript, appsScript, manifest, frontend, addonComponent, weHtml, homeHtml, providerHtml, routersHtml, homepageConfig, routeText] = await Promise.all([
-  read("public/site-config.js"), read("scripts/build.mjs"), read("scripts/serve.mjs"), read("apps-script/Code.gs"), read("apps-script/appsscript.json"),
+const [config, buildScript, serveScript, appsScript, adapterScript, manifest, frontend, addonComponent, weHtml, homeHtml, providerHtml, routersHtml, homepageConfig, routeText] = await Promise.all([
+  read("public/site-config.js"), read("scripts/build.mjs"), read("scripts/serve.mjs"), read("apps-script/Code.gs"), read("apps-script/provider-adapters.gs"), read("apps-script/appsscript.json"),
   read("public/js/app.js"), read("public/js/components/addon-row.js"), read("public/we.html"), read("public/index.html"),
   read("public/provider.html"), read("public/routers.html"), read("public/data/homepage-config.json"), read("public/manus-routes.json"),
 ]);
@@ -19,7 +19,7 @@ const routes = JSON.parse(routeText);
 });
 
 test("static build validates the complete route manifest and copies the whole public tree", () => {
-  for (const page of ["/", "/we.html", "/provider.html", "/routers.html"]) assert.ok(routes.routes.some((route) => route.path === page));
+  for (const page of ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html"]) assert.ok(routes.routes.some((route) => route.path === page));
   assert.match(buildScript, /centralApiEndpoint/);
   assert.match(buildScript, /script\.google\.com/);
   assert.match(buildScript, /await cp\(publicDir, distDir, \{ recursive: true \}\)/);
@@ -31,7 +31,7 @@ test("static build validates the complete route manifest and copies the whole pu
 });
 
 test("central Apps Script is dynamic, read-only, cache-backed and declares only spreadsheet read scope", () => {
-  for (const sheet of ["Telecom Providers", "Main Categories", "Website Settings", "Social Media", "Payment Methods", "Announcements", "Mobile_Rate Plans-Website", "Page Settings", "WE-Routers", "Terms&Conditions"]) assert.ok(appsScript.includes(sheet), `missing central data mapping ${sheet}`);
+  for (const sheet of ["Telecom Providers", "Main Categories", "Website Settings", "Social Media", "Payment Methods", "Announcements", "Mobile_Rate Plans-Website", "Page Settings", "WE-Routers", "Terms&Conditions"]) assert.ok((appsScript + adapterScript).includes(sheet), `missing central data mapping ${sheet}`);
   assert.match(appsScript, /PropertiesService\.getScriptProperties\(\)\.getProperty\(MAIN_ID_PROPERTY_\)/);
   assert.match(appsScript, /Spreadsheet_ID/);
   assert.match(appsScript, /function\s+doGet\(/);
@@ -61,8 +61,8 @@ test("local payment and add-on assets remain bundled with the WE feature compone
   assert.match(addonComponent, /addon-generic\.svg/);
 });
 
-test("all four static page routes are declared and safe", () => {
-  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/we.html", "/provider.html", "/routers.html"]);
+test("all canonical static page routes are declared and safe", () => {
+  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html"]);
   assert.equal(Object.keys(routes).length, 1);
   assert.ok(routes.routes.every((route) => route.title && route.path.startsWith("/") && !route.path.startsWith("//")));
 });
