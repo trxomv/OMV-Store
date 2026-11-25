@@ -4,35 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#100923" />
-    <meta name="description" content="اختر باقتك من عروض WE" />
+    <meta name="description" content="اختر باقتك من عروض WE أو خصص باقتك بنفسك على OMV Store." />
     <title>باقات WE المخصصة</title>
-    <link rel="icon" type="image/webp" href="assets/images/we-project-mark.webp" />
+    <link rel="icon" type="image/webp" href="assets/brand/omv-logo.webp" />
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <link rel="stylesheet" href="css/catalog.css" />
+    <link rel="stylesheet" href="css/refinement.css" />
+    <script type="module" src="js/terms-modal.js"></script>
 
-<!-- Open Graph - WhatsApp & Social Media -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="باقات WE المخصصة" />
-<meta property="og:description" content="اختر باقتك من عروض WE أو خصص باقتك بنفسك." />
-<meta property="og:url" content="https://we-product.vercel.app/we.html" />
-
-<meta property="og:image" content="https://we-product.vercel.app/assets/images/og-logo.jpg" />
-<meta property="og:image:secure_url" content="https://we-product.vercel.app/assets/images/og-logo.jpg" />
-<meta property="og:image:type" content="image/jpeg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="باقات WE المخصصة" />
-
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="باقات WE المخصصة" />
-<meta name="twitter:description" content="اختر باقتك من عروض WE أو خصص باقتك بنفسك." />
-<meta name="twitter:image" content="https://we-product.vercel.app/assets/images/og-logo.jpg" />
-
-<link rel="canonical" href="https://we-product.vercel.app/we.html" />
-
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="باقات WE المخصصة" />
+    <meta property="og:description" content="اختر باقتك من عروض WE أو خصص باقتك بنفسك على OMV Store." />
+    <meta property="og:url" content="https://we-product.vercel.app/we.html" />
+    <meta property="og:image" content="https://we-product.vercel.app/assets/social-preview/omv-we.webp" />
+    <meta property="og:image:alt" content="باقات WE المخصصة" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="باقات WE المخصصة" />
+    <meta name="twitter:description" content="اختر باقتك من عروض WE أو خصص باقتك بنفسك على OMV Store." />
+    <meta name="twitter:image" content="https://we-product.vercel.app/assets/social-preview/omv-we.webp" />
+    <link rel="canonical" href="https://we-product.vercel.app/we.html" />
   </head>
   <body>
     <a class="skip-link" href="#packages">تخطَّ إلى الباقات</a>
@@ -49,7 +41,7 @@
     <header class="site-header">
       <div class="shell header-inner">
         <a class="brand" href="#top" aria-label="باقات WE المخصصة، الصفحة الرئيسية">
-          <img src="assets/images/we-project-mark.webp" alt="" width="44" height="44" />
+          <img src="assets/providers-logos/we.svg" alt="" width="44" height="44" />
           <span>باقات <b class="we-mark">WE</b> المخصصة</span>
         </a>
         <div class="header-left-cluster">
@@ -99,9 +91,18 @@
         <div class="hero-visual">
           <div class="visual-orbit orbit-a" aria-hidden="true"></div>
           <div class="visual-orbit orbit-b" aria-hidden="true"></div>
-          <img class="sim-hero" src="assets/images/sim-hero.webp" alt="شريحة WE ذهبية بتصميم تقني مضيء" width="720" height="720" decoding="async" fetchpriority="high" />
+          <img class="sim-hero" src="assets/images/sim-hero.svg" alt="شريحة WE ذهبية بتصميم تقني مضيء" width="720" height="720" decoding="async" fetchpriority="high" />
           <div class="visual-tag"><span class="tag-spark" aria-hidden="true">✦</span><span>اختيارات تناسب احتياجاتك ✨</span></div>
         </div>
+      </section>
+
+      <section class="terms-spotlight shell" aria-label="الشروط والأحكام">
+        <button class="terms-trigger" id="terms-trigger" type="button" aria-haspopup="dialog" aria-controls="terms-dialog">
+          <span class="terms-trigger-icon" aria-hidden="true">i</span>
+          <span>الشروط والأحكام</span>
+          <span class="terms-attention" aria-label="مهم">مهم</span>
+          <span class="terms-arrow" aria-hidden="true">↙</span>
+        </button>
       </section>
 
       <section class="offers-section shell" id="packages" aria-labelledby="offers-title">
@@ -290,6 +291,15 @@
         </a>
         </div>
       </section>
+      <dialog class="terms-dialog" id="terms-dialog" aria-labelledby="terms-dialog-title">
+        <div class="terms-dialog-panel">
+          <div class="terms-dialog-heading">
+            <div><p class="eyebrow">معلومات مهمة</p><h2 id="terms-dialog-title">الشروط والأحكام — WE</h2></div>
+            <button class="terms-dialog-close" type="button" data-terms-close aria-label="إغلاق الشروط">×</button>
+          </div>
+          <div class="terms-dialog-content" id="terms-dialog-content"></div>
+        </div>
+      </dialog>
     </main>
 
     <footer class="site-footer shell">

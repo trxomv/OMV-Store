@@ -90,6 +90,7 @@ import { formatNumber } from "./utils/format.js";
   };
 
   let currentData = null;
+  let currentCompetitions = [];
   let selectedCategory = new URLSearchParams(window.location.search).get("customize") === "1" ? "custom" : "all";
   let searchText = "";
   let refreshTimer = null;
@@ -504,6 +505,63 @@ import { formatNumber } from "./utils/format.js";
     );
   }
 
+  function readCompetitionRows() {
+    const payload = lastLoadResult?.payload?.we ?? lastLoadResult?.payload;
+    const source = payload?.competitions ?? payload?.tables?.competitions ?? payload?.sections?.competitions;
+    const rows = Array.isArray(source) ? source : Array.isArray(source?.rows) ? source.rows : [];
+    return rows.filter((row) => row && typeof row === "object");
+  }
+
+  function competitionField(row, names) {
+    for (const name of names) {
+      const value = row[name];
+      if (value !== undefined && value !== null && String(value).trim()) return String(value).trim();
+    }
+    return "";
+  }
+
+  function renderCompetitions() {
+    currentCompetitions = readCompetitionRows();
+    elements.grid.hidden = false;
+    if (elements.customizer) elements.customizer.hidden = true;
+    elements.grid.replaceChildren();
+    if (!currentCompetitions.length) {
+      if (elements.empty) {
+        elements.empty.hidden = false;
+        elements.empty.textContent = "لا توجد مسابقات متاحة من مصدر البيانات الحالي.";
+      }
+      if (elements.count) elements.count.textContent = "—";
+      if (elements.range) elements.range.textContent = "لا توجد مسابقات مفعّلة حاليًا";
+      if (elements.title) elements.title.textContent = "المسابقات";
+      setStatus("لا توجد مسابقات متاحة حاليًا.", "empty");
+      return;
+    }
+    const cards = currentCompetitions.map((row) => {
+      const card = make("article", "competition-card");
+      const title = competitionField(row, ["Competition_Name", "Competition Name", "Title", "Name"]);
+      const description = competitionField(row, ["Description", "Details", "Content"]);
+      const endDate = competitionField(row, ["End_Date", "End Date", "Close Date", "Deadline"]);
+      if (title) card.append(make("h3", "competition-title", title));
+      if (description) card.append(make("p", "competition-description", description));
+      if (endDate) card.append(make("span", "competition-deadline", `آخر موعد: ${endDate}`));
+      const registrationUrl = competitionField(row, ["Registration_URL", "Registration URL", "Registration Link"]);
+      if (/^https:\/\//i.test(registrationUrl)) {
+        const link = make("a", "competition-action", "التسجيل في المسابقة ↗");
+        link.href = registrationUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        card.append(link);
+      }
+      return card;
+    });
+    elements.grid.append(...cards);
+    if (elements.empty) elements.empty.hidden = true;
+    if (elements.count) elements.count.textContent = formatNumber(cards.length);
+    if (elements.range) elements.range.textContent = `${formatNumber(cards.length)} مسابقات متاحة`;
+    if (elements.title) elements.title.textContent = "المسابقات";
+    setStatus("المسابقات المتاحة", "success");
+  }
+
   function renderTabs() {
     if (!elements.tabs || !elements.filterSection || !currentData) return;
     const categories = core.visibleCategories(currentData.settings).filter((category) =>
@@ -511,6 +569,7 @@ import { formatNumber } from "./utils/format.js";
         ? (currentData.plans.all ?? []).length > 0
         : (currentData.plans[category.id] ?? []).length > 0,
     );
+    if (currentData.settings.showCompetitions) categories.push({ id: "competitions", label: "المسابقات" });
     categories.push({ id: "custom", label: "خصص باقتك بنفسك" });
     if (!categories.some((category) => category.id === selectedCategory)) selectedCategory = categories[0]?.id ?? "all";
     elements.tabs.replaceChildren();
@@ -762,6 +821,10 @@ import { formatNumber } from "./utils/format.js";
       return;
     }
     if (elements.tabs) elements.tabs.hidden = false;
+    if (selectedCategory === "competitions") {
+      renderCompetitions();
+      return;
+    }
     if (selectedCategory === "custom") {
       elements.grid.hidden = true;
       if (elements.empty) elements.empty.hidden = true;
@@ -806,7 +869,7 @@ import { formatNumber } from "./utils/format.js";
     window.clearTimeout(refreshTimer);
     if (result?.sourceMode !== "live") return;
     const seconds = refreshSeconds(result.payload, currentData?.settings?.autoRefreshSeconds ?? core.DEFAULT_REFRESH_SECONDS);
-    refreshTimer = window.setTimeout(refresh, seconds * 1000);
+    if (seconds > 0) refreshTimer = window.setTimeout(refresh, seconds * 1000);
   }
 
   async function refresh() {

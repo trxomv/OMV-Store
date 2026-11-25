@@ -43,7 +43,7 @@ function requestJsonp(endpoint, resource, providerId) {
       cleanup();
       if (error) reject(error);
       else if (!isExpectedResource(payload, resource)) reject(new Error("invalid-api-response"));
-      else resolve(payload);
+      else resolve(withoutRawCompetitionTable(resource, payload));
     }
 
     window[callbackName] = (payload) => finish(null, payload);
@@ -62,6 +62,13 @@ function isExpectedResource(payload, resource) {
   return false;
 }
 
+function withoutRawCompetitionTable(resource, payload) {
+  if (resource !== "provider" || !payload?.tables || !Object.prototype.hasOwnProperty.call(payload.tables, "competitions")) return payload;
+  const tables = { ...payload.tables };
+  delete tables.competitions;
+  return { ...payload, tables };
+}
+
 function cacheKey(resource, providerId) {
   return `${CACHE_PREFIX}${resource}:${providerId ?? "all"}`;
 }
@@ -69,7 +76,12 @@ function cacheKey(resource, providerId) {
 function readCache(resource, providerId) {
   try {
     const value = JSON.parse(window.localStorage.getItem(cacheKey(resource, providerId)) || "null");
-    return value?.payload?.ok === true ? value.payload : null;
+    if (value?.payload?.ok !== true) return null;
+    const payload = withoutRawCompetitionTable(resource, value.payload);
+    if (payload !== value.payload) {
+      window.localStorage.setItem(cacheKey(resource, providerId), JSON.stringify({ ...value, payload }));
+    }
+    return payload;
   } catch {
     return null;
   }
@@ -77,7 +89,8 @@ function readCache(resource, providerId) {
 
 function writeCache(resource, providerId, payload) {
   try {
-    window.localStorage.setItem(cacheKey(resource, providerId), JSON.stringify({ savedAt: Date.now(), payload }));
+    const safePayload = withoutRawCompetitionTable(resource, payload);
+    window.localStorage.setItem(cacheKey(resource, providerId), JSON.stringify({ savedAt: Date.now(), payload: safePayload }));
   } catch {}
 }
 
@@ -141,6 +154,16 @@ export function renderSourceBanner(element, result) {
 }
 
 export function refreshSeconds(payload, fallback = 15) {
-  const value = Number(payload?.refreshSeconds ?? payload?.settings?.refreshSeconds ?? fallback);
-  return Number.isFinite(value) && value >= 5 && value <= 86400 ? Math.floor(value) : fallback;
+  if (payload?.refreshConfiguration?.effective?.autoDataRefresh === false
+    || payload?.settings?.effectiveRefresh?.autoDataRefresh === false
+    || payload?.settings?.flags?.["Auto Data Refresh"] === false) return 0;
+  const hasTopLevel = Object.prototype.hasOwnProperty.call(payload ?? {}, "refreshSeconds");
+  const hasSettings = Object.prototype.hasOwnProperty.call(payload?.settings ?? {}, "refreshSeconds");
+  const explicit = hasTopLevel || hasSettings;
+  const raw = hasTopLevel ? payload.refreshSeconds : hasSettings ? payload.settings.refreshSeconds : fallback;
+  if (explicit && (raw === null || raw === undefined || raw === "")) return 0;
+  const value = Number(raw);
+  if (explicit && value === 0) return 0;
+  if (!Number.isFinite(value) || value < 1 || value > 86400) return 0;
+  return Math.floor(value);
 }

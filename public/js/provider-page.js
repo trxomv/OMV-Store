@@ -6,12 +6,15 @@ import {
   normalizeTerms,
   offerForPlan,
   providerIdentity,
+  providerRoute,
+  legacyProviderId,
   providerState,
   providerStateLabel,
   providerAnnouncements,
   rowValue,
-  visiblePlanRows,
 } from "./data/provider-adapters.js";
+import { hasCompletePlanFacts, planAvailability, providerPlanRows, providerVisual, whatsappPhone, whatsappPlanHref } from "./provider-page-ui.js";
+import { competitionRoute, discountRateVisible, publicCompetitionRows } from "./data/provider-page-rules.js";
 
 const $ = (id) => document.getElementById(id);
 const make = (tag, className, text) => {
@@ -20,7 +23,9 @@ const make = (tag, className, text) => {
   if (text !== undefined) node.textContent = text;
   return node;
 };
-const queryId = Number(new URLSearchParams(window.location.search).get("id"));
+const routeInput = new URLSearchParams(window.location.search).get("id") || document.body.dataset.providerId || "";
+const queryId = legacyProviderId(routeInput);
+const canonicalRoute = providerRoute(routeInput);
 let activeProvider = null;
 let refreshTimer = 0;
 
@@ -35,12 +40,23 @@ function formatMoney(value) {
 
 function setProviderHeader(provider) {
   const identity = providerIdentity(provider.id, provider.name);
+  const visual = providerVisual(identity);
   document.title = `${identity.nameAr} — OMV Store`;
   $("breadcrumb-provider").textContent = identity.nameAr;
   $("provider-eyebrow").textContent = `شبكة ${identity.nameAr}`;
   $("provider-title").textContent = identity.nameAr;
   $("provider-subtitle").textContent = "استكشف الخدمات المتاحة من مصدر الشبكة المعتمد.";
+  $("provider-brand-name").textContent = identity.nameAr;
   $("provider-mark").textContent = identity.name === "WE" ? "WE" : identity.name;
+  if (visual) {
+    const headerImage = $("provider-header-image");
+    const logo = $("provider-logo");
+    headerImage.src = visual.header;
+    headerImage.alt = `${identity.nameAr} — هوية الشبكة`;
+    logo.src = visual.logo;
+    logo.alt = `شعار ${identity.nameAr}`;
+    $("provider-hero").style.setProperty("--provider-color", visual.color);
+  }
   $("provider-hero").classList.add(`provider-${identity.id}`);
   activeProvider = { ...identity, ...provider };
 }
@@ -64,7 +80,9 @@ function renderStatus(payload) {
     status: payload.pageState,
   });
   $("provider-status").textContent = providerStateLabel(state);
+  $("provider-header-status").textContent = providerStateLabel(state);
   $("page-state").textContent = stateMessage(payload, state);
+  $("provider-state-fact").textContent = stateMessage(payload, state);
   return state;
 }
 
@@ -75,43 +93,80 @@ function displayQuota(row) {
   return mb !== null && mb > 0 ? `${formatNumber(mb)} ميجا` : "";
 }
 
-function renderOfferCard(row, index) {
+function planMessage(row, title, price) {
+  const facts = [title, displayQuota(row)];
+  const minutes = finiteNumber(rowValue(row, ["Minutes", "Minute"]));
+  if (minutes !== null && minutes >= 0) facts.push(`${formatNumber(minutes)} دقيقة`);
+  if (price) facts.push(`السعر ${price} ج`);
+  return `السلام عليكم، أريد الاشتراك في ${facts.filter(Boolean).join(" — ")}`;
+}
+
+function renderPlanAction(label, href) {
+  if (!href) {
+    const button = make("button", "provider-action-button is-disabled", `${label} — غير متاح`);
+    button.type = "button";
+    button.disabled = true;
+    button.setAttribute("aria-disabled", "true");
+    return button;
+  }
+  const link = make("a", "provider-action-button", label);
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  return link;
+}
+
+function renderOfferCard(row, index, contacts, showDiscountRate) {
   const planId = rowValue(row, ["No. of Plan", "No of Plan", "Plan ID"]);
   const sourceName = rowValue(row, ["Plan Name", "Package Name", "Name"]);
   const title = sourceName ? String(sourceName) : planId !== undefined ? `باقة رقم ${planId}` : `باقة ${index + 1}`;
-  const card = make("article", "catalog-card");
+  const card = make("article", "offer-card provider-offer-card");
+  card.style.setProperty("--accent", providerVisual(providerIdentity(activeProvider.id))?.color || "#a554ff");
+  const availability = planAvailability(row);
+  if (!availability.available) card.classList.add("is-unavailable");
   const top = make("div", "catalog-card-top");
-  top.append(make("h3", "", title));
+  top.className = "card-top";
+  top.append(make("span", "card-number", String(index + 1).padStart(2, "0")));
   const badge = String(rowValue(row, ["Badge", "Badges", "Badge Text"]) || "").trim();
-  if (badge) top.append(make("span", "offer-chip", badge));
+  if (badge) top.append(make("span", "plan-badge badge-default", badge));
   card.append(top);
 
-  const subtitle = make("p", "catalog-card-subtitle", providerIdentity(activeProvider.id).nameAr);
-  card.append(subtitle);
-  const facts = make("div", "catalog-facts");
   const quota = displayQuota(row);
   const minutes = finiteNumber(rowValue(row, ["Minutes", "Minute"]));
   const duration = String(rowValue(row, ["Duration", "Validity", "Days Left"]) || "").trim();
-  if (quota) facts.append(make("span", "catalog-fact", quota));
-  if (minutes !== null && minutes >= 0) facts.append(make("span", "catalog-fact", `${formatNumber(minutes)} دقيقة`));
-  if (duration) facts.append(make("span", "catalog-fact", duration));
+  const facts = make("div", "provider-card-facts");
+  if (quota) facts.append(make("span", "provider-card-fact provider-card-data", quota));
+  if (minutes !== null && minutes >= 0) facts.append(make("span", "provider-card-fact provider-card-minutes", `${formatNumber(minutes)} دقيقة`));
+  if (duration) facts.append(make("span", "provider-card-fact provider-card-duration", duration));
   if (facts.childElementCount) card.append(facts);
 
   const finalPrice = finiteNumber(rowValue(row, ["Final Price", "FInal Price", "Final Price (EGP)"]));
   const offer = offerForPlan(row, true);
   const offerPrice = offer?.offerPrice !== null && offer?.offerPrice !== undefined && offer.offerPrice > 0 && finalPrice !== null && offer.offerPrice < finalPrice ? offer.offerPrice : null;
-  const price = make("div", "price-row");
+  const price = make("div", "price-band");
+  const valueStack = make("div", "price-value-stack");
   if (offerPrice !== null) {
-    price.append(make("span", "price-old", `${formatMoney(finalPrice)} ج`), make("strong", "price-current", `${formatMoney(offerPrice)} ج`));
+    valueStack.append(make("del", "original-price", `${formatMoney(finalPrice)} ج`), make("span", "current-price", `${formatMoney(offerPrice)} ج`));
   } else if (finalPrice !== null && finalPrice > 0) {
-    price.append(make("strong", "price-current", `${formatMoney(finalPrice)} ج`));
+    valueStack.append(make("span", "current-price", `${formatMoney(finalPrice)} ج`));
   } else {
-    price.append(make("span", "price-unit", "السعر غير متاح في المصدر"));
+    valueStack.append(make("span", "price-unit", "السعر غير متاح في المصدر"));
   }
-  if (offerPrice === null && offer?.discountPercent !== null && offer?.discountPercent !== undefined && offer.discountPercent > 0) {
-    price.append(make("span", "offer-chip", `خصم ${formatNumber(offer.discountPercent)}%`));
-  }
+  price.append(valueStack, make("b", "currency", "جنيه"));
   if (price.childElementCount) card.append(price);
+  const discount = offerPrice !== null && finalPrice ? Math.round((1 - offerPrice / finalPrice) * 100) : offer?.discountPercent;
+  if (showDiscountRate && discount !== null && discount !== undefined && discount > 0) card.append(make("small", "discount-badge", `خصم ${formatNumber(discount)}%`));
+  const status = make("p", `provider-plan-status ${availability.available ? "is-available" : "is-unavailable"}`, availability.label);
+  status.setAttribute("role", "status");
+  card.append(status);
+  const actions = make("div", "card-actions provider-card-actions");
+  const phone = whatsappPhone(contacts, activeProvider);
+  const priceValue = offerPrice ?? finalPrice;
+  const message = planMessage(row, title, formatMoney(priceValue));
+  const baseHref = whatsappPlanHref(phone);
+  const subscribeHref = availability.available && hasCompletePlanFacts(row) ? whatsappPlanHref(phone, message) : "";
+  actions.append(renderPlanAction("اشترك الآن ↗", subscribeHref), renderPlanAction("واتساب", availability.available ? baseHref : ""));
+  card.append(actions);
   return card;
 }
 
@@ -121,14 +176,35 @@ function renderOffers(payload) {
   section.hidden = !enabled;
   if (!enabled) return;
   const table = payload.tables?.standard;
-  const rows = visiblePlanRows(table);
+  const rows = providerPlanRows(table);
+  const showDiscountRate = discountRateVisible(payload.provider?.providerId ?? payload.provider?.id, payload.pageSettings);
+  $("provider-offer-fact").textContent = rows.length ? `${formatNumber(rows.length)} باقات متاحة` : "لا توجد باقات متاحة";
   const list = $("provider-offer-list");
-  list.replaceChildren(...rows.map(renderOfferCard));
+  list.replaceChildren(...rows.map((row, index) => renderOfferCard(row, index, payload.site?.contacts || [], showDiscountRate)));
   const empty = $("provider-offers-empty");
   empty.hidden = rows.length > 0;
   if (!rows.length) empty.textContent = table?.status === "available" || table?.status === "empty"
     ? "لا توجد باقات مكتملة ومفعّلة للعرض في هذا المصدر حاليًا."
     : `تعذر عرض الباقات: حالة الورقة ${table?.status || "غير معروفة"}.`;
+}
+
+function renderCompetitionLink(payload) {
+  const link = $("provider-competitions-link");
+  if (!link) return;
+  const providerId = payload.provider?.providerId ?? payload.provider?.canonicalProviderId ?? payload.provider?.id;
+  const route = competitionRoute(providerId);
+  const visible = Boolean(route)
+    && payload.pageEnabled === true
+    && payload.provider?.enabled === true
+    && payload.sections?.competitions?.enabled === true
+    && publicCompetitionRows(payload).length > 0;
+  link.hidden = !visible;
+  if (!visible) {
+    link.removeAttribute("href");
+    return;
+  }
+  link.href = route;
+  link.textContent = "المسابقات المتاحة ←";
 }
 
 function renderRouterCard(router) {
@@ -236,24 +312,29 @@ function renderShared(site) {
     paymentList.append(item);
   }
   const announcements = providerAnnouncements(site?.announcements || [], activeProvider);
-  if (announcements.length) {
-    const state = $("page-state");
-    const announcementBlock = make("div", "provider-notices");
-    for (const item of announcements.slice(0, 3)) announcementBlock.append(make("p", "provider-notice", String(rowValue(item, ["Value", "text"]) || "")));
-    state.after(announcementBlock);
+  const announcementBar = $("announcement-bar");
+  const announcementText = $("announcement-text");
+  const announcementDots = $("announcement-dots");
+  if (announcementBar && announcementText) {
+    announcementBar.hidden = announcements.length === 0;
+    if (announcements.length) {
+      const values = announcements.slice(0, 3).map((item) => String(rowValue(item, ["Value", "text"]) || "").trim()).filter(Boolean);
+      announcementText.textContent = values[0] || "";
+      announcementDots.textContent = values.length > 1 ? `1 / ${values.length}` : "";
+    }
   }
 }
 
 async function start() {
   $("copyright-year").textContent = String(new Date().getFullYear());
-  if (![1, 2, 3, 4].includes(queryId)) {
+  if (!queryId || !canonicalRoute) {
     $("provider-title").textContent = "الشبكة غير محددة";
     $("provider-status").textContent = "رابط غير مكتمل";
     $("page-state").textContent = "اختر مزودًا من الصفحة الرئيسية لعرض بياناته.";
     return;
   }
-  if (queryId === 2) {
-    window.location.replace("we.html");
+  if (!document.body.dataset.providerId && canonicalRoute && window.location.pathname !== canonicalRoute) {
+    window.location.replace(canonicalRoute);
     return;
   }
   try {
@@ -263,12 +344,14 @@ async function start() {
     if (!payload.provider) throw new Error("provider-not-found");
     setProviderHeader(payload.provider);
     const state = renderStatus(payload);
+    renderCompetitionLink(payload);
     renderOffers(payload);
     renderRouters(payload);
     renderTerms(payload);
     renderShared(payload.site);
-    if (result.sourceMode === "live") {
-      refreshTimer = window.setTimeout(() => start().catch(showFailure), refreshSeconds(payload, 15) * 1000);
+    const seconds = refreshSeconds(payload, 15);
+    if (result.sourceMode === "live" && seconds > 0) {
+      refreshTimer = window.setTimeout(() => start().catch(showFailure), seconds * 1000);
     }
     window.addEventListener("online", () => start().catch(showFailure), { once: true });
     if (state === "disabled" || state === "page_disabled") {

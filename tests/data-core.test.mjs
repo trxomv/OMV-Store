@@ -87,6 +87,17 @@ test("normalizes no badge, the existing single Badge field, and multiple future 
   ]);
 });
 
+test("normalizes production WE Plan_ID, Plan-Name, and split badge headers", () => {
+  const data = core.normalizePayload(payload({
+    standard: [{ Plan_ID: 7, "Plan-Name": "Source plan", MBs: 7000, Minutes: 700, "Final Price": 70, "Show Rate Plan": true, "First Badge": "First", "Second Badge": "Second" }],
+  }));
+  assert.equal(data.ok, true);
+  assert.equal(data.plans.standard.length, 1);
+  assert.equal(data.plans.standard[0].planId, "7");
+  assert.equal(data.plans.standard[0].name, "Source plan");
+  assert.deepEqual(data.plans.standard[0].badges, ["First", "Second"]);
+});
+
 test("allows a category-specific formula discount only when its row contains an explicit offer", () => {
   const data = core.normalizePayload(payload({
     standard: [{ "No. of Plan": 1, MBs: 10000, Minutes: 1100, "Final Price": 210 }],
@@ -148,6 +159,35 @@ test("filters hidden plans and rejects ambiguous duplicate or invalid plan ident
     { "No. of Plan": "Total", MBs: 3000, Minutes: 300, "Final Price": 30 },
   ] }));
   assert.equal(data.ok, false);
+});
+
+test("WE provider controls independently gate EOM plans, day-15 plans, and the existing competition tab", () => {
+  const data = core.normalizePayload(payload({
+    standard: [{ Plan_ID: 1, "Plan-Name": "Standard", MBs: 1000, Minutes: 100, "Final Price": 10, "Show Rate Plan": true }],
+    eom: [{ Plan_ID: 2, "Plan-Name": "EOM", MBs: 2000, Minutes: 200, "Final Price": 20, Show: true }],
+    to15: [{ Plan_ID: 3, "Plan-Name": "To 15", MBs: 3000, Minutes: 300, "Final Price": 30, Show: true }],
+    siteSettings: settings({
+      "Show Plans to EOM": { Value: false, Enable: false },
+      "Show to 15": { Value: true, Enable: true },
+      "Show Competitions": { Value: true, Enable: true },
+    }),
+  }));
+  assert.equal(data.settings.showPlansToEom, false);
+  assert.equal(data.settings.showPlansTo15, true);
+  assert.equal(data.settings.showCompetitions, true);
+  assert.equal(data.plans.eom.length, 0);
+  assert.equal(data.plans.to15.length, 1);
+  const categories = core.visibleCategories(data.settings, new Date("2026-10-08T12:00:00Z")).map((item) => item.id);
+  assert.equal(categories.includes("eom"), false);
+  assert.equal(categories.includes("to15"), true);
+
+  const disabled15 = core.normalizePayload(payload({
+    standard: [{ Plan_ID: 1, "Plan-Name": "Standard", MBs: 1000, Minutes: 100, "Final Price": 10, "Show Rate Plan": true }],
+    to15: [{ Plan_ID: 3, "Plan-Name": "To 15", MBs: 3000, Minutes: 300, "Final Price": 30, Show: true }],
+    siteSettings: settings({ "Show to 15": { Value: false, Enable: false } }),
+  }));
+  assert.equal(disabled15.plans.to15.length, 0);
+  assert.equal(disabled15.settings.showCompetitions, false);
 });
 
 test("uses Cairo calendar boundaries for the two existing time-limited category tabs", () => {

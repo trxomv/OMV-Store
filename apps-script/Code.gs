@@ -1,8 +1,9 @@
 /**
  * OMV Store central, read-only website data API.
  *
- * IMPORTANT: This is a new local source file. It has not been deployed.
- * Set OMV_MAIN_CONFIG_ID in Script Properties before manual deployment.
+ * Production source for the existing Web App deployment.
+ * Script Property OMV_MAIN_CONFIG_ID must hold the existing main workbook ID.
+ * The property name is a key; do not replace it with the workbook ID.
  * Provider spreadsheet IDs are read dynamically from Telecom Providers and
  * are never included in API responses.
  */
@@ -11,13 +12,6 @@ var MAIN_ID_PROPERTY_ = "OMV_MAIN_CONFIG_ID";
 var DEFAULT_REFRESH_SECONDS_ = 15;
 var MAX_CACHE_SECONDS_ = 3600;
 var CACHE_PREFIX_ = "omv-central-v1:";
-
-var PROVIDER_META_ = {
-  "1": { slug: "vodafone", standard: "Mobile_Rate Plans-Website", routers: "Vodafone-Routers", routerDetails: "Vodafone-Routers_Details", pageSettings: "Page Settings", terms: "Terms&Conditions" },
-  "2": { slug: "we", standard: "Mobile_Rate Plans-Website", eom: "Mobile_Plans to EOM-Website", to15: "Mobile_Plans to 15-Website", air: "WE-Air_Rate Plans-Website", routers: "WE-Routers", routerDetails: "WE-Routers_Details", pageSettings: "Page Settings", terms: "We-Terms&Conditions", customPricing: "Custom Pricing", addons: "Add-on" },
-  "3": { slug: "orange", standard: "Mobile_Rate Plans-Website", routers: "Orange-Routers", routerDetails: "Orange-Routers_Details", pageSettings: "Page Settings", terms: "Orange-Terms&Conditions" },
-  "4": { slug: "etisalat", standard: "Mobile_Rate Plans-Website", routers: "Etisalat-Routers", routerDetails: "Etisalat-Routers_Details", pageSettings: "Page Settings", terms: "Etisalat-Terms&Conditions" }
-};
 
 function doGet(event) {
   var parameters = event && event.parameter ? event.parameter : {};
@@ -84,14 +78,17 @@ function getMainConfig_() {
   catch (_) { throw new Error("Main configuration is not accessible"); }
 
   var main = {
-    providersTable: readTableFirstAvailable_(spreadsheet, ["Telecom Providers", "Telecom Proiders"]),
-    categories: readTable_(spreadsheet, "Main Categories"),
-    websiteSettings: readTable_(spreadsheet, "Website Settings"),
-    socialMedia: readTable_(spreadsheet, "Social Media"),
-    paymentMethods: readTable_(spreadsheet, "Payment Methods"),
-    announcements: readTable_(spreadsheet, "Announcements"),
-    terms: readTable_(spreadsheet, "Terms&Conditions")
+    providersTable: readMappedMainTable_(spreadsheet, "providers", ["Telecom Proiders"]),
+    categories: readMappedMainTable_(spreadsheet, "categories"),
+    routerOffers: readMappedMainTable_(spreadsheet, "routerOffers"),
+    masterPlans: readMappedMainTable_(spreadsheet, "masterPlans"),
+    websiteSettings: readMappedMainTable_(spreadsheet, "websiteSettings"),
+    socialMedia: readMappedMainTable_(spreadsheet, "socialMedia"),
+    paymentMethods: readMappedMainTable_(spreadsheet, "paymentMethods"),
+    announcements: readMappedMainTable_(spreadsheet, "announcements"),
+    terms: readMappedMainTable_(spreadsheet, "siteTerms", ["Terms&Conditions"])
   };
+  main.refreshConfiguration = readRefreshConfiguration_(main.websiteSettings);
   main.refreshSeconds = getRefreshSeconds_(main.websiteSettings);
   main.providers = providerRecords_(main.providersTable);
   var serialized = JSON.stringify(main);
@@ -116,14 +113,181 @@ function buildSiteResource_() {
     sourceStatus: "available",
     generatedAt: new Date().toISOString(),
     refreshSeconds: main.refreshSeconds,
-    settings: publicWebsiteSettings_(main.websiteSettings, main.refreshSeconds),
+    refreshConfiguration: main.refreshConfiguration,
+    settings: publicWebsiteSettings_(main.websiteSettings, main.refreshSeconds, main.refreshConfiguration),
     categories: activeRows_(main.categories),
     providers: providers,
     contacts: activeRows_(main.socialMedia),
     paymentMethods: activeRows_(main.paymentMethods),
     announcements: activeRows_(main.announcements),
-    terms: tableSummary_(main.terms)
+    terms: tableSummary_(main.terms),
+    routerOffers: tableSummary_(main.routerOffers),
+    masterPlans: tableSummary_(main.masterPlans)
   };
+}
+
+function checkboxState_(value) {
+  if (value === true || value === false) return value;
+  if (value === null || value === undefined || normalizeText_(value) === "") return null;
+  var text = normalizeText_(value).toLowerCase();
+  if (["true", "1", "yes", "y", "نعم", "مفعل", "مفعّل", "نشط", "نشطة"].indexOf(text) >= 0) return true;
+  if (["false", "0", "no", "n", "لا", "معطل", "معطّل", "غير مفعل", "غير مفعّل"].indexOf(text) >= 0) return false;
+  return null;
+}
+
+function settingState_(table, key) {
+  if (!key) return { status: "not_applicable", key: null, enabled: null };
+  var row = findRow_(table, ["Settings"], key);
+  if (!row) return { status: "missing", key: key, enabled: null };
+  var enabled = checkboxState_(rowValue_(row, ["Enable"]));
+  return { status: enabled === null ? "invalid" : "available", key: key, enabled: enabled };
+}
+
+function providerSettingState_(table, adapter, settingName) {
+  var key = adapter && adapter.settings ? adapter.settings[settingName] : null;
+  return settingState_(table, key);
+}
+
+function providerSettingsDiagnostics_(provider, mainPageSetting, localSettings) {
+  var diagnostics = [];
+  function append(state, location, affectsRendering) {
+    if (!state || state.status === "not_applicable" || state.status === "available") return;
+    diagnostics.push({
+      code: state.status === "missing" ? "SETTING_MISSING" : "SETTING_INVALID_BOOLEAN",
+      severity: state.status === "missing" ? "warning" : "error",
+      providerId: provider.providerId,
+      worksheet: location,
+      setting: state.key,
+      status: state.status,
+      affectsRendering: Boolean(affectsRendering)
+    });
+  }
+  append(mainPageSetting, "Website Settings", true);
+  Object.keys(localSettings || {}).forEach(function (key) {
+    append(localSettings[key], "Page Settings", key !== "discountRate");
+  });
+  return diagnostics;
+}
+
+function tableSchemaDiagnostics_(provider, tables) {
+  var diagnostics = [];
+  var adapter = providerAdapter_(provider.providerId || provider.id);
+  Object.keys(tables || {}).forEach(function (resource) {
+    var table = tables[resource];
+    if (!table || table.status === "not_applicable") return;
+    if (table.status === "unsupported_schema" || table.status === "missing_headers") {
+      diagnostics.push({
+        code: "SCHEMA_UNSUPPORTED", severity: "error", providerId: provider.providerId, resource: resource,
+        worksheet: table.sheetName || null,
+        missingHeaders: table.schema && table.schema.missing ? table.schema.missing : [],
+        duplicateHeaders: table.schema && table.schema.duplicate ? table.schema.duplicate : []
+      });
+      return;
+    }
+    if (table.status === "not_found") {
+      diagnostics.push({ code: "WORKSHEET_MISSING", severity: "error", providerId: provider.providerId, resource: resource, worksheet: table.sheetName || null });
+      return;
+    }
+    if (table.status !== "available" && table.status !== "empty") return;
+    var counts = {};
+    function add(code) { counts[code] = (counts[code] || 0) + 1; }
+    (table.rows || []).forEach(function (row) {
+      if (["standard", "home", "air", "eom", "to15"].indexOf(resource) >= 0) {
+        var visibilityHeader = resource === "eom" || resource === "to15" ? "Show" : "Show Rate Plan";
+        var rawVisibility = rowValue_(row, [visibilityHeader]);
+        var visible = checkboxState_(rawVisibility);
+        if (hasValue_(rawVisibility) && visible === null) add("INVALID_CHECKBOX");
+        if (visible !== true) return;
+        if (!hasValue_(rowValue_(row, ["Plan_ID", "Plan ID", "No. of Plan"]))) add("MISSING_IDENTIFIER");
+        if (!hasValue_(rowValue_(row, ["Plan-Name", "Plan Name", "Name"]))) add("MISSING_NAME");
+        var quota = numberValue_(rowValue_(row, resource === "home" || resource === "air" ? ["GBs", "GB"] : ["MBs", "MB"]));
+        if (!isFinite(quota) || quota <= 0) add("INVALID_QUOTA");
+        var price = numberValue_(rowValue_(row, ["Final Price", "FInal Price"]));
+        if (!isFinite(price) || price <= 0) add("INVALID_PRICE");
+        var minutesValue = rowValue_(row, ["Minutes", "Minute"]);
+        if (minutesValue !== undefined) {
+          var minutes = numberValue_(minutesValue);
+          if (!isFinite(minutes) || minutes < 0) add("INVALID_MINUTES");
+        }
+      } else if (resource === "routers") {
+        var routerHeader = adapter ? adapter.routerVisibilityHeader : "Show Router";
+        var rawRouter = rowValue_(row, [routerHeader]);
+        var visibleRouter = checkboxState_(rawRouter);
+        if (hasValue_(rawRouter) && visibleRouter === null) add("INVALID_ROUTER_CHECKBOX");
+        var rawOffer = rowValue_(row, ["Show Offer"]);
+        if (hasValue_(rawOffer) && checkboxState_(rawOffer) === null) add("INVALID_OFFER_CHECKBOX");
+        if (visibleRouter !== true) return;
+        if (!hasValue_(rowValue_(row, ["Router ID"]))) add("MISSING_IDENTIFIER");
+        if (!hasValue_(rowValue_(row, ["Router Name"]))) add("MISSING_NAME");
+        var routerPrice = numberValue_(rowValue_(row, ["FInal Price", "Final Price"]));
+        if (!isFinite(routerPrice) || routerPrice <= 0) add("INVALID_PRICE");
+      } else if (resource === "competitions") {
+        var rawEnabled = rowValue_(row, ["Enable"]);
+        var enabled = checkboxState_(rawEnabled);
+        if (hasValue_(rawEnabled) && enabled === null) add("INVALID_COMPETITION_CHECKBOX");
+        if (enabled !== true) return;
+        if (!hasValue_(rowValue_(row, ["Competition ID"]))) add("MISSING_IDENTIFIER");
+        if (!hasValue_(rowValue_(row, ["Competition Title"]))) add("MISSING_TITLE");
+      }
+    });
+    Object.keys(counts).forEach(function (code) {
+      diagnostics.push({ code: code, severity: "warning", providerId: provider.providerId, resource: resource, count: counts[code] });
+    });
+  });
+  return diagnostics;
+}
+
+function normalizeCompetitions_(table, enabled) {
+  if (!enabled) return { status: "disabled", rows: [] };
+  if (!table || (table.status !== "available" && table.status !== "empty")) return { status: table ? table.status : "not_inspected", rows: [] };
+  var rows = (table.rows || []).filter(function (row) {
+    return isEnabled_(rowValue_(row, ["Enable"])) && hasValue_(rowValue_(row, ["Competition ID"])) && hasValue_(rowValue_(row, ["Competition Title"]));
+  }).map(function (row) {
+    var benefitType = normalizeText_(rowValue_(row, ["Benefit_Type"]));
+    var giftData = rowValue_(row, ["Gift_Data_GB"]);
+    var giftDuration = rowValue_(row, ["Gift_Duration"]);
+    var durationUnit = normalizeText_(rowValue_(row, ["Duration_Unit"]));
+    var benefits = [benefitType, hasValue_(giftData) ? normalizeText_(giftData) + " GB" : "", hasValue_(giftDuration) ? normalizeText_(giftDuration) + (durationUnit ? " " + durationUnit : "") : ""].filter(Boolean);
+    var title = normalizeText_(rowValue_(row, ["Competition Title"]));
+    var endDate = jsonValue_(rowValue_(row, ["End_Date"]));
+    return {
+      competitionId: rowValue_(row, ["Competition ID"]),
+      title: title,
+      benefitType: benefitType,
+      giftDataGb: giftData,
+      giftDuration: giftDuration,
+      durationUnit: durationUnit,
+      startDate: jsonValue_(rowValue_(row, ["Start_Date"])),
+      endDate: endDate,
+      terms: normalizeText_(rowValue_(row, ["Terms"])),
+      sortOrder: numberValue_(rowValue_(row, ["Sort_Order"])),
+      enabled: true,
+      Competition_Name: title,
+      Description: benefits.join(" · "),
+      End_Date: endDate
+    };
+  });
+  rows.sort(function (a, b) { return (a.sortOrder || 0) - (b.sortOrder || 0); });
+  return { status: rows.length ? "available" : "empty", rows: rows };
+}
+
+function publicCompetitionTable_(table) {
+  var publicHeaders = [
+    "Competition ID", "Competition Title", "Benefit_Type", "Gift_Data_GB", "Gift_Duration",
+    "Duration_Unit", "Start_Date", "End_Date", "Terms", "Sort_Order", "Enable"
+  ];
+  if (!table) return notApplicableTable_();
+  var headers = (Array.isArray(table.headers) ? table.headers : []).filter(function (header) {
+    return publicHeaders.indexOf(header) >= 0;
+  });
+  var rows = (Array.isArray(table.rows) ? table.rows : []).map(function (row) {
+    var safeRow = {};
+    headers.forEach(function (header) {
+      if (row && Object.prototype.hasOwnProperty.call(row, header)) safeRow[header] = row[header];
+    });
+    return safeRow;
+  });
+  return { status: table.status || "not_inspected", headers: headers, rows: rows };
 }
 
 function buildProviderResource_(providerId) {
@@ -132,12 +296,12 @@ function buildProviderResource_(providerId) {
   if (!provider) {
     return { ok: false, apiVersion: API_VERSION_, resource: "provider", sourceStatus: "error", errorCode: "provider_not_found", message: "هذا المزوّد غير موجود في السجل المركزي." };
   }
-  var meta = PROVIDER_META_[String(providerId)];
+  var meta = providerAdapter_(providerId);
   if (!meta) {
     return { ok: true, apiVersion: API_VERSION_, resource: "provider", generatedAt: new Date().toISOString(), refreshSeconds: main.refreshSeconds, provider: publicProvider_(provider), sourceStatus: "unsupported_schema", tables: {}, pageSettings: { status: "not_inspected", rows: [] }, terms: { status: "not_inspected", rows: [] } };
   }
 
-  var pageEnabled = settingEnabled_(main.websiteSettings, "Show " + provider.name + " Page", false);
+  var mainPageSetting = settingState_(main.websiteSettings, "Show " + meta.name + " Page");
   var providerSpreadsheet;
   try {
     if (!provider.spreadsheetId) throw new Error("Missing provider source");
@@ -145,30 +309,40 @@ function buildProviderResource_(providerId) {
   } catch (_) {
     return {
       ok: true, apiVersion: API_VERSION_, resource: "provider", generatedAt: new Date().toISOString(), refreshSeconds: main.refreshSeconds,
-      provider: publicProvider_(provider), sourceStatus: "inaccessible", pageEnabled: pageEnabled,
+      provider: publicProvider_(provider), sourceStatus: "inaccessible", pageEnabled: mainPageSetting.enabled === true,
       message: "مصدر بيانات هذا المزوّد غير متاح حاليًا.", tables: {},
       pageSettings: { status: "unavailable", rows: [] }, terms: { status: "unavailable", rows: [] }, sections: emptySections_()
     };
   }
 
   var tables = {};
-  Object.keys(meta).forEach(function (key) {
-    if (key === "slug") return;
-    tables[key] = readTable_(providerSpreadsheet, meta[key]);
+  ["standard", "home", "eom", "to15", "air", "customPricing", "addons", "routers", "routerDetails", "pageSettings", "terms", "competitions"].forEach(function (key) {
+    var mapping = providerTableFallback_(meta, key);
+    if (mapping) tables[key] = readProviderTable_(providerSpreadsheet, providerId, key, mapping);
   });
-  ["eom", "to15", "air", "customPricing", "addons"].forEach(function (key) {
+  ["home", "eom", "to15", "air", "customPricing", "addons"].forEach(function (key) {
     if (!tables[key]) tables[key] = notApplicableTable_();
   });
 
   var pageSettings = tables.pageSettings || notApplicableTable_();
-  var showOffers = settingEnabled_(pageSettings, "Show Offers " + provider.name, false);
-  var showRouters = settingEnabled_(pageSettings, "Show " + provider.name + " Routers", false);
-  var showPlans = settingEnabled_(main.websiteSettings, "Show " + provider.name + " Page", false);
+  var localSettings = {};
+  ["page", "offers", "discountRate", "routers", "eom", "to15", "competitions"].forEach(function (key) {
+    localSettings[key] = providerSettingState_(pageSettings, meta, key);
+  });
+  var providerPageEnabled = localSettings.page.status === "not_applicable" ? true : localSettings.page.enabled === true;
+  var pageEnabled = mainPageSetting.enabled === true && providerPageEnabled;
+  var showOffers = localSettings.offers.enabled === true;
+  var showRouters = localSettings.routers.enabled === true;
+  var showCompetitions = localSettings.competitions.enabled === true;
   var visiblePlans = visiblePlanRows_(tables.standard);
   var sourceStatus = provider.enabled ? planSourceStatus_(tables.standard, visiblePlans) : "disabled";
   var terms = normalizeTerms_(tables.terms || notApplicableTable_());
   var routers = normalizeRouters_(tables.routers || notApplicableTable_(), tables.routerDetails || notApplicableTable_(), provider, showRouters);
-  var pageState = !provider.enabled ? "disabled" : !showPlans ? "page_disabled" : !showOffers ? "offers_disabled" : sourceStatus;
+  var competitions = normalizeCompetitions_(tables.competitions || notApplicableTable_(), showCompetitions && pageEnabled && provider.enabled);
+  var pageState = !provider.enabled ? "disabled" : !pageEnabled ? "page_disabled" : !showOffers ? "offers_disabled" : sourceStatus;
+  var diagnostics = providerSettingsDiagnostics_(provider, mainPageSetting, localSettings).concat(tableSchemaDiagnostics_(provider, tables));
+  var publicTables = Object.assign({}, tables);
+  publicTables.competitions = publicCompetitionTable_(tables.competitions);
 
   return {
     ok: true,
@@ -178,29 +352,38 @@ function buildProviderResource_(providerId) {
     refreshSeconds: main.refreshSeconds,
     provider: publicProvider_(provider),
     sourceStatus: sourceStatus,
-    pageEnabled: showPlans,
-    pageSettings: { status: pageSettings.status, rows: pageSettings.rows, offersEnabled: showOffers, routersEnabled: showRouters },
+    pageEnabled: pageEnabled,
+    pageSettings: {
+      status: pageSettings.status, rows: pageSettings.rows,
+      mainPageEnabled: mainPageSetting.enabled,
+      providerPageEnabled: localSettings.page.status === "not_applicable" ? null : localSettings.page.enabled,
+      offersEnabled: showOffers, routersEnabled: showRouters,
+      discountRateEnabled: localSettings.discountRate.status === "not_applicable" ? null : localSettings.discountRate.enabled,
+      competitionsEnabled: showCompetitions
+    },
     pageState: pageState,
+    diagnostics: diagnostics,
     sections: {
-      offers: { enabled: showPlans && showOffers && provider.enabled, status: showPlans && showOffers ? sourceStatus : "disabled" },
-      routers: { enabled: showRouters && showPlans && provider.enabled, status: routers.status, rows: routers.rows },
-      terms: { enabled: provider.enabled && showPlans, status: terms.status, rows: terms.rows }
+      offers: { enabled: pageEnabled && showOffers && provider.enabled, status: pageEnabled && showOffers ? sourceStatus : "disabled" },
+      routers: { enabled: showRouters && pageEnabled && provider.enabled, status: routers.status, rows: routers.rows },
+      terms: { enabled: provider.enabled && pageEnabled, status: terms.status, rows: terms.rows },
+      competitions: { enabled: showCompetitions && pageEnabled && provider.enabled, status: competitions.status, rows: competitions.rows }
     },
     terms: terms,
-    tables: tables,
+    tables: publicTables,
     site: {
-      settings: publicWebsiteSettings_(main.websiteSettings, main.refreshSeconds),
+      settings: publicWebsiteSettings_(main.websiteSettings, main.refreshSeconds, main.refreshConfiguration),
       announcements: targetRowsForProvider_(main.announcements, provider),
       contacts: targetRowsForProvider_(main.socialMedia, provider),
       paymentMethods: activeRows_(main.paymentMethods)
     },
     // Only WE uses the legacy normalizer; this shape is a transport adapter,
     // not a separate data source or a pricing calculation.
-    we: String(providerId) === "2" ? buildLegacyWePayload_(main, tables, provider, showOffers) : null
+    we: String(providerId) === "TE" ? buildLegacyWePayload_(main, tables, provider, pageEnabled, localSettings, showOffers, competitions) : null
   };
 }
 
-function buildLegacyWePayload_(main, tables, provider, showOffers) {
+function buildLegacyWePayload_(main, tables, provider, pageEnabled, localSettings, showOffers, competitions) {
   var settingRows = [];
   (main.websiteSettings.rows || []).forEach(function (row) {
     var key = normalizeText_(rowValue_(row, ["Settings"]));
@@ -222,9 +405,12 @@ function buildLegacyWePayload_(main, tables, provider, showOffers) {
   (tables.pageSettings.rows || []).forEach(function (row) {
     var key = normalizeText_(rowValue_(row, ["Settings"]));
     if (key === "Custom Rate Plans From 1" || key === "Custom Rate Plans From 16") {
-      settingRows.push({ Settings: key, Value: rowValue_(row, ["Enable"]), Enable: true });
+      settingRows.push({ Settings: key, Value: rowValue_(row, ["Enable"]), Enable: rowValue_(row, ["Enable"]) });
     }
   });
+  settingRows.push({ Settings: "Show Plans to EOM", Value: localSettings.eom.enabled === true, Enable: localSettings.eom.enabled === true });
+  settingRows.push({ Settings: "Show Plans to 15", Value: localSettings.to15.enabled === true, Enable: localSettings.to15.enabled === true });
+  settingRows.push({ Settings: "Show Competitions", Value: localSettings.competitions.enabled === true, Enable: localSettings.competitions.enabled === true });
 
   var globalAnnouncements = targetRowsForProvider_(main.announcements, provider);
   var legacyAnnouncements = { status: "available", headers: ["No.", "Value", "Enable"], rows: globalAnnouncements.map(function (row) {
@@ -235,8 +421,10 @@ function buildLegacyWePayload_(main, tables, provider, showOffers) {
     generatedAt: new Date().toISOString(),
     refreshSeconds: main.refreshSeconds,
     providerEnabled: provider.enabled,
-    pageEnabled: settingEnabled_(main.websiteSettings, "Show WE Page", false),
+    pageEnabled: pageEnabled,
     offersEnabled: showOffers,
+    competitions: competitions.rows,
+    competitionsEnabled: localSettings.competitions.enabled === true,
     sheets: {
       standard: tables.standard || notApplicableTable_(),
       eom: tables.eom || notApplicableTable_(),
@@ -257,11 +445,11 @@ function buildRoutersResource_() {
   var allRouters = [];
   var providerStates = [];
   main.providers.forEach(function (provider) {
-    var providerPayload = buildProviderResource_(String(provider.id));
+    var providerPayload = buildProviderResource_(String(provider.providerId || provider.id));
     var section = providerPayload.sections && providerPayload.sections.routers;
     var rows = section && section.enabled ? section.rows : [];
     Array.prototype.push.apply(allRouters, rows || []);
-    providerStates.push({ providerId: provider.id, name: provider.name, slug: provider.slug, enabled: provider.enabled, sectionEnabled: Boolean(section && section.enabled), status: section ? section.status : "unavailable" });
+    providerStates.push({ id: provider.id, providerId: provider.providerId, canonicalProviderId: provider.providerId, name: provider.name, slug: provider.slug, enabled: provider.enabled, sectionEnabled: Boolean(section && section.enabled), status: section ? section.status : "unavailable" });
   });
   allRouters.sort(function (a, b) {
     return Number(a.sortOrder || 0) - Number(b.sortOrder || 0) || String(a.name).localeCompare(String(b.name));
@@ -280,29 +468,44 @@ function buildRoutersResource_() {
 }
 
 function providerSummary_(main, provider) {
-  var pageEnabled = settingEnabled_(main.websiteSettings, "Show " + provider.name + " Page", false);
-  var meta = PROVIDER_META_[String(provider.id)];
+  var meta = providerAdapter_(provider.providerId || provider.id);
+  var mainPageSetting = settingState_(main.websiteSettings, "Show " + (meta ? meta.name : provider.name) + " Page");
   var result = {
     id: provider.id,
+    providerId: provider.providerId,
+    canonicalProviderId: provider.providerId,
     slug: provider.slug,
     name: provider.name,
     enabled: provider.enabled,
-    pageEnabled: pageEnabled,
+    pageEnabled: false,
+    mainPageEnabled: mainPageSetting.enabled,
+    providerPageEnabled: null,
     offersEnabled: false,
     routersEnabled: false,
+    discountRateEnabled: null,
+    competitionsEnabled: false,
     sourceStatus: "unavailable",
-    status: "unavailable"
+    status: "unavailable",
+    diagnostics: []
   };
   if (!meta || !provider.spreadsheetId) return result;
   try {
     var spreadsheet = SpreadsheetApp.openById(provider.spreadsheetId);
-    var page = readTable_(spreadsheet, meta.pageSettings);
-    result.offersEnabled = settingEnabled_(page, "Show Offers " + provider.name, false);
-    result.routersEnabled = settingEnabled_(page, "Show " + provider.name + " Routers", false);
-    var plans = readTable_(spreadsheet, meta.standard);
+    var page = readProviderTable_(spreadsheet, provider.providerId || provider.id, "pageSettings", meta.workbookResources.providerSettings);
+    var local = {};
+    ["page", "offers", "discountRate", "routers", "competitions"].forEach(function (key) { local[key] = providerSettingState_(page, meta, key); });
+    var providerPageEnabled = local.page.status === "not_applicable" ? true : local.page.enabled === true;
+    result.providerPageEnabled = local.page.status === "not_applicable" ? null : local.page.enabled;
+    result.pageEnabled = mainPageSetting.enabled === true && providerPageEnabled;
+    result.offersEnabled = local.offers.enabled === true;
+    result.routersEnabled = local.routers.enabled === true;
+    result.discountRateEnabled = local.discountRate.status === "not_applicable" ? null : local.discountRate.enabled;
+    result.competitionsEnabled = local.competitions.enabled === true;
+    var plans = readProviderTable_(spreadsheet, provider.providerId || provider.id, "standard", meta.workbookResources.packages.mobile);
     result.sourceStatus = planSourceStatus_(plans, visiblePlanRows_(plans));
+    result.diagnostics = providerSettingsDiagnostics_(provider, mainPageSetting, local).concat(tableSchemaDiagnostics_(provider, { pageSettings: page, standard: plans }));
     if (!provider.enabled) result.status = "disabled";
-    else if (!pageEnabled) result.status = "page_disabled";
+    else if (!result.pageEnabled) result.status = "page_disabled";
     else if (!result.offersEnabled) result.status = "offers_disabled";
     else result.status = result.sourceStatus;
   } catch (_) {
@@ -315,12 +518,12 @@ function providerSummary_(main, provider) {
 function readTable_(spreadsheet, sheetName) {
   if (!sheetName) return notApplicableTable_();
   var sheet = spreadsheet.getSheetByName(sheetName);
-  if (!sheet) return { status: "not_found", sheetName: sheetName, headers: [], rows: [] };
+  if (!sheet) return { status: "not_found", errorCode: "MISSING_WORKSHEET", sheetName: sheetName, headers: [], rows: [] };
   try {
     var range = sheet.getDataRange();
     var values = range.getValues();
     if (!values || !values.length || !values[0].some(function (value) { return normalizeText_(value) !== ""; })) {
-      return { status: "missing_headers", sheetName: sheetName, headers: [], rows: [] };
+      return { status: "missing_headers", errorCode: "UNSUPPORTED_SCHEMA", sheetName: sheetName, headers: [], rows: [] };
     }
     var formulas = range.getFormulas();
     var headers = values[0].map(function (value) { return normalizeText_(value); });
@@ -345,8 +548,23 @@ function readTable_(spreadsheet, sheetName) {
     }
     return { status: rows.length ? "available" : "empty", sheetName: sheetName, headers: headers.filter(Boolean), rows: rows };
   } catch (_) {
-    return { status: "error", sheetName: sheetName, headers: [], rows: [] };
+    return { status: "error", errorCode: "INTERNAL_SERVER_ERROR", sheetName: sheetName, headers: [], rows: [] };
   }
+}
+
+function providerTableFallback_(adapter, key) {
+  if (!adapter) return "";
+  if (key === "standard") return adapter.workbookResources.packages.mobile;
+  if (key === "home" || key === "eom" || key === "to15" || key === "air") return adapter.workbookResources.packages[key] || (key === "home" ? adapter.workbookResources.packages.air : "") || "";
+  if (key === "pageSettings") return adapter.workbookResources.providerSettings;
+  if (key === "terms") return adapter.workbookResources.providerTerms;
+  return adapter.workbookResources[key] || "";
+}
+
+function readProviderTable_(spreadsheet, providerId, logicalKey, fallbackName) {
+  // The adapter is the only worksheet-resolution path. fallbackName remains in
+  // the signature for v1 call-site compatibility but is intentionally unused.
+  return readMappedTable_(spreadsheet, providerId, logicalKey);
 }
 
 function readTableFirstAvailable_(spreadsheet, sheetNames) {
@@ -367,12 +585,14 @@ function tableSummary_(table) {
 function providerRecords_(table) {
   if (!table || !Array.isArray(table.rows)) return [];
   return table.rows.map(function (row) {
-    var id = normalizeProviderId_(rowValue_(row, ["Provider_ID"]));
-    if (!id) return null;
+    var canonicalId = normalizeProviderId_(rowValue_(row, ["Provider_ID"]));
+    if (!canonicalId) return null;
+    var adapter = providerAdapter_(canonicalId);
     return {
-      id: Number(id),
-      slug: PROVIDER_META_[id] ? PROVIDER_META_[id].slug : "provider-" + id,
-      name: normalizeText_(rowValue_(row, ["Provider_Name", "Provider_ Name"])) || "مزوّد " + id,
+      id: adapter ? adapter.legacyRouteId : null,
+      providerId: canonicalId,
+      slug: adapter ? adapter.slug : "provider-" + canonicalId,
+      name: normalizeText_(rowValue_(row, ["Provider_Name", "Provider_ Name"])) || (adapter ? adapter.name : "مزوّد " + canonicalId),
       enabled: isEnabled_(rowValue_(row, ["Enable"])),
       spreadsheetId: normalizeText_(rowValue_(row, ["Spreadsheet_ID"]))
     };
@@ -380,23 +600,40 @@ function providerRecords_(table) {
 }
 
 function publicProvider_(provider) {
-  return { id: provider.id, slug: provider.slug, name: provider.name, enabled: provider.enabled };
+  return { id: provider.id, providerId: provider.providerId || normalizeProviderId_(provider.id), slug: provider.slug, name: provider.name, enabled: provider.enabled };
 }
 
 function findProvider_(providers, id) {
-  for (var index = 0; index < providers.length; index += 1) if (String(providers[index].id) === String(id)) return providers[index];
+  var canonical = normalizeProviderId_(id);
+  for (var index = 0; index < providers.length; index += 1) if (String(providers[index].providerId || normalizeProviderId_(providers[index].id)) === canonical) return providers[index];
   return null;
 }
 
-function publicWebsiteSettings_(table, refreshSeconds) {
+function publicWebsiteSettings_(table, refreshSeconds, refreshConfiguration) {
   var rows = table && table.rows ? table.rows : [];
+  var configuration = refreshConfiguration || readRefreshConfiguration_(table);
   var flags = {};
+  var administrativeFlags = {};
+  var configuredValues = {};
   rows.forEach(function (row) {
     var key = normalizeText_(rowValue_(row, ["Settings"]));
     if (!key) return;
-    flags[key] = isEnabled_(rowValue_(row, ["Enable"]));
+    var administrativeEnabled = isEnabled_(rowValue_(row, ["Enable"]));
+    administrativeFlags[key] = administrativeEnabled;
+    configuredValues[key] = rowValue_(row, ["Value"]);
+    flags[key] = normalizeHeader_(key) === normalizeHeader_("Auto Data Refresh")
+      ? Boolean(configuration.effective.autoDataRefresh)
+      : administrativeEnabled;
   });
-  return { status: table ? table.status : "not_inspected", rows: rows, flags: flags, refreshSeconds: refreshSeconds };
+  return {
+    status: table ? table.status : "not_inspected",
+    rows: rows,
+    flags: flags,
+    administrativeFlags: administrativeFlags,
+    configuredValues: configuredValues,
+    effectiveRefresh: configuration.effective,
+    refreshSeconds: refreshSeconds
+  };
 }
 
 function activeRows_(table) {
@@ -414,28 +651,23 @@ function targetRowsForProvider_(table, provider) {
 }
 
 function normalizeTerms_(table) {
-  if (!table || table.status === "not_applicable") return { status: "not_applicable", rows: [] };
-  if (table.status !== "available" && table.status !== "empty") return { status: table.status, rows: [] };
-  var rows = (table.rows || []).filter(function (row) {
-    return isEnabled_(rowValue_(row, ["Enable"])) && normalizeText_(rowValue_(row, ["Term_Text"])) !== "";
-  }).map(function (row) {
-    return {
-      id: rowValue_(row, ["Term_ID"]),
-      text: normalizeText_(rowValue_(row, ["Term_Text"])),
-      type: normalizeText_(rowValue_(row, ["Term_Type"])) || "General",
-      displayOrder: numberValue_(rowValue_(row, ["Display_Order"]))
-    };
-  }).sort(function (a, b) { return (a.displayOrder || 0) - (b.displayOrder || 0); });
-  return { status: rows.length ? "available" : "empty", rows: rows };
+  var isMainTerms = table && table.headers && table.headers.some(function (header) { return normalizeHeader_(header) === normalizeHeader_("Term_Titel"); });
+  var canonical = canonicalTerms_(table, isMainTerms);
+  canonical.rows = canonical.rows.map(function (row) {
+    return { id: row.id, title: row.title, text: row.text, type: row.type || "General", enabled: row.enabled, displayOrder: row.displayOrder };
+  });
+  return canonical;
 }
 
 function normalizeRouters_(table, detailsTable, provider, sectionEnabled) {
   if (!sectionEnabled) return { status: "disabled", rows: [] };
   if (!table || (table.status !== "available" && table.status !== "empty")) return { status: table ? table.status : "not_inspected", rows: [] };
+  var adapter = providerAdapter_(provider.providerId || provider.id);
+  var routerVisibilityHeader = adapter ? adapter.routerVisibilityHeader : "Enable";
   var rows = (table.rows || []).filter(function (row) {
     var routerName = normalizeText_(rowValue_(row, ["Router Name"]));
     var finalPrice = numberValue_(rowValue_(row, ["FInal Price", "Final Price"]));
-    return isEnabled_(rowValue_(row, ["Enable"])) && routerName !== "" && isFinite(finalPrice) && finalPrice > 0;
+    return isEnabled_(rowValue_(row, [routerVisibilityHeader])) && routerName !== "" && isFinite(finalPrice) && finalPrice > 0;
   }).map(function (row) {
     var showOffer = isEnabled_(rowValue_(row, ["Show Offer"]));
     var details = (detailsTable && detailsTable.rows ? detailsTable.rows : []).filter(function (detail) {
@@ -447,7 +679,9 @@ function normalizeRouters_(table, detailsTable, provider, sectionEnabled) {
     var discountPrice = numberValue_(rowValue_(row, ["Discount Price"]));
     return {
       routerId: rowValue_(row, ["Router ID"]),
-      providerId: provider.id,
+      providerId: provider.providerId || normalizeProviderId_(provider.id),
+      canonicalProviderId: provider.providerId || normalizeProviderId_(provider.id),
+      providerLegacyId: provider.id,
       providerName: provider.name,
       providerSlug: provider.slug,
       name: normalizeText_(rowValue_(row, ["Router Name"])),
@@ -455,6 +689,7 @@ function normalizeRouters_(table, detailsTable, provider, sectionEnabled) {
       increase: numberValue_(rowValue_(row, ["Increase"])),
       finalPrice: finalPrice,
       showOffer: showOffer,
+      visibility: { router: true, deviceOffer: showOffer },
       discountPrice: showOffer && isFinite(discountPrice) && discountPrice > 0 ? discountPrice : null,
       sortOrder: numberValue_(rowValue_(row, ["Sort Order"])),
       details: details
@@ -510,12 +745,15 @@ function settingEnabled_(table, key, fallback) {
 }
 
 function getRefreshSeconds_(table) {
-  var row = findRow_(table, ["Settings"], "Auto Refresh Seconds");
-  var value = row ? numberValue_(rowValue_(row, ["Value"])) : NaN;
-  var enabled = row ? isEnabled_(rowValue_(row, ["Enable"])) : false;
-  return enabled && isFinite(value) && value >= 5 && value <= 86400 ? Math.floor(value) : DEFAULT_REFRESH_SECONDS_;
+  var configuration = readRefreshConfiguration_(table);
+  // The canonical global switch is authoritative. Legacy Auto Refresh Seconds
+  // and positive defaults must never activate polling when it is absent.
+  var hasAutoDataRefresh = (table && table.rows || []).some(function (row) {
+    return normalizeHeader_(rowValue_(row, ["Settings"])) === normalizeHeader_("Auto Data Refresh");
+  });
+  if (!hasAutoDataRefresh || !configuration.effective.autoDataRefresh) return 0;
+  return configuration.effective.generalDataChangeCheckSeconds || 0;
 }
-
 function findRow_(table, keyAliases, value) {
   if (!table || !Array.isArray(table.rows)) return null;
   var target = normalizeHeader_(value);
@@ -551,10 +789,7 @@ function isEnabled_(value) {
 }
 
 function normalizeProviderId_(value) {
-  var text = normalizeText_(value);
-  if (!/^\d+(?:\.0+)?$/.test(text)) return "";
-  var id = String(Number(text));
-  return PROVIDER_META_[id] ? id : "";
+  return getCanonicalProviderId_(value);
 }
 
 function normalizeTarget_(value) { return normalizeText_(value).toLowerCase().replace(/\s+/g, " "); }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-labelledby="title desc">
+  <title id="title">شريحة اتصال ذهبية بتصميم تقني</title>
+  <desc id="desc">رسم زخرفي لشريحة اتصال ذهبية مضيئة بخطوط دوائر إلكترونية.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2b1355"/><stop offset="1" stop-color="#0b182f"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a2"/><stop offset=".45" stop-color="#f5bd4d"/><stop offset="1" stop-color="#b8751e"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="14" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="640" height="640" rx="48" fill="url(#bg)"/>
+  <g fill="none" stroke="#a96bff" stroke-opacity=".32" stroke-width="2"><circle cx="320" cy="320" r="235"/><circle cx="320" cy="320" r="190"/><path d="M70 190h180M390 450h180M110 430h110M430 210h100"/></g>
+  <g transform="rotate(-12 320 320)" filter="url(#glow)">
+    <rect x="172" y="150" width="296" height="340" rx="34" fill="#161331" stroke="url(#gold)" stroke-width="8"/>
+    <path d="M235 150v92h170v-92M235 490v-92h170v92M172 250h70v140h-70M468 250h-70v140h70" fill="none" stroke="url(#gold)" stroke-width="7"/>
+    <path d="M278 242h84v156h-84zM320 242v156M278 320h84" fill="none" stroke="#ffe48b" stroke-width="7"/>
+    <circle cx="320" cy="320" r="19" fill="#fff3ac"/>
+  </g>
+  <g fill="#fff2a2"><circle cx="105" cy="125" r="5"/><circle cx="535" cy="505" r="5"/><circle cx="500" cy="125" r="3"/></g>
+</svg>

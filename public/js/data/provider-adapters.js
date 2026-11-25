@@ -1,9 +1,27 @@
 const PROVIDER_LABELS = Object.freeze({
-  1: { name: "Vodafone", nameAr: "فودافون", slug: "vodafone" },
-  2: { name: "WE", nameAr: "وي", slug: "we" },
-  3: { name: "Orange", nameAr: "أورنج", slug: "orange" },
-  4: { name: "Etisalat", nameAr: "اتصالات", slug: "etisalat" },
+  VF: { legacyId: 1, name: "Vodafone", nameAr: "فودافون", slug: "vodafone", route: "/vodafone/" },
+  TE: { legacyId: 2, name: "WE", nameAr: "وي", slug: "we", route: "/we.html" },
+  ORA: { legacyId: 3, name: "Orange", nameAr: "أورنج", slug: "orange", route: "/orange/" },
+  ET: { legacyId: 4, name: "Etisalat", nameAr: "اتصالات", slug: "etisalat", route: "/etisalat/" },
 });
+
+export function normalizeProviderId(value) {
+  const key = String(value ?? "").trim().toUpperCase();
+  if (Object.prototype.hasOwnProperty.call(PROVIDER_LABELS, key)) return key;
+  const numeric = Number(key);
+  const match = Object.entries(PROVIDER_LABELS).find(([, provider]) => provider.legacyId === numeric);
+  return match ? match[0] : "";
+}
+
+export function legacyProviderId(value) {
+  const canonical = normalizeProviderId(value);
+  return canonical ? PROVIDER_LABELS[canonical].legacyId : null;
+}
+
+export function providerRoute(value) {
+  const canonical = normalizeProviderId(value);
+  return canonical ? PROVIDER_LABELS[canonical].route : "";
+}
 
 export function booleanValue(value, fallback = false) {
   if (value === true || value === false) return value;
@@ -14,13 +32,14 @@ export function booleanValue(value, fallback = false) {
 }
 
 export function providerIdentity(id, name = "") {
-  const numericId = Number(id);
-  const known = PROVIDER_LABELS[numericId];
-  return known ? { id: numericId, ...known, sourceName: name || known.name } : {
-    id: numericId,
-    name: name || `Provider ${numericId}`,
-    nameAr: name || `مزوّد ${numericId}`,
-    slug: `provider-${numericId}`,
+  const canonicalId = normalizeProviderId(id);
+  const known = PROVIDER_LABELS[canonicalId];
+  return known ? { id: known.legacyId, canonicalId, ...known, sourceName: name || known.name } : {
+    id: Number(id),
+    canonicalId: "",
+    name: name || `Provider ${id}`,
+    nameAr: name || `مزوّد ${id}`,
+    slug: `provider-${id}`,
     sourceName: name,
   };
 }
@@ -39,10 +58,10 @@ export function providerState(provider = {}) {
 export function providerStateLabel(state) {
   return ({
     available: "متاحة الآن",
-    disabled: "قريبًا",
+    disabled: "غير مفعّل",
     page_disabled: "الصفحة غير مفعّلة",
     offers_disabled: "العروض غير مفعّلة",
-    empty: "قريبًا",
+    empty: "لا توجد بيانات",
     unavailable: "تعذر تحميل البيانات",
     inaccessible: "المصدر غير متاح",
     unsupported_schema: "المصدر قيد التجهيز",

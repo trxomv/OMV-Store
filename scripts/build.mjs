@@ -22,7 +22,7 @@ function readCentralEndpoint(source) {
 const configSource = await readFile(path.join(publicDir, "site-config.js"), "utf8");
 const endpoint = readCentralEndpoint(configSource);
 const routesDocument = JSON.parse(await readFile(path.join(publicDir, "manus-routes.json"), "utf8"));
-const expectedRoutes = ["/", "/we.html", "/provider.html", "/routers.html"];
+const expectedRoutes = ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"];
 if (Object.keys(routesDocument).length !== 1 || !Array.isArray(routesDocument.routes)) throw new Error("manus-routes.json must contain only a routes array.");
 const actualRoutes = routesDocument.routes.map((route) => route.path);
 if (JSON.stringify(actualRoutes) !== JSON.stringify(expectedRoutes)) throw new Error(`manus-routes.json must declare: ${expectedRoutes.join(", ")}.`);
@@ -43,13 +43,14 @@ async function assertNoSpreadsheetIds(directory) {
 await assertNoSpreadsheetIds(publicDir);
 
 const requiredFiles = [
-  "index.html", "we.html", "provider.html", "routers.html", "site-config.js", "manus-routes.json",
+  "index.html", "we.html", "provider.html", "routers.html", "competitions.html", "site-config.js", "manus-routes.json",
   "data/homepage-config.json", "data/preview-snapshot.json",
   "css/home.css", "css/catalog.css", "css/main.css", "css/components.css", "css/responsive.css",
-  "js/homepage.js", "js/provider-page.js", "js/routers-page.js", "js/we-integration.js",
-  "js/app.js", "js/data/data-core.js", "js/data/customizer-core.js", "js/data/provider-adapters.js", "js/data/multi-provider-client.js",
+  "js/homepage.js", "js/provider-page.js", "js/routers-page.js", "js/competitions-page.js", "js/we-integration.js",
+  "js/app.js", "js/data/data-core.js", "js/data/customizer-core.js", "js/data/provider-adapters.js", "js/data/multi-provider-client.js", "js/data/provider-page-rules.js",
   "js/components/addon-row.js", "js/components/payment-logo.js", "js/utils/dom.js", "js/utils/format.js",
-  "assets/images/sim-hero.webp", "assets/images/we-project-mark.webp",
+  "assets/images/sim-hero.svg", "assets/brand/omv-logo.webp",
+  "vodafone/index.html", "orange/index.html", "etisalat/index.html",
   "assets/icons/addon-phone.svg", "assets/icons/addon-data.svg", "assets/icons/addon-generic.svg",
 ];
 for (const file of requiredFiles) await readFile(path.join(publicDir, file));
@@ -57,5 +58,5 @@ for (const file of requiredFiles) await readFile(path.join(publicDir, file));
 await rm(distDir, { recursive: true, force: true });
 await mkdir(distDir, { recursive: true });
 await cp(publicDir, distDir, { recursive: true });
-for (const page of ["index.html", "we.html", "provider.html", "routers.html"]) await readFile(path.join(distDir, page));
+for (const page of ["index.html", "vodafone/index.html", "we.html", "orange/index.html", "etisalat/index.html", "provider.html", "routers.html", "competitions.html"]) await readFile(path.join(distDir, page));
 console.log(`Built independent static website to dist/ (${endpoint ? "central live endpoint configured" : "reviewed snapshot mode; not live data"}).`);

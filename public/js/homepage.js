@@ -6,6 +6,7 @@ import {
   normalizeTerms,
   providerAnnouncements,
   providerIdentity,
+  providerRoute,
   providerState,
   providerStateLabel,
   routerAnnouncements,
@@ -51,12 +52,14 @@ function localizeProvider(provider) {
 }
 
 function providerHref(provider) {
-  return Number(provider.id) === 2 ? "we.html" : `provider.html?id=${encodeURIComponent(provider.id)}`;
+  return providerRoute(provider.canonicalId || provider.id) || "provider.html";
 }
 
 function providerDescription(state, provider) {
-  if (state === "available") return Number(provider.id) === 2 ? "الباقات والخدمات المتاحة" : "الخدمات المتاحة من هذه الشبكة";
+  if (state === "available") return providerIdentity(provider.id).canonicalId === "TE" ? "الباقات والخدمات المتاحة" : "الخدمات المتاحة من هذه الشبكة";
   if (state === "offers_disabled") return "قسم العروض غير مفعّل حاليًا حسب إعداد الشبكة";
+  if (state === "page_disabled") return "صفحة الشبكة غير مفعّلة حاليًا حسب الإعدادات";
+  if (state === "disabled") return "الشبكة غير مفعّلة في سجل المزوّدين";
   if (state === "unavailable") return "بيانات الشبكة غير متاحة حاليًا";
   return "الخدمات قيد التجهيز — ترقّبوا توفرها";
 }
@@ -73,15 +76,16 @@ function renderProviders(site, uiConfig) {
   grid.replaceChildren();
   for (const rawProvider of cards) {
     const provider = localizeProvider(rawProvider);
+    const identity = providerIdentity(provider.id, provider.name);
     const state = providerState(provider);
     const isReady = state === "available";
-    const link = make("a", `provider-card provider-${Number(provider.id)} ${isReady ? "is-ready" : "is-coming"}`);
+    const link = make("a", `provider-card provider-${identity.id} ${isReady ? "is-ready" : "is-coming"}`);
     link.href = providerHref(provider);
     link.setAttribute("aria-label", `${provider.nameAr} — ${providerStateLabel(state)}`);
 
     const top = make("div", "provider-card-top");
-    const markText = Number(provider.id) === 2 ? "WE" : provider.name;
-    const mark = make("span", `provider-wordmark wordmark-${Number(provider.id)}`, markText);
+    const markText = identity.canonicalId === "TE" ? "WE" : provider.name;
+    const mark = make("span", `provider-wordmark wordmark-${identity.id}`, markText);
     mark.setAttribute("aria-hidden", "true");
     const stateBadge = make("span", `provider-state ${isReady ? "state-ready" : "state-soon"}`, providerStateLabel(state));
     top.append(mark, stateBadge);
@@ -90,7 +94,7 @@ function renderProviders(site, uiConfig) {
     const title = make("h3", "", provider.nameAr);
     const english = make("span", "provider-english", provider.name);
     const description = make("p", "provider-description", providerDescription(state, provider));
-    const action = make("span", "provider-action", Number(provider.id) === 2 ? "استكشف باقات WE" : "عرض حالة الشبكة");
+    const action = make("span", "provider-action", identity.canonicalId === "TE" ? "استكشف باقات WE" : "عرض حالة الشبكة");
     action.append(make("span", "", "←"));
     body.append(title, english, description);
     const notices = providerAnnouncements(site.announcements || [], provider).slice(0, 1);
@@ -239,8 +243,9 @@ async function start() {
     renderContacts(siteResult.payload);
     renderPayments(siteResult.payload);
     renderTerms(siteResult.payload);
-    if (siteResult.sourceMode === "live") {
-      refreshTimer = window.setTimeout(() => start().catch(showLoadError), refreshSeconds(siteResult.payload, 15) * 1000);
+    const seconds = refreshSeconds(siteResult.payload, 15);
+    if (siteResult.sourceMode === "live" && seconds > 0) {
+      refreshTimer = window.setTimeout(() => start().catch(showLoadError), seconds * 1000);
     }
     window.addEventListener("online", () => start().catch(showLoadError), { once: true });
   } catch (error) {

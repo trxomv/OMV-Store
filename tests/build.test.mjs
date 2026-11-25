@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 
 const read = (relative) => readFile(new URL(`../${relative}`, import.meta.url), "utf8");
-const [config, buildScript, serveScript, appsScript, manifest, frontend, addonComponent, weHtml, homeHtml, providerHtml, routersHtml, homepageConfig, routeText] = await Promise.all([
-  read("public/site-config.js"), read("scripts/build.mjs"), read("scripts/serve.mjs"), read("apps-script/Code.gs"), read("apps-script/appsscript.json"),
+const [config, buildScript, serveScript, appsScript, adapterScript, manifest, frontend, addonComponent, weHtml, homeHtml, providerHtml, routersHtml, homepageConfig, routeText] = await Promise.all([
+  read("public/site-config.js"), read("scripts/build.mjs"), read("scripts/serve.mjs"), read("apps-script/Code.gs"), read("apps-script/provider-adapters.gs"), read("apps-script/appsscript.json"),
   read("public/js/app.js"), read("public/js/components/addon-row.js"), read("public/we.html"), read("public/index.html"),
   read("public/provider.html"), read("public/routers.html"), read("public/data/homepage-config.json"), read("public/manus-routes.json"),
 ]);
@@ -15,23 +15,24 @@ const routes = JSON.parse(routeText);
   assert.equal((config.match(/centralApiEndpoint\s*:/g) || []).length, 1);
   assert.doesNotMatch(config + homeHtml + weHtml + providerHtml + routersHtml + frontend, /docs\.google\.com\/spreadsheets|Spreadsheet_ID|spreadsheetId|201554551710|CAGWbmHZLx0B1zIF5sQzRc|K6sC-Da1_VBjNTRk/i);
   assert.match(config, /centralApiEndpoint:\s*"https:\/\/script\.google\.com\/macros\/s\/[^\"]+\/exec"/);
+  assert.match(config, /centralApiEndpoint:\s*"https:\/\/script\.google\.com\/macros\/s\/AKfycbyzE6Eq4R08y3OwCAFCEd5byHy1D2YMlKNNuRm6-qlr6GZI6LGiLJxpNZzWCopbf7-CIQ\/exec"/);
   assert.doesNotMatch(homepageConfig, /Spreadsheet_ID|spreadsheetId/);
 });
 
 test("static build validates the complete route manifest and copies the whole public tree", () => {
-  for (const page of ["/", "/we.html", "/provider.html", "/routers.html"]) assert.ok(routes.routes.some((route) => route.path === page));
+  for (const page of ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"]) assert.ok(routes.routes.some((route) => route.path === page));
   assert.match(buildScript, /centralApiEndpoint/);
   assert.match(buildScript, /script\.google\.com/);
   assert.match(buildScript, /await cp\(publicDir, distDir, \{ recursive: true \}\)/);
   assert.match(buildScript, /manus-routes\.json/);
-  for (const file of ["provider.html", "routers.html", "we.html", "data/preview-snapshot.json", "css/catalog.css", "js/provider-page.js", "js/routers-page.js", "js/we-integration.js"]) assert.ok(buildScript.includes(file));
+  for (const file of ["provider.html", "routers.html", "competitions.html", "we.html", "data/preview-snapshot.json", "css/catalog.css", "js/provider-page.js", "js/routers-page.js", "js/competitions-page.js", "js/data/provider-page-rules.js", "js/we-integration.js"]) assert.ok(buildScript.includes(file));
   assert.match(buildScript, /assertNoSpreadsheetIds/);
   assert.match(serveScript, /centralApiEndpoint/);
   assert.doesNotMatch(serveScript, /sheetsEndpoint/);
 });
 
 test("central Apps Script is dynamic, read-only, cache-backed and declares only spreadsheet read scope", () => {
-  for (const sheet of ["Telecom Providers", "Main Categories", "Website Settings", "Social Media", "Payment Methods", "Announcements", "Mobile_Rate Plans-Website", "Page Settings", "WE-Routers", "Terms&Conditions"]) assert.ok(appsScript.includes(sheet), `missing central data mapping ${sheet}`);
+  for (const sheet of ["Telecom Providers", "Main Categories", "Website Settings", "Social Media", "Payment Methods", "Announcements", "Mobile_Rate Plans-Website", "Page Settings", "WE-Routers", "Terms&Conditions"]) assert.ok((appsScript + adapterScript).includes(sheet), `missing central data mapping ${sheet}`);
   assert.match(appsScript, /PropertiesService\.getScriptProperties\(\)\.getProperty\(MAIN_ID_PROPERTY_\)/);
   assert.match(appsScript, /Spreadsheet_ID/);
   assert.match(appsScript, /function\s+doGet\(/);
@@ -61,8 +62,8 @@ test("local payment and add-on assets remain bundled with the WE feature compone
   assert.match(addonComponent, /addon-generic\.svg/);
 });
 
-test("all four static page routes are declared and safe", () => {
-  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/we.html", "/provider.html", "/routers.html"]);
+test("all canonical static page routes are declared and safe", () => {
+  assert.deepEqual(routes.routes.map((route) => route.path), ["/", "/vodafone/", "/we.html", "/orange/", "/etisalat/", "/provider.html", "/routers.html", "/competitions.html"]);
   assert.equal(Object.keys(routes).length, 1);
   assert.ok(routes.routes.every((route) => route.title && route.path.startsWith("/") && !route.path.startsWith("//")));
 });
