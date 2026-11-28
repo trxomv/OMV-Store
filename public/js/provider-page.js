@@ -161,6 +161,8 @@ function renderOfferCard(row, index, contacts, showDiscountRate) {
   const status = make("p", `provider-plan-status ${availability.available ? "is-available" : "is-unavailable"}`, availability.label);
   status.setAttribute("role", "status");
   card.append(status);
+  const secondBadge = createSourceBadgeSlot(row, "second");
+  if (secondBadge) card.append(secondBadge);
   const actions = make("div", "card-actions provider-card-actions");
   const phone = whatsappPhone(contacts, activeProvider);
   const priceValue = offerPrice ?? finalPrice;
@@ -169,8 +171,6 @@ function renderOfferCard(row, index, contacts, showDiscountRate) {
   const subscribeHref = availability.available && hasCompletePlanFacts(row) ? whatsappPlanHref(phone, message) : "";
   actions.append(renderPlanAction("اشترك الآن ↗", subscribeHref), renderPlanAction("واتساب", availability.available ? baseHref : ""));
   card.append(actions);
-  const secondBadge = createSourceBadgeSlot(row, "second");
-  if (secondBadge) card.append(secondBadge);
   return card;
 }
 

@@ -9,6 +9,7 @@ const make = (tag, className, text) => {
   return node;
 };
 const AVAILABLE_ROUTER_IMAGES = new Set(["we/TE_RTR_201.jpg"]);
+let routerDetailsSequence = 0;
 
 function money(value) {
   const amount = Number(value);
@@ -109,6 +110,8 @@ function appendImage(card, router) {
 function appendDetails(card, details) {
   if (!Array.isArray(details) || !details.length) return;
   const list = make("div", "router-details");
+  list.id = `router-details-${++routerDetailsSequence}`;
+  list.hidden = true;
   for (const detail of details) {
     const item = make("div", "router-detail");
     const title = [detail.section, detail.title].filter(Boolean).join(" — ");
@@ -116,7 +119,17 @@ function appendDetails(card, details) {
     if (detail.content) item.append(make("p", "", detail.content));
     list.append(item);
   }
-  card.append(list);
+  const toggle = make("button", "router-details-toggle", "عرض التفاصيل");
+  toggle.type = "button";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", list.id);
+  toggle.addEventListener("click", () => {
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!expanded));
+    toggle.textContent = expanded ? "عرض التفاصيل" : "إخفاء التفاصيل";
+    list.hidden = expanded;
+  });
+  card.append(toggle, list);
 }
 
 export function createRouterCard(router) {

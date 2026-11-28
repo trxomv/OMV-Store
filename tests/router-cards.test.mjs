@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { providerFirstBadgeText, sourceBadgeText } from "../public/js/components/source-badges.js";
 import {
+  createRouterCard,
   createRouterSourceTableLoader,
   enrichRouterRows,
   routerBelongsToProvider,
@@ -10,8 +11,29 @@ import {
   routerPriceDisplay,
   routerSectionEnabled,
 } from "../public/js/components/router-card.js";
-
 const refinementCss = await readFile(new URL("../public/css/refinement.css", import.meta.url), "utf8");
+const componentsCss = await readFile(new URL("../public/css/components.css", import.meta.url), "utf8");
+const weAppSource = await readFile(new URL("../public/js/app.js", import.meta.url), "utf8");
+const providerPageSource = await readFile(new URL("../public/js/provider-page.js", import.meta.url), "utf8");
+
+class TestElement {
+  constructor(tagName) {
+    this.tagName = tagName;
+    this.className = "";
+    this.children = [];
+    this.attributes = new Map();
+    this.listeners = new Map();
+    this.style = { setProperty() {} };
+    this.classList = { add: (...names) => { this.className = [...new Set([...this.className.split(/\s+/).filter(Boolean), ...names])].join(" "); } };
+    this.hidden = false;
+    this.textContent = "";
+  }
+  append(...nodes) { this.children.push(...nodes); }
+  setAttribute(name, value) { this.attributes.set(name, String(value)); }
+  getAttribute(name) { return this.attributes.get(name) ?? null; }
+  addEventListener(name, callback) { this.listeners.set(name, callback); }
+  click() { this.listeners.get("click")?.({ currentTarget: this }); }
+}
 
 test("source badges preserve the exact source label and keep first and second positions independent", () => {
   const record = { "First Badge": "  Source First  ", "Second Badge": "Source Second" };
@@ -102,6 +124,54 @@ test("router offer visibility is independent from router section visibility and 
   });
 });
 
+test("router details start collapsed and the accessible button toggles visibility and label", () => {
+  const previousDocument = globalThis.document;
+  globalThis.document = { createElement: (tagName) => new TestElement(tagName) };
+  try {
+    const card = createRouterCard({
+      routerId: "R1",
+      name: "راوتر للاختبار",
+      providerId: "TE",
+      providerName: "WE",
+      finalPrice: 900,
+      details: [{ section: "المواصفات", title: "السرعة", content: "300 ميجابت" }],
+    });
+    const toggle = card.children.find((child) => child.className === "router-details-toggle");
+    const details = card.children.find((child) => child.className === "router-details");
+    assert.ok(toggle);
+    assert.ok(details);
+    assert.equal(toggle.tagName, "button");
+    assert.equal(toggle.type, "button");
+    assert.equal(toggle.textContent, "عرض التفاصيل");
+    assert.equal(toggle.getAttribute("aria-expanded"), "false");
+    assert.equal(toggle.getAttribute("aria-controls"), details.id);
+    assert.equal(details.hidden, true);
+
+    toggle.click();
+    assert.equal(toggle.textContent, "إخفاء التفاصيل");
+    assert.equal(toggle.getAttribute("aria-expanded"), "true");
+    assert.equal(details.hidden, false);
+
+    toggle.click();
+    assert.equal(toggle.textContent, "عرض التفاصيل");
+    assert.equal(toggle.getAttribute("aria-expanded"), "false");
+    assert.equal(details.hidden, true);
+  } finally {
+    if (previousDocument === undefined) delete globalThis.document;
+    else globalThis.document = previousDocument;
+  }
+});
+
+test("second source badges are inserted before offer share and provider action buttons", () => {
+  const weBadgePosition = weAppSource.indexOf("if (secondBadge) article.append(secondBadge)");
+  const weActionsPosition = weAppSource.indexOf("if (settings.showCopyButton || settings.showShareButton)");
+  const providerBadgePosition = providerPageSource.indexOf("if (secondBadge) card.append(secondBadge)");
+  const providerActionsPosition = providerPageSource.indexOf('const actions = make("div", "card-actions provider-card-actions")');
+  assert.ok(weBadgePosition >= 0 && weBadgePosition < weActionsPosition);
+  assert.ok(providerBadgePosition >= 0 && providerBadgePosition < providerActionsPosition);
+  assert.match(refinementCss, /\.source-badge-slot--second\s*\{\s*order:\s*0;/);
+});
+
 test("router filters match both canonical and legacy provider identifiers", () => {
   assert.equal(routerBelongsToProvider({ providerId: "VF" }, "1"), true);
   assert.equal(routerBelongsToProvider({ providerLegacyId: 3, providerId: "ORA" }, "3"), true);
@@ -115,7 +185,9 @@ test("shared card grids declare the one/two/three/four-column responsive breakpo
   assert.match(refinementCss, /@media\s*\(max-width:\s*600px\)[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)/);
   assert.match(refinementCss, /@media\s*\(min-width:\s*601px\)\s*and\s*\(max-width:\s*1100px\)[\s\S]*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(refinementCss, /@media\s*\(min-width:\s*1360px\)[\s\S]*auto-fit,\s*minmax\(min\(100%,\s*250px\),\s*1fr\)/);
-  assert.match(refinementCss, /grid-auto-rows:\s*1fr/);
+  assert.doesNotMatch(refinementCss, /grid-auto-rows:\s*1fr/);
+  assert.match(componentsCss, /\.offer-card\s*\{\s*height:\s*auto;\s*min-height:\s*0;/);
+  assert.doesNotMatch(refinementCss, /min-height:\s*340px/);
 });
 
 test("the WE package-card glow stays inside the card and cannot widen the document", () => {

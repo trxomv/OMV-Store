@@ -729,6 +729,9 @@ import { formatNumber } from "./utils/format.js";
       article.append(cta);
     }
 
+    const secondBadge = createSourceBadgeSlot(plan, "second");
+    if (secondBadge) article.append(secondBadge);
+
     if (settings.showCopyButton || settings.showShareButton) {
       const actions = make("div", "card-actions");
       if (settings.showCopyButton) {
@@ -760,8 +763,6 @@ import { formatNumber } from "./utils/format.js";
       }
       article.append(actions);
     }
-    const secondBadge = createSourceBadgeSlot(plan, "second");
-    if (secondBadge) article.append(secondBadge);
     return article;
   }
 
