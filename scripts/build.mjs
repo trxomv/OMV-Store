@@ -45,10 +45,10 @@ await assertNoSpreadsheetIds(publicDir);
 const requiredFiles = [
   "index.html", "we.html", "provider.html", "routers.html", "competitions.html", "site-config.js", "manus-routes.json",
   "data/homepage-config.json", "data/preview-snapshot.json",
-  "css/home.css", "css/catalog.css", "css/main.css", "css/components.css", "css/responsive.css",
+  "css/home.css", "css/catalog.css", "css/main.css", "css/components.css", "css/responsive.css", "css/refinement.css",
   "js/homepage.js", "js/provider-page.js", "js/routers-page.js", "js/competitions-page.js", "js/we-integration.js",
   "js/app.js", "js/data/data-core.js", "js/data/customizer-core.js", "js/data/provider-adapters.js", "js/data/multi-provider-client.js", "js/data/provider-page-rules.js",
-  "js/components/addon-row.js", "js/components/payment-logo.js", "js/utils/dom.js", "js/utils/format.js",
+  "js/components/addon-row.js", "js/components/payment-logo.js", "js/components/source-badges.js", "js/components/router-card.js", "js/utils/dom.js", "js/utils/format.js",
   "assets/images/sim-hero.svg", "assets/brand/omv-logo.webp",
   "vodafone/index.html", "orange/index.html", "etisalat/index.html",
   "assets/icons/addon-phone.svg", "assets/icons/addon-data.svg", "assets/icons/addon-generic.svg",

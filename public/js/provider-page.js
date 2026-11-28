@@ -15,6 +15,8 @@ import {
 } from "./data/provider-adapters.js";
 import { hasCompletePlanFacts, planAvailability, providerPlanRows, providerVisual, whatsappPhone, whatsappPlanHref } from "./provider-page-ui.js";
 import { competitionRoute, discountRateVisible, publicCompetitionRows } from "./data/provider-page-rules.js";
+import { createSourceBadgeSlot, providerFirstBadgeText } from "./components/source-badges.js";
+import { createRouterCard, enrichRouterRows, routerSectionEnabled } from "./components/router-card.js";
 
 const $ = (id) => document.getElementById(id);
 const make = (tag, className, text) => {
@@ -118,23 +120,23 @@ function renderPlanAction(label, href) {
 
 function renderOfferCard(row, index, contacts, showDiscountRate) {
   const planId = rowValue(row, ["No. of Plan", "No of Plan", "Plan ID"]);
-  const sourceName = rowValue(row, ["Plan Name", "Package Name", "Name"]);
+  const sourceName = rowValue(row, ["Plan Name", "Plan-Name", "Package Name", "Name"]);
   const title = sourceName ? String(sourceName) : planId !== undefined ? `باقة رقم ${planId}` : `باقة ${index + 1}`;
-  const card = make("article", "offer-card provider-offer-card");
+  const card = make("article", "offer-card package-card provider-offer-card");
   card.style.setProperty("--accent", providerVisual(providerIdentity(activeProvider.id))?.color || "#a554ff");
   const availability = planAvailability(row);
   if (!availability.available) card.classList.add("is-unavailable");
+  const firstBadgeText = providerFirstBadgeText(row);
+  const firstBadge = firstBadgeText ? createSourceBadgeSlot({ "First Badge": firstBadgeText }, "first") : null;
   const top = make("div", "catalog-card-top");
   top.className = "card-top";
   top.append(make("span", "card-number", String(index + 1).padStart(2, "0")));
-  const badge = String(rowValue(row, ["Badge", "Badges", "Badge Text"]) || "").trim();
-  if (badge) top.append(make("span", "plan-badge badge-default", badge));
-  card.append(top);
+  card.append(...(firstBadge ? [firstBadge] : []), top, make("h3", "provider-offer-title", title));
 
   const quota = displayQuota(row);
   const minutes = finiteNumber(rowValue(row, ["Minutes", "Minute"]));
   const duration = String(rowValue(row, ["Duration", "Validity", "Days Left"]) || "").trim();
-  const facts = make("div", "provider-card-facts");
+  const facts = make("div", "provider-card-facts package-facts");
   if (quota) facts.append(make("span", "provider-card-fact provider-card-data", quota));
   if (minutes !== null && minutes >= 0) facts.append(make("span", "provider-card-fact provider-card-minutes", `${formatNumber(minutes)} دقيقة`));
   if (duration) facts.append(make("span", "provider-card-fact provider-card-duration", duration));
@@ -167,6 +169,8 @@ function renderOfferCard(row, index, contacts, showDiscountRate) {
   const subscribeHref = availability.available && hasCompletePlanFacts(row) ? whatsappPlanHref(phone, message) : "";
   actions.append(renderPlanAction("اشترك الآن ↗", subscribeHref), renderPlanAction("واتساب", availability.available ? baseHref : ""));
   card.append(actions);
+  const secondBadge = createSourceBadgeSlot(row, "second");
+  if (secondBadge) card.append(secondBadge);
   return card;
 }
 
@@ -207,49 +211,14 @@ function renderCompetitionLink(payload) {
   link.textContent = "المسابقات المتاحة ←";
 }
 
-function renderRouterCard(router) {
-  const card = make("article", "catalog-card");
-  const top = make("div", "catalog-card-top");
-  top.append(make("h3", "", String(router.name || "")));
-  top.append(make("span", "router-provider", String(router.providerName || "")));
-  card.append(top);
-  const facts = make("div", "catalog-facts");
-  const basePrice = formatMoney(router.price);
-  const increase = formatMoney(router.increase);
-  if (basePrice) facts.append(make("span", "catalog-fact", `السعر الأساسي: ${basePrice} ج`));
-  if (increase) facts.append(make("span", "catalog-fact", `الزيادة: ${increase} ج`));
-  if (facts.childElementCount) card.append(facts);
-  const price = make("div", "price-row");
-  const finalPrice = formatMoney(router.finalPrice);
-  const discountPrice = router.showOffer ? formatMoney(router.discountPrice) : "";
-  if (discountPrice && finalPrice && Number(router.discountPrice) < Number(router.finalPrice)) {
-    price.append(make("span", "price-old", `${finalPrice} ج`), make("strong", "price-current", `${discountPrice} ج`), make("span", "offer-chip", "عرض"));
-  } else if (finalPrice) price.append(make("strong", "price-current", `${finalPrice} ج`));
-  else price.append(make("span", "price-unit", "السعر غير مكتمل في المصدر"));
-  card.append(price);
-  const details = Array.isArray(router.details) ? router.details : [];
-  if (details.length) {
-    const list = make("div", "router-details");
-    for (const detail of details) {
-      const item = make("div", "router-detail");
-      const title = [detail.section, detail.title].filter(Boolean).join(" — ");
-      if (title) item.append(make("strong", "", title));
-      if (detail.content) item.append(make("p", "", detail.content));
-      list.append(item);
-    }
-    card.append(list);
-  }
-  return card;
-}
-
 function renderRouters(payload) {
   const section = $("provider-routers");
   const routerData = payload.sections?.routers;
-  const enabled = routerData?.enabled === true;
+  const enabled = routerSectionEnabled(routerData);
   section.hidden = !enabled;
   if (!enabled) return;
-  const rows = Array.isArray(routerData.rows) ? routerData.rows : [];
-  $("provider-router-list").replaceChildren(...rows.map(renderRouterCard));
+  const rows = enrichRouterRows(routerData.rows, payload.tables?.routers);
+  $("provider-router-list").replaceChildren(...rows.map(createRouterCard));
   const empty = $("provider-routers-empty");
   empty.hidden = rows.length > 0;
   empty.textContent = rows.length ? "" : routerData.status === "empty"

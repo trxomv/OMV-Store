@@ -89,13 +89,34 @@ test("normalizes no badge, the existing single Badge field, and multiple future 
 
 test("normalizes production WE Plan_ID, Plan-Name, and split badge headers", () => {
   const data = core.normalizePayload(payload({
-    standard: [{ Plan_ID: 7, "Plan-Name": "Source plan", MBs: 7000, Minutes: 700, "Final Price": 70, "Show Rate Plan": true, "First Badge": "First", "Second Badge": "Second" }],
+    standard: [{ Plan_ID: 7, "Plan-Name": "Source plan", MBs: 7000, Minutes: 700, "Final Price": 70, "Show Rate Plan": true, "First Badge": " First ", "Second Badge": "Second", "First Badge Enable": true, "Second Badge Enable": false }],
   }));
   assert.equal(data.ok, true);
   assert.equal(data.plans.standard.length, 1);
   assert.equal(data.plans.standard[0].planId, "7");
   assert.equal(data.plans.standard[0].name, "Source plan");
   assert.deepEqual(data.plans.standard[0].badges, ["First", "Second"]);
+  assert.equal(data.plans.standard[0].firstBadge, "First");
+  assert.equal(data.plans.standard[0].secondBadge, "Second");
+  assert.equal(data.plans.standard[0].firstBadgeEnabled, true);
+  assert.equal(data.plans.standard[0].secondBadgeEnabled, false);
+});
+
+test("split source badges take precedence over the legacy Badge field without duplicates", () => {
+  const data = core.normalizePayload(payload({
+    standard: [
+      { "No. of Plan": 1, MBs: 1000, Minutes: 100, "Final Price": 10, Badge: "Legacy badge", "First Badge": "Source first" },
+      { "No. of Plan": 2, MBs: 2000, Minutes: 200, "Final Price": 20, Badge: "Legacy badge", "First Badge": "Source first", "Second Badge": "Source second" },
+      { "No. of Plan": 3, MBs: 3000, Minutes: 300, "Final Price": 30, Badge: "Legacy fallback" },
+      { "No. of Plan": 4, MBs: 4000, Minutes: 400, "Final Price": 40, "Second Badge": "Source second only" },
+    ],
+  }));
+  assert.deepEqual(data.plans.standard.map(({ badges, firstBadge, secondBadge }) => ({ badges, firstBadge, secondBadge })), [
+    { badges: ["Source first"], firstBadge: "Source first", secondBadge: "" },
+    { badges: ["Source first", "Source second"], firstBadge: "Source first", secondBadge: "Source second" },
+    { badges: ["Legacy fallback"], firstBadge: "Legacy fallback", secondBadge: "" },
+    { badges: ["Source second only"], firstBadge: "", secondBadge: "Source second only" },
+  ]);
 });
 
 test("allows a category-specific formula discount only when its row contains an explicit offer", () => {

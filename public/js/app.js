@@ -4,6 +4,7 @@ import * as customizerCore from "./data/customizer-core.js";
 import { loadResource, refreshSeconds, renderSourceBanner } from "./data/multi-provider-client.js";
 import { createAddonRow } from "./components/addon-row.js";
 import { paymentLogoCandidates, paymentLogoInitials } from "./components/payment-logo.js";
+import { createSourceBadgeSlot } from "./components/source-badges.js";
 import { make } from "./utils/dom.js";
 import { formatNumber } from "./utils/format.js";
 
@@ -682,18 +683,12 @@ import { formatNumber } from "./utils/format.js";
     const article = make("article", "offer-card");
     const accent = PACKAGE_ACCENTS[Number(plan.gb)];
     if (accent) article.style.setProperty("--accent", accent);
+    article.classList.add("package-card");
+    const firstBadge = createSourceBadgeSlot(plan, "first");
     const top = make("div", "card-top");
     const sequence = make("span", "card-number", String(index + 1).padStart(2, "0"));
     top.append(sequence);
-
-    const badgeTexts = Array.isArray(plan.badges) ? plan.badges : (plan.badge ? [plan.badge] : []);
-    const badges = badgeTexts.map((value) => String(value ?? "").trim()).filter(Boolean);
-    const badgeList = badges.length ? make("div", "card-badges") : null;
-    if (badgeList) {
-      badgeList.setAttribute("role", "list");
-      badgeList.append(...badges.map(PackageBadge));
-      top.append(badgeList);
-    }
+    const title = make("h3", "offer-title", packageName(plan));
 
     const categoryRail = categoryId === "all" ? CategorySidebar(plan) : null;
     if (categoryRail) article.classList.add("has-category-sidebar");
@@ -703,6 +698,8 @@ import { formatNumber } from "./utils/format.js";
     const phoneIcon = make("span", "phone-mark");
     phoneIcon.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.3 3.4 10 7.1 8.4 9.2c1.1 2.5 3 4.4 5.5 5.5l2.1-1.6 2.1-1.6 3.7 2.7-.6 3c-.2 1-1.1 1.7-2.1 1.7-6.9 0-12.5-5.6-12.5-12.5 0-1 .7-1.9 1.7-2.1l2.1-.5Z"/></svg>';
     minutes.append(phoneIcon, make("b", "", formatNumber(plan.minutes)), document.createTextNode(" دقيقة"));
+    const facts = make("div", "package-facts");
+    facts.append(amount, minutes);
 
     const price = currentPrice(plan);
     const priceStack = make("div", "price-value-stack");
@@ -718,7 +715,7 @@ import { formatNumber } from "./utils/format.js";
     }
     priceArea.append(priceBand);
 
-    article.append(...(categoryRail ? [categoryRail] : []), top, amount, minutes, priceArea);
+    article.append(...(categoryRail ? [categoryRail] : []), ...(firstBadge ? [firstBadge] : []), top, title, facts, priceArea);
     const phone = validWhatsAppNumber(settings.whatsappNumber);
     if (settings.showWhatsApp && phone) {
       const messageCategory = categoryId === "all" ? plan.categoryId : categoryId;
@@ -763,6 +760,8 @@ import { formatNumber } from "./utils/format.js";
       }
       article.append(actions);
     }
+    const secondBadge = createSourceBadgeSlot(plan, "second");
+    if (secondBadge) article.append(secondBadge);
     return article;
   }
 

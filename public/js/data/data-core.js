@@ -169,11 +169,18 @@
       const rawShow = pick(row, ["Show Rate Plan", "Show Plan", "Show", "Visible", "Visibility", "Enabled"]);
       if (rawShow !== undefined && rawShow !== "" && !booleanValue(rawShow, false)) return null;
 
-      const badges = [...new Set([
-        ...badgeItems(pick(row, ["Badges", "Badge Text", "Plan Badge", "Badge"])),
-        ...badgeItems(pick(row, ["First Badge"])),
-        ...badgeItems(pick(row, ["Second Badge"])),
-      ])];
+      const sourceFirstBadge = normalizeText(pick(row, ["First Badge"]));
+      const sourceSecondBadge = normalizeText(pick(row, ["Second Badge"]));
+      const splitBadges = [sourceFirstBadge, sourceSecondBadge].filter(Boolean);
+      const hasSplitBadgeFields = Object.keys(row ?? {}).some((header) => ["first_badge", "second_badge"].includes(normalizeHeader(header)));
+      const legacyBadges = hasSplitBadgeFields
+        ? []
+        : badgeItems(pick(row, ["Badges", "Badge Text", "Plan Badge", "Badge"]));
+      const badges = [...new Set([...splitBadges, ...legacyBadges])];
+      const firstBadge = sourceFirstBadge || (splitBadges.length ? "" : badges[0] || "");
+      const secondBadge = sourceSecondBadge || (splitBadges.length ? "" : badges[1] || "");
+      const firstBadgeEnabled = pick(row, ["First Badge Enable", "First Badge Enabled", "Enable First Badge", "Show First Badge"]);
+      const secondBadgeEnabled = pick(row, ["Second Badge Enable", "Second Badge Enabled", "Enable Second Badge", "Show Second Badge"]);
 
       const sourceOfferFlag = pick(row, [
         "Discount Eligible", "Eligible For Discount", "Show Offer", "Show Discount", "Discount Enabled", "Has Offer",
@@ -198,6 +205,10 @@
         name: normalizeText(pick(row, ["Plan Name", "Plan-Name", "Package Name", "Name", "اسم الباقة"])),
         badge: badges.join(" "),
         badges,
+        firstBadge,
+        secondBadge,
+        firstBadgeEnabled,
+        secondBadgeEnabled,
         mbs,
         gb: mbs / 1000,
         minutes,

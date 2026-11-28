@@ -1,5 +1,6 @@
 import { loadResource, refreshSeconds } from "./data/multi-provider-client.js";
 import { normalizeTerms } from "./data/provider-adapters.js";
+import { createRouterCard, enrichRouterRows, routerSectionEnabled } from "./components/router-card.js";
 
 const $ = (id) => document.getElementById(id);
 const make = (tag, className, text) => {
@@ -10,52 +11,13 @@ const make = (tag, className, text) => {
 };
 let timer = 0;
 
-function money(value) {
-  const number = Number(value);
-  return Number.isFinite(number) && number > 0 ? new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(number) : "";
-}
-
-function routerCard(router) {
-  const card = make("article", "catalog-card");
-  const top = make("div", "catalog-card-top");
-  top.append(make("h3", "", String(router.name || "")));
-  top.append(make("span", "router-provider", "WE"));
-  card.append(top);
-  const facts = make("div", "catalog-facts");
-  const base = money(router.price);
-  const increase = money(router.increase);
-  if (base) facts.append(make("span", "catalog-fact", `السعر الأساسي: ${base} ج`));
-  if (increase) facts.append(make("span", "catalog-fact", `الزيادة: ${increase} ج`));
-  if (facts.childElementCount) card.append(facts);
-  const price = make("div", "price-row");
-  const finalPrice = money(router.finalPrice);
-  const discounted = router.showOffer ? money(router.discountPrice) : "";
-  if (discounted && finalPrice && Number(router.discountPrice) < Number(router.finalPrice)) {
-    price.append(make("span", "price-old", `${finalPrice} ج`), make("strong", "price-current", `${discounted} ج`), make("span", "offer-chip", "عرض"));
-  } else if (finalPrice) price.append(make("strong", "price-current", `${finalPrice} ج`));
-  else price.append(make("span", "price-unit", "السعر النهائي غير متاح"));
-  card.append(price);
-  if (Array.isArray(router.details) && router.details.length) {
-    const details = make("div", "router-details");
-    for (const detail of router.details) {
-      const row = make("div", "router-detail");
-      const heading = [detail.section, detail.title].filter(Boolean).join(" — ");
-      if (heading) row.append(make("strong", "", heading));
-      if (detail.content) row.append(make("p", "", detail.content));
-      details.append(row);
-    }
-    card.append(details);
-  }
-  return card;
-}
-
 function renderRouters(payload) {
   const section = $("we-router-section");
   const data = payload.sections?.routers;
-  section.hidden = data?.enabled !== true;
+  section.hidden = !routerSectionEnabled(data);
   if (section.hidden) return;
-  const records = Array.isArray(data.rows) ? data.rows : [];
-  $("we-router-list").replaceChildren(...records.map(routerCard));
+  const records = enrichRouterRows(data.rows, payload.tables?.routers);
+  $("we-router-list").replaceChildren(...records.map(createRouterCard));
   const empty = $("we-router-empty");
   empty.hidden = records.length > 0;
   empty.textContent = records.length ? "" : data.status === "empty"
